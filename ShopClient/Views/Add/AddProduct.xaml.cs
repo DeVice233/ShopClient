@@ -1,4 +1,6 @@
-﻿using System;
+﻿using ModelsApi;
+using ShopClient.ViewModels.Add;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -22,6 +24,12 @@ namespace ShopClient.Views.Add
         public AddProduct()
         {
             InitializeComponent();
+            DataContext = new AddProductViewModel(null);
+        }
+        public AddProduct(ProductApi  product)
+        {
+            InitializeComponent();
+            DataContext = new AddProductViewModel(product);
         }
     }
 }

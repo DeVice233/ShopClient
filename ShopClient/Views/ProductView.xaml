@@ -10,10 +10,28 @@
 
     <Grid>
         <Grid.RowDefinitions>
+            <RowDefinition Height="60"/>
             <RowDefinition />
             <RowDefinition Height="40"/>
         </Grid.RowDefinitions>
-        <ListView Grid.Row="0" ItemsSource="{Binding Products}"  SelectedItem="{Binding SelectedProduct}">
+        <Grid Grid.Row="0" Background="WhiteSmoke">
+            <StackPanel Grid.Row="0" HorizontalAlignment="Left" Margin="5" Orientation="Horizontal" >
+                <StackPanel>
+                    <Label Content="Фильтрация по типу:"/>
+                    <ComboBox Width="140" DisplayMemberPath="Title" ItemsSource="{Binding ProductTypes}" SelectedItem="{Binding SelectedProductTypeFilter}"/>
+                </StackPanel>
+                <StackPanel Margin="10 0 10 0">
+                    <Label Content="Поиск:"/>
+                    <TextBox Width="160" Height="22" Text="{Binding SearchText, UpdateSourceTrigger=PropertyChanged}"/>
+                </StackPanel>
+                <StackPanel>
+                    <Label Grid.Column="1" Content="Критерий поиска:"/>
+                    <ComboBox Width="160"  ItemsSource="{Binding SearchType}" SelectedItem="{Binding SelectedSearchType}"/>
+                </StackPanel>
+            </StackPanel>
+        </Grid>
+        
+        <ListView Grid.Row="1" ItemsSource="{Binding Products}"  SelectedItem="{Binding SelectedProduct}">
             <ListView.View>
                 <GridView>
                     <GridViewColumn Header="Артикул" DisplayMemberBinding="{Binding Article}"/>
@@ -32,7 +50,7 @@
                 </ContextMenu>
             </ListView.ContextMenu>
         </ListView>
-        <Grid Background="#FF1A315B" Grid.Row="1">
+        <Grid Background="#FF1A315B" Grid.Row="2">
             <StackPanel Orientation="Horizontal">
                 <Button Width="auto" Background="Transparent" 
                         BorderThickness="0" Margin="5,0,0,0"
@@ -41,8 +59,15 @@
                         <Image Source="/Images/add2.png"/>
                     </Button.Content>
                 </Button>
-
+            <Label Content="{Binding SearchCountRows}"/>
+            <Button Content="&lt;" Width="20" Command="{Binding BackPage}"/>
+            <Label Content="{Binding Pages}"/>
+            <Button Content=">" Width="20" Command="{Binding ForwardPage}"/>
+        
+            <Label Content="Кол-во записей на странице:"/>
+            <ComboBox Width="200" ItemsSource="{Binding ViewCountRows}" SelectedItem="{Binding SelectedViewCountRows}"/>
             </StackPanel>
+          
             <Grid/>
         </Grid>
     </Grid>

@@ -1,5 +1,6 @@
 ﻿using ModelsApi;
 using ShopClient.Core;
+using ShopClient.Views.Add;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -53,15 +54,32 @@ namespace ShopClient.ViewModels
             }
         }
 
+        public CustomCommand AddProduct{ get; set; }
+        public CustomCommand EditProduct { get; set; }
+        public CustomCommand DeleteProduct { get; set; }
+
         public ProductViewModel()
         {
             Units = new List<UnitApi>();
             ProductTypes = new List<ProductTypeApi>();
             Products = new List<ProductApi>();
             GetList();
-            
 
 
+
+            AddProduct = new CustomCommand(() =>
+            {
+                AddProduct addProduct = new AddProduct();
+                addProduct.ShowDialog();
+                Update();
+            });
+            EditProduct = new CustomCommand(() =>
+            {
+                if (SelectedProduct == null) return;
+                AddProduct addProduct = new AddProduct(SelectedProduct);
+                addProduct.ShowDialog();
+                Update();
+            });
 
 
         }
