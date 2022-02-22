@@ -17,15 +17,15 @@
         <Grid Grid.Row="0" Background="WhiteSmoke">
             <StackPanel Grid.Row="0" HorizontalAlignment="Left" Margin="5" Orientation="Horizontal" >
                 <StackPanel>
-                    <Label Content="Фильтрация по типу:"/>
-                    <ComboBox Width="140" DisplayMemberPath="Title" ItemsSource="{Binding ProductTypes}" SelectedItem="{Binding SelectedProductTypeFilter}"/>
+                    <Label Content="Фильтрация по типу:"  FontFamily="Century Gothic"/>
+                    <ComboBox Width="140" DisplayMemberPath="Title" ItemsSource="{Binding ProductTypeFilter}" SelectedItem="{Binding SelectedProductTypeFilter}"/>
                 </StackPanel>
                 <StackPanel Margin="10 0 10 0">
-                    <Label Content="Поиск:"/>
-                    <TextBox Width="160" Height="22" Text="{Binding SearchText, UpdateSourceTrigger=PropertyChanged}"/>
+                    <Label Content="Поиск:"  FontFamily="Century Gothic"/>
+                    <TextBox Width="160" Height="22" Text="{Binding SearchText, UpdateSourceTrigger=PropertyChanged}"  FontFamily="Century Gothic"/>
                 </StackPanel>
                 <StackPanel>
-                    <Label Grid.Column="1" Content="Критерий поиска:"/>
+                    <Label Grid.Column="1" Content="Критерий поиска:"  FontFamily="Century Gothic"/>
                     <ComboBox Width="160"  ItemsSource="{Binding SearchType}" SelectedItem="{Binding SelectedSearchType}"/>
                 </StackPanel>
             </StackPanel>
@@ -59,13 +59,15 @@
                         <Image Source="/Images/add2.png"/>
                     </Button.Content>
                 </Button>
-            <Label Content="{Binding SearchCountRows}"/>
-            <Button Content="&lt;" Width="20" Command="{Binding BackPage}"/>
-            <Label Content="{Binding Pages}"/>
-            <Button Content=">" Width="20" Command="{Binding ForwardPage}"/>
-        
-            <Label Content="Кол-во записей на странице:"/>
-            <ComboBox Width="200" ItemsSource="{Binding ViewCountRows}" SelectedItem="{Binding SelectedViewCountRows}"/>
+
+                <Label Content="{Binding SearchCountRows}" VerticalAlignment="Center" Foreground="White"  FontFamily="Century Gothic" />
+                <Button Content="&lt;" Width="20" Command="{Binding BackPage}" Height="30"/>
+                <Label Content="{Binding Pages}" VerticalAlignment="Center" Foreground="White"  FontFamily="Century Gothic" />
+                <Button Content=">" Width="20" Command="{Binding ForwardPage}" Height="30" />
+
+                <Label Content="Кол-во записей на странице:" Foreground="White" VerticalAlignment="Center" FontFamily="Century Gothic" />
+                <ComboBox Width="140" ItemsSource="{Binding ViewCountRows}" SelectedItem="{Binding SelectedViewCountRows}" Height="25" />
+                
             </StackPanel>
           
             <Grid/>

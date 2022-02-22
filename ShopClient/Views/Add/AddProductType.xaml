@@ -9,7 +9,7 @@
     <Grid>
         <Border BorderThickness="5" BorderBrush="#FF1A315B" 
                 Panel.ZIndex="2">
-            <Grid>
+            <Grid Background="WhiteSmoke">
                 <Grid.RowDefinitions>
                     <RowDefinition/>
                     <RowDefinition Height="auto"/>

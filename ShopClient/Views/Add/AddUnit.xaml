@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:ShopClient.Views.Add"
         mc:Ignorable="d"
         Title="AddUnit" Height="100" Width="200" WindowStartupLocation="CenterScreen" ResizeMode="NoResize" WindowStyle="None">
-    <Grid>
+    <Grid Background="WhiteSmoke">
         <Border BorderThickness="5" BorderBrush="#FF1A315B" 
                 Panel.ZIndex="2">
             <Grid>

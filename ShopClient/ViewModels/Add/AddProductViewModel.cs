@@ -205,7 +205,7 @@ namespace ShopClient.ViewModels.Add
             else
             {
                    SelectedUnit = Units.First(s => s.Id == product.IdUnit);
-            SelectedProductType = ProductTypes.First(s => s.Id == product.IdProductType);
+                   SelectedProductType = ProductTypes.First(s => s.Id == product.IdProductType);
             }
          
             SignalChanged("Units");
