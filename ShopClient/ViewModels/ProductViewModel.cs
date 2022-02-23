@@ -137,6 +137,7 @@ namespace ShopClient.ViewModels
         public CustomCommand DeleteProduct { get; set; }
         public CustomCommand BackPage { get; set; }
         public CustomCommand ForwardPage { get; set; }
+        public CustomCommand ProductPriceChange { get; set; }
 
         private List<ProductApi> FullProducts = new List<ProductApi>();
         public int rows = 0;
@@ -186,7 +187,7 @@ namespace ShopClient.ViewModels
                 Pagination();
 
             });
-
+            
             AddProduct = new CustomCommand(() =>
             {
                 AddProduct addProduct = new AddProduct();
@@ -204,6 +205,17 @@ namespace ShopClient.ViewModels
                 InitPagination();
                 Pagination();
             });
+
+            ProductPriceChange = new CustomCommand(() =>
+            {
+                if (SelectedProduct == null) return;
+                AddProductPriceChange addProductPriceChange = new AddProductPriceChange(SelectedProduct);
+                addProductPriceChange.ShowDialog();
+                Update();
+                InitPagination();
+                Pagination();
+            });
+
             DeleteProduct = new CustomCommand(() =>
             {
                 MessageBoxResult result = MessageBox.Show("Удалить запись?", "Подтвердите действие", MessageBoxButton.YesNo, MessageBoxImage.Question);

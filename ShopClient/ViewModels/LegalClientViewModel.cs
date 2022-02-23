@@ -12,6 +12,28 @@ namespace ShopClient.ViewModels
 {
    public class LegalClientViewModel : BaseViewModel
     {
+        private string searchText = "";
+        public string SearchText
+        {
+            get => searchText;
+            set
+            {
+                searchText = value;
+                Search();
+            }
+        }
+
+        public List<string> SearchType { get; set; }
+        private string selectedSearchType;
+        public string SelectedSearchType
+        {
+            get => selectedSearchType;
+            set
+            {
+                selectedSearchType = value;
+                Search();
+            }
+        }
         private List<LegalClientApi> legalClients;
         public List<LegalClientApi> LegalClients
         {
@@ -48,12 +70,18 @@ namespace ShopClient.ViewModels
         public CustomCommand EditLegalClient { get; set; }
         public CustomCommand DeleteLegalClient { get; set; }
 
+        private List<LegalClientApi> FullLegalClients = new List<LegalClientApi>();
+        List<LegalClientApi> searchResult;
+
         public LegalClientViewModel()
         {
             Clients = new List<ClientApi>();
             LegalClients = new List<LegalClientApi>();
             GetList();
 
+            SearchType = new List<string>();
+            SearchType.AddRange(new string[] {"Наименование","ИНН","Телефон" });
+            selectedSearchType = SearchType.First();
 
 
             AddLegalClient = new CustomCommand(() =>
@@ -89,6 +117,28 @@ namespace ShopClient.ViewModels
                 else return;
 
             });
+            UpdateList();
+        }
+        private void Search()
+        {
+            var search = SearchText.ToLower();
+
+                if (SelectedSearchType == "Наименование")
+                    searchResult = FullLegalClients
+                        .Where(c => c.Title.ToLower().Contains(search)).ToList();
+                else if (SelectedSearchType == "ИНН")
+                    searchResult = FullLegalClients
+                        .Where(c => c.Inn.ToString().Contains(search)).ToList();
+            else if (SelectedSearchType == "Телефон")
+                searchResult = FullLegalClients
+                    .Where(c => c.Client.Phone.ToString().Contains(search)).ToList();
+            UpdateList();
+        }
+
+        private void UpdateList()
+        {
+
+            LegalClients = searchResult;
         }
 
         private async Task Delete(LegalClientApi legalClient)
@@ -99,6 +149,7 @@ namespace ShopClient.ViewModels
         private async Task GetList()
         {
             LegalClients = await Api.GetListAsync<List<LegalClientApi>>("LegalClient");
+            FullLegalClients = LegalClients;
         }
 
         private void Update()

@@ -31,5 +31,6 @@ namespace ShopClient.Views.Add
             InitializeComponent();
             DataContext = new AddProductViewModel(product);
         }
+
     }
 }

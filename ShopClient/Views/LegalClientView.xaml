@@ -9,14 +9,27 @@
       Title="LegalClientView">
 
     <Grid>
-        <Grid.RowDefinitions>
+        <Grid.RowDefinitions> 
+            <RowDefinition Height="60"/>
             <RowDefinition />
             <RowDefinition Height="40"/>
         </Grid.RowDefinitions>
-        <ListView Grid.Row="0" ItemsSource="{Binding LegalClients, UpdateSourceTrigger=PropertyChanged}"  SelectedItem="{Binding SelectedLegalClient}">
+        <Grid Grid.Row="0" Background="WhiteSmoke">
+            <StackPanel Grid.Row="0" HorizontalAlignment="Left" Margin="5" Orientation="Horizontal" >
+                <StackPanel Margin="0 0 10 0">
+                    <Label Content="Поиск:"  FontFamily="Century Gothic"/>
+                    <TextBox Width="160" Height="22" Text="{Binding SearchText, UpdateSourceTrigger=PropertyChanged}"  FontFamily="Century Gothic"/>
+                </StackPanel>
+                <StackPanel>
+                    <Label Grid.Column="1" Content="Критерий поиска:"  FontFamily="Century Gothic"/>
+                    <ComboBox Width="160"  ItemsSource="{Binding SearchType}" SelectedItem="{Binding SelectedSearchType}"/>
+                </StackPanel>
+            </StackPanel>
+        </Grid>
+        <ListView Grid.Row="1" ItemsSource="{Binding LegalClients, UpdateSourceTrigger=PropertyChanged}"  SelectedItem="{Binding SelectedLegalClient}">
             <ListView.View>
                 <GridView>
-                    <GridViewColumn Header="Название" DisplayMemberBinding="{Binding Title}"/>
+                    <GridViewColumn Header="Наименование" DisplayMemberBinding="{Binding Title}"/>
                     <GridViewColumn Header="ИНН" DisplayMemberBinding="{Binding Inn}"/>
                     <GridViewColumn Header="Email" DisplayMemberBinding="{Binding Email}"/>
                     <GridViewColumn Header="Телефон" DisplayMemberBinding="{Binding Client.Phone}"/>

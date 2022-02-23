@@ -12,6 +12,28 @@ namespace ShopClient.ViewModels
 {
     public class PhysicalClientViewModel : BaseViewModel
     {
+        private string searchText = "";
+        public string SearchText
+        {
+            get => searchText;
+            set
+            {
+                searchText = value;
+                Search();
+            }
+        }
+
+        public List<string> SearchType { get; set; }
+        private string selectedSearchType;
+        public string SelectedSearchType
+        {
+            get => selectedSearchType;
+            set
+            {
+                selectedSearchType = value;
+                Search();
+            }
+        }
         private List<PhysicalClientApi> physicalClients;
         public List<PhysicalClientApi> PhysicalClients
         {
@@ -49,13 +71,18 @@ namespace ShopClient.ViewModels
         public CustomCommand EditPhysicalClient { get; set; }
         public CustomCommand DeletePhysicalClient { get; set; }
 
+        private List<PhysicalClientApi> FullPhysicalClients = new List<PhysicalClientApi>();
+        List<PhysicalClientApi> searchResult;
+
         public PhysicalClientViewModel()
         {    
             Clients = new List<ClientApi>();
             PhysicalClients = new List<PhysicalClientApi>();
             GetList();
-        
 
+            SearchType = new List<string>();
+            SearchType.AddRange(new string[] { "Фамилия", "Адрес", "Телефон" });
+            selectedSearchType = SearchType.First();
 
             AddPhysicalClient = new CustomCommand(() =>
             {
@@ -91,7 +118,27 @@ namespace ShopClient.ViewModels
 
             });
         }
+        private void Search()
+        {
+            var search = SearchText.ToLower();
 
+            if (SelectedSearchType == "Фамилия")
+                searchResult = FullPhysicalClients
+                    .Where(c => c.LastName.ToLower().Contains(search)).ToList();
+            else if (SelectedSearchType == "Адрес")
+                searchResult = FullPhysicalClients
+                    .Where(c => c.Client.Address.ToString().Contains(search)).ToList();
+            else if (SelectedSearchType == "Телефон")
+                searchResult = FullPhysicalClients
+                    .Where(c => c.Client.Phone.ToString().Contains(search)).ToList();
+            UpdateList();
+        }
+
+        private void UpdateList()
+        {
+
+            PhysicalClients = searchResult;
+        }
         private async Task Delete(PhysicalClientApi physicalClient)
         {
             var res = await Api.DeleteAsync<PhysicalClientApi>(physicalClient, "PhysicalClient");
@@ -100,6 +147,7 @@ namespace ShopClient.ViewModels
         private async Task GetList()
         {
             PhysicalClients = await Api.GetListAsync<List<PhysicalClientApi>>("PhysicalClient");
+            FullPhysicalClients = PhysicalClients;
         }
 
         private void Update()

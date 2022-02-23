@@ -1,5 +1,4 @@
-﻿using ModelsApi;
-using ShopClient.ViewModels.Add;
+﻿using ShopClient.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,20 +11,20 @@ using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
+using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace ShopClient.Views.Add
+namespace ShopClient.Views
 {
     /// <summary>
-    /// Логика взаимодействия для AddProductPriceChange.xaml
+    /// Логика взаимодействия для OrderView.xaml
     /// </summary>
-    public partial class AddProductPriceChange : Window
+    public partial class OrderView : Page
     {
-        public AddProductPriceChange(ProductApi product)
+        public OrderView()
         {
             InitializeComponent();
-            DataContext = new AddProductPriceChangeViewModel(product);
+            DataContext = new OrderViewModel();
         }
-      
     }
 }

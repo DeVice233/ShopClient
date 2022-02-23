@@ -1,4 +1,6 @@
-﻿using Microsoft.Win32;
+﻿using LiveCharts;
+using LiveCharts.Wpf;
+using Microsoft.Win32;
 using ModelsApi;
 using ShopClient.Core;
 using System;
@@ -9,12 +11,40 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Media.Imaging;
+using System.Windows.Controls;
+using System.Windows.Media;
+using ShopClient.Views.Add;
 
 namespace ShopClient.ViewModels.Add
 {
-   public class AddProductViewModel : BaseViewModel
+    public class AddProductViewModel : BaseViewModel
     {
-        public ProductApi AddProduct{ get; set; }
+        private List<string> timeStamps;
+        public List<string> TimeStamps
+        {
+            get => timeStamps;
+            set
+            {
+                timeStamps = value;
+                SignalChanged();
+            }
+        }
+        private string selectedTimeStamp;
+        public string SelectedTimeStamp
+        {
+            get => selectedTimeStamp;
+            set
+            {
+                if (value != selectedTimeStamp)
+                {
+                    selectedTimeStamp = value;
+                    SignalChanged();
+                    Chart(AddProduct);
+                }
+            }
+        }
+
+        public ProductApi AddProduct { get; set; }
 
         private BitmapImage imageProduct;
         public BitmapImage ImageProduct
@@ -70,17 +100,28 @@ namespace ShopClient.ViewModels.Add
         public CustomCommand Save { get; set; }
         public CustomCommand Cancel { get; set; }
         public CustomCommand SelectImage { get; set; }
+        public CustomCommand UpdateChart { get; set; }
 
+        public List<ProductApi> Products;
+        private List<ProductCostHistoryApi> ProductCostHistories = new List<ProductCostHistoryApi>();
+        private List<ProductCostHistoryApi> ThisProductCostHistory = new List<ProductCostHistoryApi>();
+        ChartValues<double> Retail = new ChartValues<double>();
+        ChartValues<double> Wholesale = new ChartValues<double>();
+        List<DateTime> Dates = new List<DateTime>();
+        DateTime[] DatesArray; 
 
         public AddProductViewModel(ProductApi product)
         {
             Units = new List<UnitApi>();
             ProductTypes = new List<ProductTypeApi>();
-         
+
+            TimeStamps = new List<string>();
+            TimeStamps.AddRange(new string[] { "За год", "За месяц", "За все время"});
+            SelectedTimeStamp = TimeStamps.Last();
 
             if (product == null)
             {
-                AddProduct = new ProductApi { };
+                AddProduct = new ProductApi { Image="" };
                 GetList(product);
             }
             else
@@ -90,24 +131,28 @@ namespace ShopClient.ViewModels.Add
                     Id = product.Id,
                     Title = product.Title,
                     Description = product.Description,
-                    Article = product.Article, 
+                    Article = product.Article,
                     Barcode = product.Barcode,
                     Image = product.Image,
                     IdUnit = product.IdUnit,
                     IdProductType = product.IdProductType,
                     RetailPrice = product.RetailPrice,
-                    WholesalePrice = product.WholesalePrice 
+                    WholesalePrice = product.WholesalePrice
                 };
-           
+
                 GetList(product);
 
-                if(product.Image.Length == 0 || product.Image == null)
+                if ( product.Image == null)
                 {
-                product.Image = "picture.JPG";
+                    product.Image = "picture.JPG";
                 }
-                ImageProduct = GetImageFromPath(Environment.CurrentDirectory + "/Products/" + product.Image); 
+                if (product.Image.Length == 0)
+                {
+                    product.Image = "picture.JPG";
+                }
+                ImageProduct = GetImageFromPath(Environment.CurrentDirectory + "/Products/" + product.Image);
             }
-               
+
 
             Save = new CustomCommand(() =>
             {
@@ -115,19 +160,22 @@ namespace ShopClient.ViewModels.Add
                 if (result == MessageBoxResult.Yes)
                 {
                     try
-                    { 
+                    {
+                        if (!IsValid(AddProduct)) return;
                         AddProduct.IdProductType = SelectedProductType.Id;
-                            AddProduct.IdUnit = SelectedUnit.Id;
+                        AddProduct.IdUnit = SelectedUnit.Id;
                         if (AddProduct.Id == 0)
                         {
+                            AddProduct.WholesalePrice = 0;
+                            AddProduct.RetailPrice = 0;
                             Add(AddProduct);
-                        }    
-                          
+                        }
+
                         else
                         {
-                        Edit(AddProduct);
+                            Edit(AddProduct);
                         }
-                           
+
                         foreach (Window window in Application.Current.Windows)
                         {
                             if (window.DataContext == this) CloseWin(window);
@@ -155,6 +203,11 @@ namespace ShopClient.ViewModels.Add
                 else return;
             });
 
+            UpdateChart = new CustomCommand(() =>
+            {
+                Chart(product);
+            });
+
             SelectImage = new CustomCommand(() =>
             {
                 OpenFileDialog ofd = new OpenFileDialog();
@@ -175,7 +228,35 @@ namespace ShopClient.ViewModels.Add
                 }
             });
 
+            BuildChart();
         }
+
+        private bool IsValid(ProductApi product)
+        {
+            foreach(ProductApi product1 in Products)
+            {
+                if (product.Article == product1.Article)
+                {
+                    MessageBox.Show("Артикул должен быть уникальным!", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
+                    return false;
+                }
+            }
+            return true;
+        }
+
+        public SeriesCollection SeriesCollection { get; set; }
+        private string[] labels;
+        public string[] Labels 
+        {
+            get => labels;
+            set
+            {
+                labels = value;
+                SignalChanged();
+            }
+        }
+
+        public Func<double, string> YFormatter { get; set; }
 
         public void CloseWin(object obj)
         {
@@ -194,20 +275,26 @@ namespace ShopClient.ViewModels.Add
         }
         private async Task GetList(ProductApi product)
         {
-            
+            ProductCostHistories = await Api.GetListAsync<List<ProductCostHistoryApi>>("ProductCostHistory");
             ProductTypes = await Api.GetListAsync<List<ProductTypeApi>>("ProductType");
+            if (product != null)
+            {
+                ThisProductCostHistory = ProductCostHistories.Where(c => c.IdProduct == product.Id).ToList();
+                PrepareChart(ThisProductCostHistory);
+            }
+          
             Units = await Api.GetListAsync<List<UnitApi>>("Unit");
-            if(product == null)
+            Products = await Api.GetListAsync<List<ProductApi>>("Product");
+            if (product == null)
             {
                 SelectedUnit = Units.First();
                 SelectedProductType = ProductTypes.First();
             }
             else
             {
-                   SelectedUnit = Units.First(s => s.Id == product.IdUnit);
-                   SelectedProductType = ProductTypes.First(s => s.Id == product.IdProductType);
+                SelectedUnit = Units.First(s => s.Id == product.IdUnit);
+                SelectedProductType = ProductTypes.First(s => s.Id == product.IdProductType);
             }
-         
             SignalChanged("Units");
             SignalChanged("ProductTypes");
         }
@@ -220,6 +307,68 @@ namespace ShopClient.ViewModels.Add
             img.UriSource = new Uri(url, UriKind.Absolute);
             img.EndInit();
             return img;
+        }
+        public void Chart(ProductApi product)
+        {
+            List<ProductCostHistoryApi> TimeStampHistory;
+            if (SelectedTimeStamp == "За год")
+            {
+                TimeStampHistory = ProductCostHistories.Where(c => c.IdProduct == product.Id && c.ChangeDate > (DateTime.Now - TimeSpan.FromDays(365))).ToList();
+                PrepareChart(TimeStampHistory);
+            }
+            else if (SelectedTimeStamp == "За месяц")
+            {
+                TimeStampHistory = ProductCostHistories.Where(c => c.IdProduct == product.Id && c.ChangeDate > (DateTime.Now - TimeSpan.FromDays(30))).ToList();
+                PrepareChart(TimeStampHistory);
+            }
+            else if (SelectedTimeStamp == "За все время")
+            {
+                TimeStampHistory = ProductCostHistories.Where(c => c.IdProduct == product.Id).ToList();
+                PrepareChart(TimeStampHistory);
+            }
+        }
+
+        public void PrepareChart(List<ProductCostHistoryApi> productCostHistories)
+        {
+            Retail.Clear();
+            Wholesale.Clear();
+            Dates.Clear();
+            var result = productCostHistories.OrderBy(x => x.ChangeDate);
+            foreach (ProductCostHistoryApi productCostHistory in result)
+            {
+
+                Retail.Add((double)productCostHistory.RetailPriceValue);
+                Wholesale.Add((double)productCostHistory.WholesalePirceValue);
+                Dates.Add((DateTime)productCostHistory.ChangeDate);
+            }
+            string[] dateTimes = new string[Dates.Count];
+            for (int i = 0; i < Dates.Count; i++)
+            {
+                dateTimes[i] = Dates[i].Date.ToShortDateString().ToString();
+            }
+            Labels = dateTimes;
+            BuildChart();
+        }
+
+        public void BuildChart()
+        {
+
+            SeriesCollection = new SeriesCollection
+              {
+                new LineSeries
+                {
+                    Title = "Розн. цена",
+                     Values = Retail
+                },
+                new LineSeries
+                {
+                    Title = "Опт. цена",
+                    Values = Wholesale
+                },
+
+              };
+            
+            YFormatter = value => value.ToString("C");
         }
     }
 }

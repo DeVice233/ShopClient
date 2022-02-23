@@ -98,8 +98,18 @@
                         </Grid.ColumnDefinitions>
                         <Grid Background="#FF1A315B">
                             <StackPanel Margin="0,10,0,0">
+                                <RadioButton Content="Продукты" Height="60"
+                             FontSize="20" Foreground="white"  IsChecked="True"
+                             Style="{StaticResource MenuButtonThemeHorizontal}"
+                             Command="{Binding OpenProductView}">
+                                </RadioButton>
+                                <RadioButton Content="Заказы" Height="60"
+                             FontSize="20" Foreground="white"
+                             Style="{StaticResource MenuButtonThemeHorizontal}"
+                             Command="{Binding OpenOrderView}">
+                                </RadioButton>
                                 <RadioButton Content="Ед. измерения" Height="60"
-                             FontSize="20" Foreground="white" IsChecked="True"
+                             FontSize="20" Foreground="white"
                              Style="{StaticResource MenuButtonThemeHorizontal}"
                              Command="{Binding OpenUnitView}">
                                 </RadioButton>
@@ -117,11 +127,6 @@
                              FontSize="20" Foreground="white" 
                              Style="{StaticResource MenuButtonThemeHorizontal}"
                              Command="{Binding OpenLegalClientView}">
-                                </RadioButton>
-                                <RadioButton Content="Продукты" Height="60"
-                             FontSize="20" Foreground="white" 
-                             Style="{StaticResource MenuButtonThemeHorizontal}"
-                             Command="{Binding OpenProductView}">
                                 </RadioButton>
                             </StackPanel>
                         </Grid>

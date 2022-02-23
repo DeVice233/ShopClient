@@ -11,8 +11,22 @@ namespace ShopClient
 {
     public class MainVM : BaseViewModel
     {
-        private object _currentPage;
+        public List<SaleTypeApi> SaleTypes = new List<SaleTypeApi>();
+        public List<ActionTypeApi> ActionTypes = new List<ActionTypeApi>();
+
+        private object _currentListPage;
         public object CurrentListPage
+        {
+            get { return _currentListPage; }
+            set
+            {
+                _currentListPage = value;
+                SignalChanged("CurrentListPage");
+            }
+        }
+
+        private object _currentPage;
+        public object CurrentPage
         {
             get { return _currentPage; }
             set
@@ -27,10 +41,12 @@ namespace ShopClient
         public CustomCommand OpenPhysicalClientView { get; set; }
         public CustomCommand OpenLegalClientView { get; set; }
         public CustomCommand OpenProductView { get; set; }
+        public CustomCommand OpenOrderView { get; set; }
 
         public MainVM()
         {
-            CurrentListPage = new UnitView();
+            GetList();
+            CurrentListPage = new ProductView();
 
             OpenUnitView = new CustomCommand(()=>
             {
@@ -57,7 +73,40 @@ namespace ShopClient
                 CurrentListPage = new ProductView();
                 SignalChanged("CurrentListPage");
             });
+            OpenOrderView = new CustomCommand(() =>
+            {
+                CurrentListPage = new OrderView();
+                SignalChanged("CurrentListPage");
+            });
         } 
       
+        public void FirstStart()
+        {
+            if(SaleTypes.Count == 0 && ActionTypes.Count == 0)
+            {
+                AddSaleType(new SaleTypeApi { Title="Розничная" });
+                AddSaleType(new SaleTypeApi { Title = "Оптовая" });
+
+                AddActionType(new ActionTypeApi { Name = "Продажа" });
+                AddActionType(new ActionTypeApi { Name = "Возврат" });
+                AddActionType(new ActionTypeApi { Name = "Переоценка" });
+                AddActionType(new ActionTypeApi { Name = "Приход" });
+                AddActionType(new ActionTypeApi { Name = "Списание" });
+            }
+        }
+        private async Task AddSaleType(SaleTypeApi saleType)
+        {
+            var id = await Api.PostAsync<SaleTypeApi>(saleType, "SaleType");
+        }
+        private async Task AddActionType(ActionTypeApi actionType)
+        {
+            var id = await Api.PostAsync<ActionTypeApi>(actionType, "ActionType");
+        }
+        private async Task GetList()
+        {
+            SaleTypes = await Api.GetListAsync<List<SaleTypeApi>>("SaleType");
+            ActionTypes = await Api.GetListAsync<List<ActionTypeApi>>("ActionType");
+            FirstStart();
+        }
     }
 }

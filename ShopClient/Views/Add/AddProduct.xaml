@@ -4,9 +4,15 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:ShopClient.Views.Add"
+        xmlns:lvc="clr-namespace:LiveCharts.Wpf;assembly=LiveCharts.Wpf"
         mc:Ignorable="d"
-        Title="AddProduct" Height="400" Width="600" WindowStartupLocation="CenterScreen" ResizeMode="NoResize" WindowStyle="None">
+        Title="AddProduct" Height="450" Width="850" WindowStartupLocation="CenterScreen" ResizeMode="NoResize" WindowStyle="None">
     <Grid>
+        <Grid.Resources>
+            <Style x:Key="CleanSeparator" TargetType="lvc:Separator">
+                <Setter Property="IsEnabled" Value="False"></Setter>
+            </Style>
+        </Grid.Resources>
         <Border BorderThickness="5" BorderBrush="#FF1A315B" 
                 Panel.ZIndex="2">
             <Grid Background="WhiteSmoke">
@@ -17,41 +23,47 @@
                 </Grid.RowDefinitions>
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="auto"/>
+                    <ColumnDefinition Width="180"/>
                     <ColumnDefinition/>
                 </Grid.ColumnDefinitions>
-                <StackPanel Orientation="Horizontal" DataContext="{Binding AddProduct}" Grid.Row="0" Margin="0 10 0 0">
+                <StackPanel Orientation="Vertical" Grid.Row="0">
+                    <StackPanel Orientation="Horizontal" DataContext="{Binding AddProduct}"  Margin="0 10 0 0">
 
-                    <StackPanel Orientation="Vertical" >
-                        <Label Content="Артикул:"/>
-                        <Label Content="Штрихкод:"/>
-                        <Label Content="Название:"/>
-                        <Label Content="Опт. цена:"/>
-                        <Label Content="Розн. цена:"/>
+                        <StackPanel Orientation="Vertical" >
+                            <Label Content="Артикул:"/>
+                            <Label Content="Штрихкод:"/>
+                            <Label Content="Название:"/>
+                            <Label Content="Опт. цена:"/>
+                            <Label Content="Розн. цена:"/>
+                        </StackPanel>
+
+                        <StackPanel Orientation="Vertical">
+                            <TextBox Text="{Binding Article}" Style="{StaticResource PropertyTextBox}" Width="150"/>
+                            <TextBox Text="{Binding Barcode}" Style="{StaticResource PropertyTextBox}" />
+                            <TextBox Text="{Binding Title}" Style="{StaticResource PropertyTextBox}"   />
+                            <TextBox Text="{Binding WholesalePrice}" Style="{StaticResource PropertyTextBox}" IsEnabled="False"/>
+                            <TextBox Text="{Binding RetailPrice}" Style="{StaticResource PropertyTextBox}" IsEnabled="False"/>
+
+                        </StackPanel>
                     </StackPanel>
-
-                    <StackPanel Orientation="Vertical">
-                        <TextBox Text="{Binding Article}" Style="{StaticResource PropertyTextBox}" Width="200"/>
-                        <TextBox Text="{Binding Barcode}" Style="{StaticResource PropertyTextBox}" />
-                        <TextBox Text="{Binding Title}" Style="{StaticResource PropertyTextBox}"   />
-                        <TextBox Text="{Binding WholesalePrice}" Style="{StaticResource PropertyTextBox}" />
-                        <TextBox Text="{Binding RetailPrice}" Style="{StaticResource PropertyTextBox}"/>
-                    </StackPanel>
-
                 </StackPanel>
+              
                 <StackPanel Grid.Row="1">
                        <StackPanel Width="200" >
-                    <Label Content="Единица измерения:"/>
+                       
+                        <Label Content="Единица измерения:"/>
                     <ComboBox ItemsSource="{Binding Units}" DisplayMemberPath="Title" SelectedItem="{Binding SelectedUnit}"/>
                 </StackPanel>
                 <StackPanel Width="200" >
                     <Label Content="Тип продукта:"/>
                     <ComboBox ItemsSource="{Binding ProductTypes}" DisplayMemberPath="Title" SelectedItem="{Binding SelectedProductType}"/>
-                </StackPanel>
+                      
+                    </StackPanel>
                 </StackPanel>
                 <StackPanel Grid.Row="0" Grid.Column="1" HorizontalAlignment="Left" Margin="10 10 0 0">
                     <Label Content="Фото:"/>
                     <Image Source="{Binding ImageProduct}" Width="150" Height="150"/>
-                    <Button Content="Выбрать изображение" Command="{Binding SelectImage}" Margin="0 10 0 0"/>
+                    <Button Content="Выбрать изображение" Command="{Binding SelectImage}" Margin="0 10 0 0" Style="{StaticResource MainButton}"/>
                 </StackPanel>
                 <StackPanel Grid.Column="1" Grid.Row="1" DataContext="{Binding AddProduct}" Margin="0 10 10 0">
                     <Label Content="Описание:"/>
@@ -60,11 +72,32 @@
 
                 <Button Content="Отмена" Command="{Binding Cancel}" Grid.Row="2" Height="30" Margin="5" HorizontalAlignment="Left" VerticalAlignment="Bottom" Grid.ColumnSpan="2"  FontFamily="Century Gothic" Foreground="Red"
                     Background="Transparent" BorderBrush="Red" />
-                <Button Content="Сохранить" Command="{Binding Save}" Grid.Row="2" Height="30" Margin="5" HorizontalAlignment="Right" VerticalAlignment="Bottom" Grid.ColumnSpan="2"  FontFamily="Century Gothic" Foreground="Green"
+                <Button Content="Сохранить" Command="{Binding Save}" Grid.Row="2" Height="30" Margin="5" HorizontalAlignment="Right" VerticalAlignment="Bottom" Grid.ColumnSpan="3"  FontFamily="Century Gothic" Foreground="Green"
                     Background="Transparent" BorderBrush="Green" />
 
-            </Grid>
+                <Grid Grid.Column="2" Grid.RowSpan="2">
+                    <StackPanel Orientation="Vertical">
+                        <Label Content="График изменения цен:" FontFamily="Century Gothic" FontSize="14" />
+                        <Grid  Height="300">
+                            <lvc:CartesianChart Series="{Binding SeriesCollection}" LegendLocation="Right" >
+                                <lvc:CartesianChart.AxisY>
+                                    <lvc:Axis Title="Цена" LabelFormatter="{Binding YFormatter}"></lvc:Axis>
+                                </lvc:CartesianChart.AxisY>
+                                <lvc:CartesianChart.AxisX>
+                                    <lvc:Axis Title="Дата" Labels="{Binding Labels}"></lvc:Axis>
+                                </lvc:CartesianChart.AxisX>
+                            </lvc:CartesianChart>
 
+                        </Grid>
+                        <Label Content="Промежуток времени:" FontFamily="Century Gothic"/>
+                        <ComboBox ItemsSource="{Binding TimeStamps}" SelectedItem="{Binding SelectedTimeStamp}" Width="120" HorizontalAlignment="Left" Margin="10 0 0 0"/>
+                        <!--<Button Content="Обновить график" Command="{Binding UpdateChart}" Style="{StaticResource MainButton}" Grid.Row="2" Height="20" Margin="5" Width="120" FontFamily="Century Gothic" />-->
+                    </StackPanel>
+                </Grid>
+             
+            </Grid>
+         
         </Border>
     </Grid>
+    
 </Window>

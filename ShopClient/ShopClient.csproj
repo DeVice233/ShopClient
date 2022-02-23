@@ -11,6 +11,10 @@
   </ItemGroup>
 
   <ItemGroup>
+    <PackageReference Include="LiveCharts.Wpf" Version="0.9.7" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Reference Include="ModelsApi">
       <HintPath>..\..\ModelsApi\bin\Debug\net5.0\ModelsApi.dll</HintPath>
     </Reference>
