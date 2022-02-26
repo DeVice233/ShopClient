@@ -36,7 +36,9 @@ namespace ShopClient
             }
         }
 
+        public CustomCommand OpenProductOrderInView { get; set; }
         public CustomCommand OpenUnitView { get; set; }
+        public CustomCommand OpenFabricatorView { get; set; }
         public CustomCommand OpenProductTypeView { get; set; }
         public CustomCommand OpenPhysicalClientView { get; set; }
         public CustomCommand OpenLegalClientView { get; set; }
@@ -47,6 +49,7 @@ namespace ShopClient
         {
             GetList();
             CurrentListPage = new ProductView();
+            CurrentPage = new ProductOrderInView();
 
             OpenUnitView = new CustomCommand(()=>
             {
@@ -77,6 +80,16 @@ namespace ShopClient
             {
                 CurrentListPage = new OrderView();
                 SignalChanged("CurrentListPage");
+            }); 
+            OpenFabricatorView = new CustomCommand(() =>
+            {
+                CurrentListPage = new FabricatorView();
+                SignalChanged("CurrentListPage");
+            });
+            OpenProductOrderInView = new CustomCommand(() =>
+            {
+                CurrentPage = new ProductOrderInView();
+                SignalChanged("CurrentPage");
             });
         } 
       
@@ -90,7 +103,7 @@ namespace ShopClient
                 AddActionType(new ActionTypeApi { Name = "Продажа" });
                 AddActionType(new ActionTypeApi { Name = "Возврат" });
                 AddActionType(new ActionTypeApi { Name = "Переоценка" });
-                AddActionType(new ActionTypeApi { Name = "Приход" });
+                AddActionType(new ActionTypeApi { Name = "Поступление" });
                 AddActionType(new ActionTypeApi { Name = "Списание" });
             }
         }

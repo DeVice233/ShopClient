@@ -37,6 +37,7 @@
                     <GridViewColumn Header="Артикул" DisplayMemberBinding="{Binding Article}"/>
                     <GridViewColumn Header="Штрихкод" DisplayMemberBinding="{Binding Barcode}"/>
                     <GridViewColumn Header="Название" DisplayMemberBinding="{Binding Title}"/>
+                    <GridViewColumn Header="Производитель" DisplayMemberBinding="{Binding Fabricator.Title}"/>
                     <GridViewColumn Header="Тип" DisplayMemberBinding="{Binding ProductType.Title}"/>
                     <GridViewColumn Header="Ед." DisplayMemberBinding="{Binding Unit.Title}"/>
                     <GridViewColumn Header="Розн. цена" DisplayMemberBinding="{Binding RetailPrice}"/>

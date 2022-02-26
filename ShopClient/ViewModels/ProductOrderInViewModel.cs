@@ -3,6 +3,7 @@ using ShopClient.Core;
 using ShopClient.Views.Add;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -10,21 +11,8 @@ using System.Windows;
 
 namespace ShopClient.ViewModels
 {
-    public class ProductViewModel : BaseViewModel
+   public class ProductOrderInViewModel : BaseViewModel
     {
-        public List<string> ViewCountRows { get; set; }
-
-        public string SelectedViewCountRows
-        {
-            get => selectedViewCountRows;
-            set
-            {
-                selectedViewCountRows = value;
-                paginationPageIndex = 0;
-                Pagination();
-            }
-        }
-
         private List<ProductTypeApi> productTypeFilter;
         public List<ProductTypeApi> ProductTypeFilter
         {
@@ -45,26 +33,6 @@ namespace ShopClient.ViewModels
                 selectedProductTypeFilter = value;
                 SignalChanged();
                 Search();
-            }
-        }
-
-        public string SearchCountRows
-        {
-            get => searchCountRows;
-            set
-            {
-                searchCountRows = value;
-                SignalChanged();
-            }
-        }
-        private string pages;
-        public string Pages
-        {
-            get => pages;
-            set
-            {
-                pages = value;
-                SignalChanged();
             }
         }
         private string searchText = "";
@@ -99,13 +67,13 @@ namespace ShopClient.ViewModels
                 SignalChanged();
             }
         }
-        private List<FabricatorApi> fabricators;
-        public List<FabricatorApi> Fabricators
+        private ObservableCollection<ProductOrderInApi> productOrderIns;
+        public ObservableCollection<ProductOrderInApi> ProductOrderIns
         {
-            get => fabricators;
+            get => productOrderIns;
             set
             {
-                Set(ref fabricators, value);
+                Set(ref productOrderIns, value);
                 SignalChanged();
             }
         }
@@ -131,6 +99,17 @@ namespace ShopClient.ViewModels
 
             }
         }
+        private List<LegalClientApi> legalClients;
+        public List<LegalClientApi> LegalClients
+        {
+            get => legalClients;
+            set
+            {
+                Set(ref legalClients, value);
+                SignalChanged();
+
+            }
+        }
         private ProductApi selectedProduct = new ProductApi { };
         public ProductApi SelectedProduct
         {
@@ -141,105 +120,95 @@ namespace ShopClient.ViewModels
                 SignalChanged();
             }
         }
-
-        public CustomCommand AddProduct{ get; set; }
-        public CustomCommand EditProduct { get; set; }
-        public CustomCommand DeleteProduct { get; set; }
-        public CustomCommand BackPage { get; set; }
-        public CustomCommand ForwardPage { get; set; }
-        public CustomCommand ProductPriceChange { get; set; }
-
-        private List<ProductApi> FullProducts = new List<ProductApi>();
-        public int rows = 0;
-        public int CountPages = 0;
-        List<ProductApi> searchResult;
-        int paginationPageIndex = 0;
-        private string searchCountRows;
-        private string selectedViewCountRows;
-        public ProductViewModel()
+        private LegalClientApi selectedLegalClient;
+        public LegalClientApi SelectedLegalClient
         {
-            Fabricators = new List<FabricatorApi>();
+            get => selectedLegalClient;
+            set
+            {
+                selectedLegalClient = value;
+                SignalChanged();
+            }
+        }
+        private ProductOrderInApi selectedProductOrderIn;
+        public ProductOrderInApi SelectedProductOrderIn
+        {
+            get => selectedProductOrderIn;
+            set
+            {
+                selectedProductOrderIn = value;
+                SignalChanged();
+            }
+        }
+
+        public CustomCommand AddProduct { get; set; }
+        public CustomCommand AddOrder { get; set; }
+        public CustomCommand DeleteProductOrderIn { get; set; }
+
+        public int NewOrderId;
+        List<ProductApi> searchResult;
+        private List<ProductApi> FullProducts = new List<ProductApi>();
+        private List<ActionTypeApi> ActionTypes = new List<ActionTypeApi>();
+        public ProductOrderInViewModel()
+        {
             Units = new List<UnitApi>();
             ProductTypes = new List<ProductTypeApi>();
             Products = new List<ProductApi>();
             ProductTypeFilter = new List<ProductTypeApi>();
+            ProductOrderIns = new ObservableCollection<ProductOrderInApi>();
             GetList();
-
-            ViewCountRows = new List<string>();
-            ViewCountRows.AddRange(new string[] { "10", "50", "все" });
-            selectedViewCountRows = ViewCountRows.First();
 
             SearchType = new List<string>();
             SearchType.AddRange(new string[] { "Наименование", "Артикул" });
             selectedSearchType = SearchType.First();
 
-            BackPage = new CustomCommand(() =>
-            {
-                if (searchResult == null)
-                    return;
-                if (paginationPageIndex > 0)
-                    paginationPageIndex--;
-                Pagination();
-            });
-
-            ForwardPage = new CustomCommand(() =>
-            {
-                if (searchResult == null)
-                    return;
-                int.TryParse(SelectedViewCountRows, out int rowsOnPage);
-                if (rowsOnPage == 0)
-                    return;
-                int countPage = searchResult.Count() / rowsOnPage;
-                CountPages = countPage;
-                if (searchResult.Count() % rowsOnPage != 0)
-                    countPage++;
-                if (countPage > paginationPageIndex + 1)
-                    paginationPageIndex++;
-                Pagination();
-
-            });
-            
             AddProduct = new CustomCommand(() =>
             {
-                AddProduct addProduct = new AddProduct();
-                addProduct.ShowDialog();
-                Update();
-                InitPagination();
-                Pagination();
-            });
-            EditProduct = new CustomCommand(() =>
-            {
                 if (SelectedProduct == null) return;
-                AddProduct addProduct = new AddProduct(SelectedProduct);
-                addProduct.ShowDialog();
+                ProductOrderInApi productOrderIn = new ProductOrderInApi{ IdProduct = SelectedProduct.Id};
+                AddProductOrderIn addProductOrderIn = new AddProductOrderIn(productOrderIn);
+                addProductOrderIn.ShowDialog();
+                if (productOrderIn.Count <= 0 || productOrderIn.Count == null)
+                {
+                    Update();
+                    return;
+                }
+                GetProperties(productOrderIn);
+                ProductOrderIns.Add(productOrderIn);
                 Update();
-                InitPagination();
-                Pagination();
             });
-
-            ProductPriceChange = new CustomCommand(() =>
+            AddOrder = new CustomCommand(() =>
             {
-                if (SelectedProduct == null) return;
-                AddProductPriceChange addProductPriceChange = new AddProductPriceChange(SelectedProduct);
-                addProductPriceChange.ShowDialog();
-                Update();
-                InitPagination();
-                Pagination();
-            });
-
-            DeleteProduct = new CustomCommand(() =>
-            {
-                MessageBoxResult result = MessageBox.Show("Удалить запись?", "Подтвердите действие", MessageBoxButton.YesNo, MessageBoxImage.Question);
+               
+                MessageBoxResult result = MessageBox.Show("Принять заказ?", "Подтвердите действие", MessageBoxButton.YesNo, MessageBoxImage.Question);
                 if (result == MessageBoxResult.Yes)
                 {
-                    if (SelectedProduct == null) return;
+                    if (ProductOrderIns.Count == 0 || ProductOrderIns == null)
+                    {
+                        MessageBox.Show("Заказ пуст!", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
+                        return;
+                    }
+                    if (SelectedLegalClient == null)
+                    {
+                        MessageBox.Show("Необходимо выбрать поствщика!", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
+                        return;
+                    }
                     try
                     {
-                        Delete(SelectedProduct);
-                        Update();
-                        SignalChanged("Products");
-                        InitPagination();
-                        Pagination();
+                        ActionTypeApi actionType = ActionTypes.First(c => c.Name == "Поступление");
+                        ClientApi client = SelectedLegalClient.Client;
+
+                        AddNewOrder(new OrderApi {Date = DateTime.Now, IdActionType = actionType.Id, IdClient =client.Id });
+
+                        foreach (ProductOrderInApi productOrderIn in ProductOrderIns)
+                        {
+                            AddNewProductOrderIn(new ProductOrderInApi { Count = productOrderIn.Count });
+                        }
+                     
+                        MessageBox.Show("Заказ принят", "Успех", MessageBoxButton.OK, MessageBoxImage.Information);
+
+                        SelectedLegalClient = null;
+                        ProductOrderIns.Clear();
                     }
                     catch (Exception e)
                     {
@@ -248,34 +217,15 @@ namespace ShopClient.ViewModels
                 }
                 else return;
 
+
             });
-        }
-
-        private void InitPagination()
-        {
-            SearchCountRows = $"Найдено записей: {searchResult.Count} из {FullProducts.Count}";
-            paginationPageIndex = 0;
-        }
-
-        private void Pagination()
-        {
-            int rowsOnPage = 0;
-            if (!int.TryParse(SelectedViewCountRows, out rowsOnPage))
+            DeleteProductOrderIn = new CustomCommand(() =>
             {
-                Products = searchResult;
-            }
-            else
-            {
-                Products = searchResult.Skip(rowsOnPage * paginationPageIndex)
-                    .Take(rowsOnPage).ToList();
-
-            }
-
-            int.TryParse(SelectedViewCountRows, out rows);
-            if (rows == 0)
-                rows = FullProducts.Count;
-            CountPages = (searchResult.Count() - 1) / rows;
-            Pages = $"{paginationPageIndex + 1}/{CountPages + 1}";
+                if (SelectedProductOrderIn == null) return;
+                ProductOrderIns.Remove(SelectedProductOrderIn);
+                Update();
+            });
+            UpdateList();
         }
 
         private void Search()
@@ -301,45 +251,56 @@ namespace ShopClient.ViewModels
                     searchResult = FullProducts
                         .Where(c => c.Article.ToString().Contains(search) && c.ProductType.Title.Contains(SelectedProductTypeFilter.Title)).ToList();
             }
-            InitPagination();
-            Pagination();
+                 UpdateList();
         }
 
-        private async Task Delete(ProductApi product)
-        {
-            var res = await Api.DeleteAsync<ProductApi>(product, "Product");
-            GetList();
-        }
         private async Task GetList()
         {
-            Fabricators = await Api.GetListAsync<List<FabricatorApi>>("Fabricator");
+            ActionTypes = await Api.GetListAsync<List<ActionTypeApi>>("ActionType");
+            var legalClients = await Api.GetListAsync<List<LegalClientApi>>("LegalClient");
+            LegalClients = legalClients.Where(s => s.IsSupplier == 1).ToList();
             Units = await Api.GetListAsync<List<UnitApi>>("Unit");
             ProductTypes = await Api.GetListAsync<List<ProductTypeApi>>("ProductType");
             Products = await Api.GetListAsync<List<ProductApi>>("Product");
             FullProducts = Products;
             foreach (ProductApi product in Products)
             {
-                product.Fabricator = Fabricators.First(s => s.Id == product.IdFabricator);
                 product.Unit = Units.First(s => s.Id == product.IdUnit);
                 product.ProductType = ProductTypes.First(s => s.Id == product.IdProductType);
-            } 
+            }
             ProductTypeFilter = await Api.GetListAsync<List<ProductTypeApi>>("ProductType");
             ProductTypeFilter.Add(new ProductTypeApi { Title = "Все типы" });
             SelectedProductTypeFilter = ProductTypeFilter.Last();
-        
-            InitPagination();
-            Pagination();
+           
         }
 
+        private void GetProperties(ProductOrderInApi productOrderIn)
+        {
+                productOrderIn.Product = Products.First(s => s.Id == productOrderIn.IdProduct);
+                productOrderIn.Product.Unit = Units.First(s => s.Id == productOrderIn.Product.IdUnit);
+                productOrderIn.Product.ProductType = ProductTypes.First(s => s.Id == productOrderIn.Product.IdProductType);
+        }
+        private void UpdateList()
+        {
+            Products = searchResult;
+        }
+        private async Task AddNewOrder(OrderApi order)
+        {
+            NewOrderId = await Api.PostAsync<OrderApi>(order, "Order");
+        }
+        private async Task AddNewProductOrderIn(ProductOrderInApi productOrderIn)
+        {
+            var id = await Api.PostAsync<ProductOrderInApi>(productOrderIn, "ProductOrderIn");
+        }
         private void Update()
-        { 
-            
+        {
             GetList();
             SignalChanged("Units");
             SignalChanged("ProductTypes");
             SignalChanged("Products");
+            SignalChanged("ProductOrderIns");
+            SignalChanged("LegalClients");
             SelectedProductTypeFilter = ProductTypeFilter.Last();
         }
-      
     }
 }

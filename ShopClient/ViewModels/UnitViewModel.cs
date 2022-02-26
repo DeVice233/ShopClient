@@ -81,7 +81,6 @@ namespace ShopClient.ViewModels
             });
         }
 
-
         private async Task GetList()
         {
             Units = await Api.GetListAsync<List<UnitApi>>("Unit");

@@ -78,7 +78,7 @@ namespace ShopClient.ViewModels.Add
 
         public AddProductPriceChangeViewModel(ProductApi product)
         {
-            ProductTitle = product.Title;
+            ProductTitle = $"{product.Fabricator.Title} " + product.Title + $" ({product.Unit.Title})";
             OldRetailPrice = product.RetailPrice;
             OldWholesalePrice = product.WholesalePrice;
             ChangeDate = DateTime.Now;

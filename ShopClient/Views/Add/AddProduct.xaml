@@ -59,6 +59,11 @@
                     <ComboBox ItemsSource="{Binding ProductTypes}" DisplayMemberPath="Title" SelectedItem="{Binding SelectedProductType}"/>
                       
                     </StackPanel>
+                    <StackPanel Width="200" >
+                        <Label Content="Производитель:"/>
+                        <ComboBox ItemsSource="{Binding Fabricators}" DisplayMemberPath="Title" SelectedItem="{Binding SelectedFabricator}"/>
+
+                    </StackPanel>
                 </StackPanel>
                 <StackPanel Grid.Row="0" Grid.Column="1" HorizontalAlignment="Left" Margin="10 10 0 0">
                     <Label Content="Фото:"/>

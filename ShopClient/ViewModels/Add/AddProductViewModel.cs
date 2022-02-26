@@ -56,7 +56,16 @@ namespace ShopClient.ViewModels.Add
                 SignalChanged();
             }
         }
-
+        private List<FabricatorApi> fabricators;
+        public List<FabricatorApi> Fabricators
+        {
+            get => fabricators;
+            set
+            {
+                fabricators = value;
+                SignalChanged();
+            }
+        }
         private List<UnitApi> units;
         public List<UnitApi> Units
         {
@@ -74,6 +83,16 @@ namespace ShopClient.ViewModels.Add
             set
             {
                 productTypes = value;
+                SignalChanged();
+            }
+        }
+        private FabricatorApi selectedFabricator;
+        public FabricatorApi SelectedFabricator
+        {
+            get => selectedFabricator;
+            set
+            {
+                selectedFabricator = value;
                 SignalChanged();
             }
         }
@@ -114,6 +133,7 @@ namespace ShopClient.ViewModels.Add
         {
             Units = new List<UnitApi>();
             ProductTypes = new List<ProductTypeApi>();
+            Fabricators = new List<FabricatorApi>();
 
             TimeStamps = new List<string>();
             TimeStamps.AddRange(new string[] { "За год", "За месяц", "За все время"});
@@ -121,7 +141,7 @@ namespace ShopClient.ViewModels.Add
 
             if (product == null)
             {
-                AddProduct = new ProductApi { Image="" };
+                AddProduct = new ProductApi { Image="picture.JPG" };
                 GetList(product);
             }
             else
@@ -134,6 +154,8 @@ namespace ShopClient.ViewModels.Add
                     Article = product.Article,
                     Barcode = product.Barcode,
                     Image = product.Image,
+                    IdFabricator = product.IdFabricator,
+                    deleted_at = product.deleted_at,
                     IdUnit = product.IdUnit,
                     IdProductType = product.IdProductType,
                     RetailPrice = product.RetailPrice,
@@ -161,11 +183,12 @@ namespace ShopClient.ViewModels.Add
                 {
                     try
                     {
-                        if (!IsValid(AddProduct)) return;
+                      
                         AddProduct.IdProductType = SelectedProductType.Id;
+                        AddProduct.IdFabricator = SelectedFabricator.Id;
                         AddProduct.IdUnit = SelectedUnit.Id;
                         if (AddProduct.Id == 0)
-                        {
+                        { 
                             AddProduct.WholesalePrice = 0;
                             AddProduct.RetailPrice = 0;
                             Add(AddProduct);
@@ -231,7 +254,7 @@ namespace ShopClient.ViewModels.Add
             BuildChart();
         }
 
-        private bool IsValid(ProductApi product)
+        private bool IsValid(ProductApi product) //сделать валидацию
         {
             foreach(ProductApi product1 in Products)
             {
@@ -282,19 +305,22 @@ namespace ShopClient.ViewModels.Add
                 ThisProductCostHistory = ProductCostHistories.Where(c => c.IdProduct == product.Id).ToList();
                 PrepareChart(ThisProductCostHistory);
             }
-          
+            Fabricators = await Api.GetListAsync<List<FabricatorApi>>("Fabricator");
             Units = await Api.GetListAsync<List<UnitApi>>("Unit");
             Products = await Api.GetListAsync<List<ProductApi>>("Product");
             if (product == null)
             {
                 SelectedUnit = Units.First();
+                SelectedFabricator = Fabricators.First();
                 SelectedProductType = ProductTypes.First();
             }
             else
             {
+                SelectedFabricator = Fabricators.First(s => s.Id == product.IdFabricator);
                 SelectedUnit = Units.First(s => s.Id == product.IdUnit);
                 SelectedProductType = ProductTypes.First(s => s.Id == product.IdProductType);
             }
+            SignalChanged("Fabricators");
             SignalChanged("Units");
             SignalChanged("ProductTypes");
         }

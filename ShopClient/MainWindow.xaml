@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:ShopClient"
         mc:Ignorable="d"
-        Title="MainWindow" Height="720" Width="1280"  WindowState="Normal" WindowStartupLocation="CenterScreen" WindowStyle="ToolWindow" ResizeMode="CanResize">
+        Title="Shop" Height="720" Width="1280"  WindowState="Normal" WindowStartupLocation="CenterScreen" WindowStyle="ThreeDBorderWindow" ResizeMode="CanResize">
     <Grid>
         <TabControl >
             <TabItem Header="Документы">
@@ -31,10 +31,6 @@
 
 
                         <Grid  Background="#FF1A315B">
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="55*"/>
-                                <ColumnDefinition Width="582*"/>
-                            </Grid.ColumnDefinitions>
                             <StackPanel Orientation="Horizontal" Grid.ColumnSpan="2" >
                                 <StackPanel Orientation="Vertical">
                                     <StackPanel Orientation="Horizontal">
@@ -43,24 +39,17 @@
                              FontSize="20" Foreground="white" IsChecked="True"
                              Style="{StaticResource MenuButtonThemeVertical}"
                              Command="{Binding }">
-                                           
+
                                         </RadioButton>
                                         <RadioButton Content="Возврат"
                              FontSize="20" Foreground="white"
                              Style="{StaticResource MenuButtonThemeVertical}"
                              Command="{Binding }">
                                         </RadioButton>
-                                    </StackPanel>
-                                    <TextBlock Text="Продажа" HorizontalAlignment="Center" FontSize="14" Foreground="White" FontFamily="Century Gothic" />
-                                </StackPanel>
-
-                                <StackPanel Orientation="Vertical">
-                                    <StackPanel Orientation="Horizontal">
-                                        
                                         <RadioButton Content="Поступление" 
                              FontSize="20" Foreground="white"
                              Style="{StaticResource MenuButtonThemeVertical}"
-                             Command="{Binding }">
+                             Command="{Binding OpenProductOrderInView}">
                                 </RadioButton>
                                         
                                 <RadioButton Content="Переоценка"
@@ -117,6 +106,11 @@
                              FontSize="20" Foreground="white" 
                              Style="{StaticResource MenuButtonThemeHorizontal}"
                              Command="{Binding OpenProductTypeView}">
+                                </RadioButton>
+                                <RadioButton Content="Производители" Height="60"
+                             FontSize="20" Foreground="white" 
+                             Style="{StaticResource MenuButtonThemeHorizontal}"
+                             Command="{Binding OpenFabricatorView}">
                                 </RadioButton>
                                 <RadioButton Content="Физ. лица" Height="60"
                              FontSize="20" Foreground="white" 

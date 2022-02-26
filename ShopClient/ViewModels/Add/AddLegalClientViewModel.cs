@@ -11,6 +11,16 @@ namespace ShopClient.ViewModels.Add
 {
     public class AddLegalClientViewModel : BaseViewModel
     {
+        private bool isSupplier;
+        public bool IsSupplier 
+        {
+            get => isSupplier;
+            set
+            {
+                isSupplier = value;
+                SignalChanged();
+            }
+        }
         public LegalClientApi AddLegalClient { get; set; }
         public ClientApi AddClient { get; set; } = new ClientApi();
 
@@ -21,7 +31,7 @@ namespace ShopClient.ViewModels.Add
         {
             if (legalClient == null)
             {
-                AddLegalClient = new LegalClientApi { Client = AddClient };
+                AddLegalClient = new LegalClientApi { Client = AddClient, IsSupplier = 0 };
             }
             else
             {
@@ -31,9 +41,14 @@ namespace ShopClient.ViewModels.Add
                     Client = legalClient.Client,
                     Title = legalClient.Title,
                     Inn = legalClient.Inn,
-                    Email = legalClient.Email
+                    Email = legalClient.Email,
+                    IsSupplier = legalClient.IsSupplier
+                    
                 };
             }
+            if (AddLegalClient.IsSupplier == 0) 
+                IsSupplier = false;
+            else IsSupplier = true;
 
             Save = new CustomCommand(() =>
             {
@@ -42,6 +57,9 @@ namespace ShopClient.ViewModels.Add
                 {
                     try
                     {
+                        if (IsSupplier == false) AddLegalClient.IsSupplier = 0;
+                        else AddLegalClient.IsSupplier = 1;
+
                         if (AddLegalClient.Id == 0)
                         {
                             Add(AddLegalClient);
