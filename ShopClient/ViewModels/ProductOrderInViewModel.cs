@@ -1,5 +1,6 @@
 ﻿using ModelsApi;
 using ShopClient.Core;
+using ShopClient.Helper;
 using ShopClient.Views.Add;
 using System;
 using System.Collections.Generic;
@@ -13,6 +14,18 @@ namespace ShopClient.ViewModels
 {
    public class ProductOrderInViewModel : BaseViewModel
     {
+
+        private object _clickedTreeElement;
+        public object ClickedTreeElement
+        {
+            get => _clickedTreeElement;
+
+            set {
+                  Set(ref _clickedTreeElement, value);
+                  UpdateListWithTreeView();
+            }
+        }
+
         private List<ProductTypeApi> productTypeFilter;
         public List<ProductTypeApi> ProductTypeFilter
         {
@@ -107,7 +120,16 @@ namespace ShopClient.ViewModels
             {
                 Set(ref legalClients, value);
                 SignalChanged();
-
+            }
+        }
+        private ObservableCollection<ProductTypeTreeView> productTypeTreeViews = new ObservableCollection<ProductTypeTreeView>();
+        public ObservableCollection<ProductTypeTreeView> ProductTypeTreeViews
+        {
+            get => productTypeTreeViews;
+            set
+            {
+                Set(ref productTypeTreeViews, value);
+                SignalChanged();
             }
         }
         private ProductApi selectedProduct = new ProductApi { };
@@ -145,10 +167,11 @@ namespace ShopClient.ViewModels
         public CustomCommand AddOrder { get; set; }
         public CustomCommand DeleteProductOrderIn { get; set; }
 
-        public int NewOrderId;
+        public List<OrderApi> Orders;
         List<ProductApi> searchResult;
         private List<ProductApi> FullProducts = new List<ProductApi>();
         private List<ActionTypeApi> ActionTypes = new List<ActionTypeApi>();
+        private List<FabricatorApi> Fabricators = new List<FabricatorApi>();
         public ProductOrderInViewModel()
         {
             Units = new List<UnitApi>();
@@ -199,10 +222,10 @@ namespace ShopClient.ViewModels
                         ClientApi client = SelectedLegalClient.Client;
 
                         AddNewOrder(new OrderApi {Date = DateTime.Now, IdActionType = actionType.Id, IdClient =client.Id });
-
+                        
                         foreach (ProductOrderInApi productOrderIn in ProductOrderIns)
                         {
-                            AddNewProductOrderIn(new ProductOrderInApi { Count = productOrderIn.Count });
+                            AddProductOrdersIn(productOrderIn);
                         }
                      
                         MessageBox.Show("Заказ принят", "Успех", MessageBoxButton.OK, MessageBoxImage.Information);
@@ -226,6 +249,13 @@ namespace ShopClient.ViewModels
                 Update();
             });
             UpdateList();
+        }
+
+        private async Task AddProductOrdersIn(ProductOrderInApi productOrderIn)
+        {
+            await GetListOrders();
+            var orderId = Orders.Last().Id;
+            await AddNewProductOrderIn(new ProductOrderInApi { Count = productOrderIn.Count, Price = productOrderIn.Price, Remains = productOrderIn.Count, IdOrder = orderId, IdProduct = productOrderIn.IdProduct });
         }
 
         private void Search()
@@ -253,13 +283,17 @@ namespace ShopClient.ViewModels
             }
                  UpdateList();
         }
-
+        private async Task GetListOrders()
+        {
+            Orders = await Api.GetListAsync<List<OrderApi>>("Order");
+        }
         private async Task GetList()
         {
             ActionTypes = await Api.GetListAsync<List<ActionTypeApi>>("ActionType");
             var legalClients = await Api.GetListAsync<List<LegalClientApi>>("LegalClient");
             LegalClients = legalClients.Where(s => s.IsSupplier == 1).ToList();
             Units = await Api.GetListAsync<List<UnitApi>>("Unit");
+            Fabricators = await Api.GetListAsync<List<FabricatorApi>>("Fabricator");
             ProductTypes = await Api.GetListAsync<List<ProductTypeApi>>("ProductType");
             Products = await Api.GetListAsync<List<ProductApi>>("Product");
             FullProducts = Products;
@@ -267,13 +301,39 @@ namespace ShopClient.ViewModels
             {
                 product.Unit = Units.First(s => s.Id == product.IdUnit);
                 product.ProductType = ProductTypes.First(s => s.Id == product.IdProductType);
+                product.Fabricator = Fabricators.First(s => s.Id == product.IdFabricator);
             }
             ProductTypeFilter = await Api.GetListAsync<List<ProductTypeApi>>("ProductType");
             ProductTypeFilter.Add(new ProductTypeApi { Title = "Все типы" });
             SelectedProductTypeFilter = ProductTypeFilter.Last();
-           
+            PrepareTreeView();
         }
+        private void PrepareTreeView()
+        {
+            ProductTypeTreeViews.Clear();
+            foreach(ProductTypeApi productType in ProductTypes)
+            {
+                var productTypeTreeView = new ProductTypeTreeView { Title = productType.Title };
+                ProductTypeTreeViews.Add(productTypeTreeView);
+                var ProductByProductType = Products.Where(s => s.IdProductType == productType.Id);
+                foreach (FabricatorApi fab in Fabricators)
+                {
+                    var a = 0;
+                    foreach (ProductApi prod in ProductByProductType)
+                    {
+                        if (prod.IdFabricator == fab.Id)
+                        {
+                            var fabricatorTreeView = new FabricatorTreeView { Title = fab.Title };
+                            productTypeTreeView.Fabricators.Add(fabricatorTreeView);
+                            a = 1;
+                        }
+                        if (a == 1) break;
+                    }
 
+                }
+            }
+            SignalChanged("ProductTypeTreeViews");
+        }
         private void GetProperties(ProductOrderInApi productOrderIn)
         {
                 productOrderIn.Product = Products.First(s => s.Id == productOrderIn.IdProduct);
@@ -284,9 +344,24 @@ namespace ShopClient.ViewModels
         {
             Products = searchResult;
         }
+        private void UpdateListWithTreeView()
+        {
+            if (ClickedTreeElement == null) Products = FullProducts;
+            if (ClickedTreeElement is ProductTypeTreeView)
+            {
+                var clickedEl = (ProductTypeTreeView)ClickedTreeElement;
+                Products = FullProducts.Where(s => s.ProductType.Title == clickedEl.Title).ToList();
+            }
+            if (ClickedTreeElement is FabricatorTreeView)
+            {
+                var clickedEl = (FabricatorTreeView)ClickedTreeElement;
+                Products = FullProducts.Where(s => s.ProductType.Title == clickedEl.Parent && s.Fabricator.Title == clickedEl.Title).ToList();
+            }
+            
+        }
         private async Task AddNewOrder(OrderApi order)
         {
-            NewOrderId = await Api.PostAsync<OrderApi>(order, "Order");
+            var id = await Api.PostAsync<OrderApi>(order, "Order");
         }
         private async Task AddNewProductOrderIn(ProductOrderInApi productOrderIn)
         {

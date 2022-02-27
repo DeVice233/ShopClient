@@ -96,7 +96,7 @@ namespace ShopClient.ViewModels.Add
 
             Save = new CustomCommand(() =>
             {
-                MessageBoxResult result = MessageBox.Show("Сохранить изменения?", "Подтвердите действие", MessageBoxButton.YesNo, MessageBoxImage.Question);
+                MessageBoxResult result = MessageBox.Show("Внести в документ?", "Подтвердите действие", MessageBoxButton.YesNo, MessageBoxImage.Question);
                 if (result == MessageBoxResult.Yes)
                 {
                     if (Count <= 0)

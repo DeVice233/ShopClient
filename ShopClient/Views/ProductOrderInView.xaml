@@ -4,6 +4,8 @@
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
       xmlns:local="clr-namespace:ShopClient.Views"
+      xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
+      xmlns:ei="http://schemas.microsoft.com/expression/2010/interactions" xmlns:i1="clr-namespace:Microsoft.VisualBasic;assembly=Microsoft.VisualBasic.Core"
       mc:Ignorable="d" 
       d:DesignHeight="450" d:DesignWidth="800" Background="White"
       Title="ProductOrderInView">
@@ -41,24 +43,33 @@
                 <Label  Content="ПОСТУПЛЕНИЕ"  FontFamily="Century Gothic" FontSize="20" FontWeight="ExtraBold" />
             </StackPanel>
         </Grid>
-        <TreeView Grid.Row="1" Grid.Column="0" Grid.RowSpan="2" ItemsSource="{Binding ProductTypeTreeViews}">
-            <TreeView.ItemTemplate>
-                <HierarchicalDataTemplate ItemsSource="{Binding FabricatorTreeView}">
-                    <TextBlock Text="{Binding Title}"/>
-                    <HierarchicalDataTemplate.ItemTemplate>
-                        <DataTemplate>
-                            <TextBlock Text="{Binding Title}" />
-                        </DataTemplate>
-                    </HierarchicalDataTemplate.ItemTemplate>
-                </HierarchicalDataTemplate>
-            </TreeView.ItemTemplate>
+        <TreeView Grid.Row="1" Grid.Column="0" Grid.RowSpan="2"  Margin="0 0 5 0" Background="Beige" BorderThickness="1" TreeViewItem.Selected="TreeViewItem_OnItemSelected" x:Name="trvName" Tag="{Binding ClickedTreeElement, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
+            <TreeViewItem Header="Все" ItemsSource="{Binding ProductTypeTreeViews}">
+                <TreeViewItem.ItemTemplate>
+                    <HierarchicalDataTemplate ItemsSource="{Binding Path=Fabricators}">
+                        <TextBlock Text="{Binding Title}" />
+                        <HierarchicalDataTemplate.ItemTemplate>
+                            <DataTemplate >
+                                <TextBlock Text="{Binding Title}" >
+                                    <TextBlock.Resources>
+                                        <Style TargetType="{x:Type TreeViewItem}">
+                                            <Setter Property="IsSelected" Value="{Binding IsSelected, Source=Check, Mode=TwoWay}" />
+                                        </Style>
+                                    </TextBlock.Resources>
+                                </TextBlock>
+                            </DataTemplate>
+                        </HierarchicalDataTemplate.ItemTemplate>
+                    </HierarchicalDataTemplate>
+                </TreeViewItem.ItemTemplate>
+            </TreeViewItem>
         </TreeView>
-        <ListView Grid.Row="1" Grid.Column="1"  ItemsSource="{Binding Products}"  SelectedItem="{Binding SelectedProduct}" Background="AliceBlue" >
+        <ListView Grid.Row="1" Grid.Column="1"  ItemsSource="{Binding Products}"  SelectedItem="{Binding SelectedProduct}" Background="AliceBlue">
             <ListView.View>
                 <GridView>
                     <GridViewColumn Header="Артикул" DisplayMemberBinding="{Binding Article}"/>
                     <GridViewColumn Header="Штрихкод" DisplayMemberBinding="{Binding Barcode}"/>
                     <GridViewColumn Header="Название" DisplayMemberBinding="{Binding Title}"/>
+                    <GridViewColumn Header="Производитель" DisplayMemberBinding="{Binding Fabricator.Title}"/>
                     <GridViewColumn Header="Тип" DisplayMemberBinding="{Binding ProductType.Title}"/>
                     <GridViewColumn Header="Ед." DisplayMemberBinding="{Binding Unit.Title}"/>
                     <GridViewColumn Header="Розн. цена" DisplayMemberBinding="{Binding RetailPrice}"/>
