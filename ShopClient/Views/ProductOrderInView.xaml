@@ -43,7 +43,7 @@
                 <Label  Content="ПОСТУПЛЕНИЕ"  FontFamily="Century Gothic" FontSize="20" FontWeight="ExtraBold" />
             </StackPanel>
         </Grid>
-        <TreeView Grid.Row="1" Grid.Column="0" Grid.RowSpan="2"  Margin="0 0 5 0" Background="Beige" BorderThickness="1" TreeViewItem.Selected="TreeViewItem_OnItemSelected" x:Name="trvName" Tag="{Binding ClickedTreeElement, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
+        <TreeView FontSize="16" Grid.Row="1" Grid.Column="0" Grid.RowSpan="2"  Margin="0 0 5 0" Background="Beige" BorderThickness="1" TreeViewItem.Selected="TreeViewItem_OnItemSelected" x:Name="trvName" Tag="{Binding ClickedTreeElement, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
             <TreeViewItem Header="Все" ItemsSource="{Binding ProductTypeTreeViews}">
                 <TreeViewItem.ItemTemplate>
                     <HierarchicalDataTemplate ItemsSource="{Binding Path=Fabricators}">
@@ -63,7 +63,7 @@
                 </TreeViewItem.ItemTemplate>
             </TreeViewItem>
         </TreeView>
-        <ListView Grid.Row="1" Grid.Column="1"  ItemsSource="{Binding Products}"  SelectedItem="{Binding SelectedProduct}" Background="AliceBlue">
+        <ListView Grid.Row="1" Grid.Column="1" FontSize="15" ItemsSource="{Binding Products}"  SelectedItem="{Binding SelectedProduct}" Background="AliceBlue">
             <ListView.View>
                 <GridView>
                     <GridViewColumn Header="Артикул" DisplayMemberBinding="{Binding Article}"/>
@@ -82,7 +82,7 @@
                 </ContextMenu>
             </ListView.ContextMenu>
         </ListView>
-        <ListView Grid.Row="2" Grid.Column="1" Margin="0 10 0 0" ItemsSource="{Binding ProductOrderIns}"  SelectedItem="{Binding SelectedProductOrderIn}" Background="#FFF9E4E4">
+        <ListView FontSize="15" Grid.Row="2" Grid.Column="1" Margin="0 10 0 0" ItemsSource="{Binding ProductOrderIns}"  SelectedItem="{Binding SelectedProductOrderIn}" Background="#FFF9E4E4">
             <ListView.View>
                 <GridView>
                     <GridViewColumn Header="Артикул" DisplayMemberBinding="{Binding Product.Article}"/>
@@ -106,7 +106,7 @@
             <ComboBox ItemsSource="{Binding LegalClients}" SelectedItem="{Binding SelectedLegalClient}" DisplayMemberPath="Title"/>
         </StackPanel>
         <StackPanel Grid.Row="3" Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Right">
-            <Button Content="Принять" Height="25" Width="120" Command="{Binding AddOrder}"/>
+            <Button Content="Принять" Height="25" Width="120" Command="{Binding AddOrder}" FontSize="16"/>
         </StackPanel>
 
     </Grid>

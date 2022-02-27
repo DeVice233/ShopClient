@@ -264,6 +264,7 @@ namespace ShopClient.ViewModels.Add
                     return false;
                 }
             }
+        
             return true;
         }
 

@@ -26,7 +26,7 @@
                 </StackPanel>
             </StackPanel>
         </Grid>
-        <ListView Grid.Row="1" ItemsSource="{Binding PhysicalClients}"  SelectedItem="{Binding SelectedPhysicalClient}">
+        <ListView Grid.Row="1" ItemsSource="{Binding PhysicalClients}" FontSize="16" SelectedItem="{Binding SelectedPhysicalClient}">
             <ListView.View>
                 <GridView>
                     <GridViewColumn Header="Имя" DisplayMemberBinding="{Binding FirstName}"/>

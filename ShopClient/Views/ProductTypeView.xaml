@@ -13,7 +13,7 @@
             <RowDefinition />
             <RowDefinition Height="40"/>
         </Grid.RowDefinitions>
-        <ListView Grid.Row="0" ItemsSource="{Binding ProductTypes}"  SelectedItem="{Binding SelectedProductType}">
+        <ListView Grid.Row="0" ItemsSource="{Binding ProductTypes}" FontSize="16" SelectedItem="{Binding SelectedProductType}">
             <ListView.View>
                 <GridView>
                     <GridViewColumn Header="№" DisplayMemberBinding="{Binding Id}"/>

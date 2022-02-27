@@ -12,7 +12,7 @@
             <RowDefinition />
             <RowDefinition Height="40"/>
         </Grid.RowDefinitions>
-        <ListView Grid.Row="0" ItemsSource="{Binding Units}"  SelectedItem="{Binding SelectedUnit}">
+        <ListView Grid.Row="0" ItemsSource="{Binding Units}" FontSize="16" SelectedItem="{Binding SelectedUnit}">
             <ListView.View>
                 <GridView>
                     <GridViewColumn Header="№" DisplayMemberBinding="{Binding Id}"/>

@@ -26,7 +26,7 @@
                 </StackPanel>
             </StackPanel>
         </Grid>
-        <ListView Grid.Row="1" ItemsSource="{Binding LegalClients, UpdateSourceTrigger=PropertyChanged}"  SelectedItem="{Binding SelectedLegalClient}">
+        <ListView Grid.Row="1" ItemsSource="{Binding LegalClients, UpdateSourceTrigger=PropertyChanged}" FontSize="16" SelectedItem="{Binding SelectedLegalClient}">
             <ListView.View>
                 <GridView>
                     <GridViewColumn Header="Наименование" DisplayMemberBinding="{Binding Title}"/>

@@ -30,8 +30,8 @@
                 </StackPanel>
             </StackPanel>
         </Grid>
-        
-        <ListView Grid.Row="1" ItemsSource="{Binding Products}"  SelectedItem="{Binding SelectedProduct}">
+
+        <ListView Grid.Row="1" ItemsSource="{Binding Products}" FontSize="16" SelectedItem="{Binding SelectedProduct}">
             <ListView.View>
                 <GridView>
                     <GridViewColumn Header="Артикул" DisplayMemberBinding="{Binding Article}"/>

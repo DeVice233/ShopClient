@@ -31,7 +31,7 @@
             </StackPanel>
         </Grid>
 
-        <ListView Grid.Row="1" ItemsSource="{Binding Orders}"  SelectedItem="{Binding SelectedOrder}">
+        <ListView Grid.Row="1" ItemsSource="{Binding Orders}" FontSize="16" SelectedItem="{Binding SelectedOrder}">
             <ListView.View>
                 <GridView>
                     <GridViewColumn Header="№" DisplayMemberBinding="{Binding Id}"/>
