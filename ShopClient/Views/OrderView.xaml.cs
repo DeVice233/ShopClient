@@ -26,5 +26,11 @@ namespace ShopClient.Views
             InitializeComponent();
             DataContext = new OrderViewModel();
         }
+
+        private void ClickColumn(object sender, MouseButtonEventArgs e)
+        {
+            string p = ((Control)sender).Tag as string;
+            ((OrderViewModel)DataContext).Sort(p);
+        }
     }
 }

@@ -43,7 +43,7 @@
                 <Label  Content="ПОСТУПЛЕНИЕ"  FontFamily="Century Gothic" FontSize="20" FontWeight="ExtraBold" />
             </StackPanel>
         </Grid>
-        <TreeView FontSize="16" Grid.Row="1" Grid.Column="0" Grid.RowSpan="2"  Margin="0 0 5 0" Background="Beige" BorderThickness="1" TreeViewItem.Selected="TreeViewItem_OnItemSelected" x:Name="trvName" Tag="{Binding ClickedTreeElement, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
+        <TreeView FontSize="16" Grid.Row="0" Grid.Column="0" Grid.RowSpan="3"  Margin="0 5 5 0" Background="Beige" BorderThickness="1" TreeViewItem.Selected="TreeViewItem_OnItemSelected" x:Name="trvName" Tag="{Binding ClickedTreeElement, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
             <TreeViewItem Header="Все" ItemsSource="{Binding ProductTypeTreeViews}">
                 <TreeViewItem.ItemTemplate>
                     <HierarchicalDataTemplate ItemsSource="{Binding Path=Fabricators}">

@@ -18,7 +18,7 @@
             <StackPanel Grid.Row="0" HorizontalAlignment="Left" Margin="5" Orientation="Horizontal" >
                 <StackPanel>
                     <Label Content="Фильтрация по типу:"  FontFamily="Century Gothic"/>
-                    <ComboBox Width="140" DisplayMemberPath="Title" ItemsSource="{Binding ProductTypeFilter}" SelectedItem="{Binding SelectedProductTypeFilter}"/>
+                    <ComboBox Width="140" DisplayMemberPath="Name" ItemsSource="{Binding ActionTypeFilter}" SelectedItem="{Binding SelectedActionTypeFilter}"/>
                 </StackPanel>
                 <StackPanel Margin="10 0 10 0">
                     <Label Content="Поиск:"  FontFamily="Century Gothic"/>
@@ -35,7 +35,13 @@
             <ListView.View>
                 <GridView>
                     <GridViewColumn Header="№" DisplayMemberBinding="{Binding Id}"/>
-                    <GridViewColumn Header="Дата" DisplayMemberBinding="{Binding Date, StringFormat='{}{0:dd.MM.yyyy}'}"/>
+                    <GridViewColumn  DisplayMemberBinding="{Binding Date, StringFormat='{}{0:dd.MM.yyyy}'}">
+                        <GridViewColumn.HeaderTemplate>
+                            <DataTemplate>
+                                <Label Content="Дата"  FontSize="14" Tag="Date" MouseDown="ClickColumn"/>
+                            </DataTemplate>
+                        </GridViewColumn.HeaderTemplate>
+                    </GridViewColumn>
                     <GridViewColumn Header="Тип операции" DisplayMemberBinding="{Binding ActionType.Name}"/>
                 </GridView>
             </ListView.View>
