@@ -44,12 +44,13 @@ namespace ShopClient
         public CustomCommand OpenLegalClientView { get; set; }
         public CustomCommand OpenProductView { get; set; }
         public CustomCommand OpenOrderView { get; set; }
+        public CustomCommand OpenOrderOutView { get; set; }
 
         public MainVM()
         {
             GetList();
             CurrentListPage = new ProductView();
-            CurrentPage = new ProductOrderInView();
+            CurrentPage = new OrderOutView();
 
             OpenUnitView = new CustomCommand(()=>
             {
@@ -89,6 +90,11 @@ namespace ShopClient
             OpenProductOrderInView = new CustomCommand(() =>
             {
                 CurrentPage = new ProductOrderInView();
+                SignalChanged("CurrentPage");
+            });
+            OpenOrderOutView = new CustomCommand(() =>
+            {
+                CurrentPage = new OrderOutView();
                 SignalChanged("CurrentPage");
             });
         } 

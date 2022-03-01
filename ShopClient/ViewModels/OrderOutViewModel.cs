@@ -12,17 +12,17 @@ using System.Windows;
 
 namespace ShopClient.ViewModels
 {
-   public class ProductOrderInViewModel : BaseViewModel
-    {
-
+    public class OrderOutViewModel : BaseViewModel
+    { 
         private object _clickedTreeElement;
         public object ClickedTreeElement
         {
             get => _clickedTreeElement;
 
-            set {
-                  Set(ref _clickedTreeElement, value);
-                  UpdateListWithTreeView();
+            set
+            {
+                Set(ref _clickedTreeElement, value);
+                UpdateListWithTreeView();
             }
         }
 
@@ -70,6 +70,7 @@ namespace ShopClient.ViewModels
                 Search();
             }
         }
+
         private List<ProductApi> products;
         public List<ProductApi> Products
         {
@@ -77,16 +78,6 @@ namespace ShopClient.ViewModels
             set
             {
                 Set(ref products, value);
-                SignalChanged();
-            }
-        }
-        private ObservableCollection<ProductOrderInApi> productOrderIns;
-        public ObservableCollection<ProductOrderInApi> ProductOrderIns
-        {
-            get => productOrderIns;
-            set
-            {
-                Set(ref productOrderIns, value);
                 SignalChanged();
             }
         }
@@ -112,16 +103,6 @@ namespace ShopClient.ViewModels
 
             }
         }
-        private List<LegalClientApi> legalClients;
-        public List<LegalClientApi> LegalClients
-        {
-            get => legalClients;
-            set
-            {
-                Set(ref legalClients, value);
-                SignalChanged();
-            }
-        }
         private ObservableCollection<ProductTypeTreeView> productTypeTreeViews = new ObservableCollection<ProductTypeTreeView>();
         public ObservableCollection<ProductTypeTreeView> ProductTypeTreeViews
         {
@@ -142,44 +123,62 @@ namespace ShopClient.ViewModels
                 SignalChanged();
             }
         }
-        private LegalClientApi selectedLegalClient;
-        public LegalClientApi SelectedLegalClient
-        {
-            get => selectedLegalClient;
+
+        public List<SaleTypeApi> saleTypes;
+        public List<SaleTypeApi> SaleTypes {
+            get => saleTypes;
             set
             {
-                selectedLegalClient = value;
-                SignalChanged();
-            }
-        }
-        private ProductOrderInApi selectedProductOrderIn;
-        public ProductOrderInApi SelectedProductOrderIn
-        {
-            get => selectedProductOrderIn;
-            set
-            {
-                selectedProductOrderIn = value;
+                Set(ref saleTypes, value);
                 SignalChanged();
             }
         }
 
-        public CustomCommand AddProduct { get; set; }
-        public CustomCommand AddOrder { get; set; }
-        public CustomCommand DeleteProductOrderIn { get; set; }
+        private ObservableCollection<ProductOrderOutApi> productOrderOuts;
+        public ObservableCollection<ProductOrderOutApi> ProductOrderOuts
+        {
+            get => productOrderOuts;
+            set
+            {
+                Set(ref productOrderOuts, value);
+                SignalChanged();
+            }
+        }
+        private ProductOrderOutApi selectedProductOrderOuts;
+        public ProductOrderOutApi SelectedProductOrderOuts
+        {
+            get => selectedProductOrderOuts;
+            set
+            {
+                selectedProductOrderOuts = value;
+                SignalChanged();
+            }
+        }
+        private SaleTypeApi selectedSaleType;
+        public SaleTypeApi SelectedSaleType
+        {
+            get => selectedSaleType;
+            set
+            {
+                selectedSaleType = value;
+                SignalChanged();
+            }
+        }
 
-        public List<OrderApi> Orders;
-        List<ProductApi> searchResult;
         private List<ProductOrderInApi> FullProductOrderIns = new List<ProductOrderInApi>();
         private List<ProductApi> FullProducts = new List<ProductApi>();
         private List<ActionTypeApi> ActionTypes = new List<ActionTypeApi>();
         private List<FabricatorApi> Fabricators = new List<FabricatorApi>();
-        public ProductOrderInViewModel()
+        List<ProductApi> searchResult;
+
+        public CustomCommand AddProduct { get; set; }
+
+        public OrderOutViewModel()
         {
             Units = new List<UnitApi>();
             ProductTypes = new List<ProductTypeApi>();
             Products = new List<ProductApi>();
             ProductTypeFilter = new List<ProductTypeApi>();
-            ProductOrderIns = new ObservableCollection<ProductOrderInApi>();
             GetList();
 
             SearchType = new List<string>();
@@ -188,76 +187,28 @@ namespace ShopClient.ViewModels
 
             AddProduct = new CustomCommand(() =>
             {
-                if (SelectedProduct == null) return;
-                ProductOrderInApi productOrderIn = new ProductOrderInApi{ IdProduct = SelectedProduct.Id};
-                AddProductOrderIn addProductOrderIn = new AddProductOrderIn(productOrderIn);
-                addProductOrderIn.ShowDialog();
-                if (productOrderIn.Count <= 0 || productOrderIn.Count == null)
+                if (SelectedSaleType == null)
                 {
-                    Update();
+                    MessageBox.Show("Выберите тип продажи!", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
                     return;
                 }
-                GetProperties(productOrderIn);
-                ProductOrderIns.Add(productOrderIn);
+                if (SelectedProduct == null) return;
+                ProductOrderOutApi productOrderOut = new ProductOrderOutApi { Product = SelectedProduct };
+                AddOrderOut addOrderOut = new AddOrderOut(productOrderOut, SelectedSaleType);
+                addOrderOut.ShowDialog();
+                //if (productOrderIn.Count <= 0 || productOrderIn.Count == null)
+                //{
+                //    Update();
+                //    return;
+                //}
+                //GetProperties(productOrderIn);
+                //ProductOrderIns.Add(productOrderIn);
                 Update();
             });
-            AddOrder = new CustomCommand(() =>
-            {
-               
-                MessageBoxResult result = MessageBox.Show("Принять заказ?", "Подтвердите действие", MessageBoxButton.YesNo, MessageBoxImage.Question);
-                if (result == MessageBoxResult.Yes)
-                {
-                    if (ProductOrderIns.Count == 0 || ProductOrderIns == null)
-                    {
-                        MessageBox.Show("Заказ пуст!", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
-                        return;
-                    }
-                    if (SelectedLegalClient == null)
-                    {
-                        MessageBox.Show("Необходимо выбрать поствщика!", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
-                        return;
-                    }
-                    try
-                    {
-                        ActionTypeApi actionType = ActionTypes.First(c => c.Name == "Поступление");
-                        ClientApi client = SelectedLegalClient.Client;
 
-                        AddNewOrder(new OrderApi {Date = DateTime.Now, IdActionType = actionType.Id, IdClient =client.Id });
-                        
-                        foreach (ProductOrderInApi productOrderIn in ProductOrderIns)
-                        {
-                            AddProductOrdersIn(productOrderIn);
-                        }
-                     
-                        MessageBox.Show("Заказ принят", "Успех", MessageBoxButton.OK, MessageBoxImage.Information);
-
-                        SelectedLegalClient = null;
-                        ProductOrderIns.Clear();
-                    }
-                    catch (Exception e)
-                    {
-                        MessageBox.Show(e.Message);
-                    };
-                }
-                else return;
-
-
-            });
-            DeleteProductOrderIn = new CustomCommand(() =>
-            {
-                if (SelectedProductOrderIn == null) return;
-                ProductOrderIns.Remove(SelectedProductOrderIn);
-                Update();
-            });
             UpdateList();
         }
 
-        private async Task AddProductOrdersIn(ProductOrderInApi productOrderIn)
-        {
-            await GetListOrders();
-            var orderId = Orders.Last().Id;
-            await AddNewProductOrderIn(new ProductOrderInApi { Count = productOrderIn.Count, Price = productOrderIn.Price, Remains = productOrderIn.Count, IdOrder = orderId, IdProduct = productOrderIn.IdProduct });
-        }
 
         private void Search()
         {
@@ -282,17 +233,13 @@ namespace ShopClient.ViewModels
                     searchResult = FullProducts
                         .Where(c => c.Article.ToString().Contains(search) && c.ProductType.Title.Contains(SelectedProductTypeFilter.Title)).ToList();
             }
-                 UpdateList();
+            UpdateList();
         }
-        private async Task GetListOrders()
-        {
-            Orders = await Api.GetListAsync<List<OrderApi>>("Order");
-        }
+
         private async Task GetList()
         {
             ActionTypes = await Api.GetListAsync<List<ActionTypeApi>>("ActionType");
-            var legalClients = await Api.GetListAsync<List<LegalClientApi>>("LegalClient");
-            LegalClients = legalClients.Where(s => s.IsSupplier == 1).ToList();
+            SaleTypes = await Api.GetListAsync<List<SaleTypeApi>>("SaleType");
             Units = await Api.GetListAsync<List<UnitApi>>("Unit");
             Fabricators = await Api.GetListAsync<List<FabricatorApi>>("Fabricator");
             ProductTypes = await Api.GetListAsync<List<ProductTypeApi>>("ProductType");
@@ -311,10 +258,11 @@ namespace ShopClient.ViewModels
             SelectedProductTypeFilter = ProductTypeFilter.Last();
             PrepareTreeView();
         }
+
         private void PrepareTreeView()
         {
             ProductTypeTreeViews.Clear();
-            foreach(ProductTypeApi productType in ProductTypes)
+            foreach (ProductTypeApi productType in ProductTypes)
             {
                 var productTypeTreeView = new ProductTypeTreeView { Title = productType.Title };
                 ProductTypeTreeViews.Add(productTypeTreeView);
@@ -337,12 +285,6 @@ namespace ShopClient.ViewModels
             }
             SignalChanged("ProductTypeTreeViews");
         }
-        private void GetProperties(ProductOrderInApi productOrderIn)
-        {
-                productOrderIn.Product = Products.First(s => s.Id == productOrderIn.IdProduct);
-                productOrderIn.Product.Unit = Units.First(s => s.Id == productOrderIn.Product.IdUnit);
-                productOrderIn.Product.ProductType = ProductTypes.First(s => s.Id == productOrderIn.Product.IdProductType);
-        }
         private void UpdateList()
         {
             Products = searchResult;
@@ -360,15 +302,7 @@ namespace ShopClient.ViewModels
                 var clickedEl = (FabricatorTreeView)ClickedTreeElement;
                 Products = FullProducts.Where(s => s.ProductType.Title == clickedEl.Parent && s.Fabricator.Title == clickedEl.Title).ToList();
             }
-            
-        }
-        private async Task AddNewOrder(OrderApi order)
-        {
-            var id = await Api.PostAsync<OrderApi>(order, "Order");
-        }
-        private async Task AddNewProductOrderIn(ProductOrderInApi productOrderIn)
-        {
-            var id = await Api.PostAsync<ProductOrderInApi>(productOrderIn, "ProductOrderIn");
+
         }
         private void Update()
         {

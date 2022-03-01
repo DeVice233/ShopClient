@@ -150,6 +150,7 @@ namespace ShopClient.ViewModels
         public CustomCommand ProductPriceChange { get; set; }
 
         private List<ProductApi> FullProducts = new List<ProductApi>();
+        private List<ProductOrderInApi> ProductOrderIns = new List<ProductOrderInApi>();
         public int rows = 0;
         public int CountPages = 0;
         List<ProductApi> searchResult;
@@ -316,9 +317,11 @@ namespace ShopClient.ViewModels
             Units = await Api.GetListAsync<List<UnitApi>>("Unit");
             ProductTypes = await Api.GetListAsync<List<ProductTypeApi>>("ProductType");
             Products = await Api.GetListAsync<List<ProductApi>>("Product");
+            ProductOrderIns = await Api.GetListAsync<List<ProductOrderInApi>>("ProductOrderIn");
             FullProducts = Products;
             foreach (ProductApi product in Products)
             {
+                product.Count = ProductOrderIns.Where(s => s.IdProduct == product.Id).Select(s => s.Remains).Sum();
                 product.Fabricator = Fabricators.First(s => s.Id == product.IdFabricator);
                 product.Unit = Units.First(s => s.Id == product.IdUnit);
                 product.ProductType = ProductTypes.First(s => s.Id == product.IdProductType);

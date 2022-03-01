@@ -36,12 +36,13 @@
                 <GridView>
                     <GridViewColumn Header="Артикул" DisplayMemberBinding="{Binding Article}"/>
                     <GridViewColumn Header="Штрихкод" DisplayMemberBinding="{Binding Barcode}"/>
-                    <GridViewColumn Header="Название" DisplayMemberBinding="{Binding Title}"/>
-                    <GridViewColumn Header="Производитель" DisplayMemberBinding="{Binding Fabricator.Title}"/>
-                    <GridViewColumn Header="Тип" DisplayMemberBinding="{Binding ProductType.Title}"/>
-                    <GridViewColumn Header="Ед." DisplayMemberBinding="{Binding Unit.Title}"/>
+                    <GridViewColumn Header="Название" DisplayMemberBinding="{Binding Title}"  Width="140"/>
+                    <GridViewColumn Header="Производитель" DisplayMemberBinding="{Binding Fabricator.Title}"  Width="140"/>
+                    <GridViewColumn Header="Тип" DisplayMemberBinding="{Binding ProductType.Title}"  Width="70"/>
+                    <GridViewColumn Header="Ед." DisplayMemberBinding="{Binding Unit.Title}" Width="50"/>
                     <GridViewColumn Header="Розн. цена" DisplayMemberBinding="{Binding RetailPrice}"/>
                     <GridViewColumn Header="Опт. цена" DisplayMemberBinding="{Binding WholesalePrice}"/>
+                    <GridViewColumn Header="Кол-во" DisplayMemberBinding="{Binding Count}"/>
                 </GridView>
             </ListView.View>
             <ListView.ContextMenu>

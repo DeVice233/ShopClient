@@ -38,7 +38,7 @@
                                         <RadioButton Content="Продажа"
                              FontSize="20" Foreground="white" IsChecked="True"
                              Style="{StaticResource MenuButtonThemeVertical}"
-                             Command="{Binding }">
+                             Command="{Binding OpenOrderOutView}">
 
                                         </RadioButton>
                                         <RadioButton Content="Возврат"
@@ -51,13 +51,7 @@
                              Style="{StaticResource MenuButtonThemeVertical}"
                              Command="{Binding OpenProductOrderInView}">
                                 </RadioButton>
-                                        
-                                <RadioButton Content="Переоценка"
-                             FontSize="20" Foreground="white"
-                             Style="{StaticResource MenuButtonThemeVertical}"
-                             Command="{Binding }">
-                                </RadioButton>
-                                        
+                                                                                
                                 <RadioButton Content="Списание"
                              FontSize="20" Foreground="white"
                              Style="{StaticResource MenuButtonThemeVertical}"
