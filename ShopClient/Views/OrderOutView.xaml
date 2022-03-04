@@ -29,7 +29,7 @@
             </Grid.ColumnDefinitions>
             <StackPanel Grid.Column="0">
                 <Label Content="Тип продажи:"  FontFamily="Century Gothic"/>
-                <ComboBox Width="140" DisplayMemberPath="Title" ItemsSource="{Binding SaleTypes}" SelectedItem="{Binding SelectedSaleType}"/>
+                <ComboBox Width="140" DisplayMemberPath="Title" ItemsSource="{Binding SaleTypes}" SelectedItem="{Binding SelectedSaleType}" IsEnabled="{Binding IsEnableSaleType}"/>
             </StackPanel>
             <StackPanel Grid.Column="1" Margin="10 0 10 0">
                 <Label Content="Фильтрация по типу:"  FontFamily="Century Gothic"/>
@@ -87,16 +87,17 @@
                 </ContextMenu>
             </ListView.ContextMenu>
         </ListView>
-        <ListView FontSize="15" Grid.Row="2" Grid.Column="1" Margin="0 10 0 0" ItemsSource="{Binding ProductOrderOuts}"  SelectedItem="{Binding SelectedProductOrderOut}" Background="#FFF9E4E4">
+        <ListView FontSize="15" Grid.Row="2" Grid.Column="1" Margin="0 10 0 0" ItemsSource="{Binding OrderOutVisuals}"  SelectedItem="{Binding SelectedOrderOutVisual}" HorizontalContentAlignment="Right" Background="#FFF9E4E4">
             <ListView.View>
                 <GridView>
-                    <GridViewColumn Header="Артикул" DisplayMemberBinding="{Binding Product.Article}"/>
+                    <GridViewColumn Header="Артикул" DisplayMemberBinding="{Binding Product.Article}"  />
                     <GridViewColumn Header="Наименование" DisplayMemberBinding="{Binding Product.Title}"/>
-                    <GridViewColumn Header="Кол-во" DisplayMemberBinding="{Binding Count}"/>
-                    <GridViewColumn Header="Цена" DisplayMemberBinding="{Binding Price}"/>
-                    <GridViewColumn Header="Скидка" DisplayMemberBinding="{Binding Discount}"/>
                     <GridViewColumn Header="Тип" DisplayMemberBinding="{Binding Product.ProductType.Title}"/>
                     <GridViewColumn Header="Ед." DisplayMemberBinding="{Binding Product.Unit.Title}"/>
+                    <GridViewColumn Header="Кол-во" DisplayMemberBinding="{Binding Count}"/>
+                    <GridViewColumn Header="Цена" DisplayMemberBinding="{Binding Price}"/>
+                    <GridViewColumn Header="Разница" DisplayMemberBinding="{Binding Discount}"/>
+                    <GridViewColumn Header="Сумма" DisplayMemberBinding="{Binding Sum}"/>
                 </GridView>
             </ListView.View>
             <ListView.ContextMenu>

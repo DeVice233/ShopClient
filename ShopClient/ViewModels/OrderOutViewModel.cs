@@ -92,6 +92,17 @@ namespace ShopClient.ViewModels
 
             }
         }
+        private ObservableCollection<ProductOrderInApi> productOrderInsToUpdate = new ObservableCollection<ProductOrderInApi>();
+        public ObservableCollection<ProductOrderInApi> ProductOrderInsToUpdate
+        {
+            get => productOrderInsToUpdate;
+            set
+            {
+                Set(ref productOrderInsToUpdate, value);
+                SignalChanged();
+
+            }
+        }
         private List<ProductTypeApi> productTypes;
         public List<ProductTypeApi> ProductTypes
         {
@@ -154,13 +165,43 @@ namespace ShopClient.ViewModels
                 SignalChanged();
             }
         }
-        private SaleTypeApi selectedSaleType;
+        private bool isEnableSaleType = true;
+        public bool IsEnableSaleType
+        {  get => isEnableSaleType;
+           set
+           {
+                isEnableSaleType = value;
+                SignalChanged();
+            }
+    }
+    private SaleTypeApi selectedSaleType;
         public SaleTypeApi SelectedSaleType
         {
             get => selectedSaleType;
             set
             {
                 selectedSaleType = value;
+                SignalChanged();
+             
+            }
+        }
+        private ObservableCollection<OrderOutVisual> orderOutVisuals = new ObservableCollection<OrderOutVisual>();
+        public ObservableCollection<OrderOutVisual> OrderOutVisuals
+        {
+            get => orderOutVisuals;
+            set
+            {
+                Set(ref orderOutVisuals, value);
+                SignalChanged();
+            }
+        }
+        private OrderOutVisual selectedOrderOutVisual;
+        public OrderOutVisual SelectedOrderOutVisual
+        {
+            get => selectedOrderOutVisual;
+            set
+            {
+                selectedOrderOutVisual = value;
                 SignalChanged();
             }
         }
@@ -169,6 +210,7 @@ namespace ShopClient.ViewModels
         private List<ProductApi> FullProducts = new List<ProductApi>();
         private List<ActionTypeApi> ActionTypes = new List<ActionTypeApi>();
         private List<FabricatorApi> Fabricators = new List<FabricatorApi>();
+        public List<ProductOrderOutApi> ProductOrderOutsToUpdate = new List<ProductOrderOutApi>();
         List<ProductApi> searchResult;
 
         public CustomCommand AddProduct { get; set; }
@@ -193,9 +235,48 @@ namespace ShopClient.ViewModels
                     return;
                 }
                 if (SelectedProduct == null) return;
-                ProductOrderOutApi productOrderOut = new ProductOrderOutApi { Product = SelectedProduct };
-                AddOrderOut addOrderOut = new AddOrderOut(productOrderOut, SelectedSaleType);
+                if (SelectedProduct.Count <= 0)
+                {
+                    MessageBox.Show("Продукт отсутствует на складе!", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
+                    return;
+                }
+                foreach (var item in ProductOrderOutsToUpdate)
+                {
+                    if (item.Product == SelectedProduct)
+                    {
+                        MessageBox.Show("Такой продукт уже есть в заказе!", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
+                        return;
+                    }
+                }
+                var checkUpdate = ProductOrderOutsToUpdate.Count;
+                AddOrderOut addOrderOut = new AddOrderOut(ProductOrderOutsToUpdate, SelectedSaleType, ProductOrderInsToUpdate, SelectedProduct);
                 addOrderOut.ShowDialog();
+                if (checkUpdate == ProductOrderOutsToUpdate.Count) return;
+                OrderOutVisuals.Clear();
+                foreach ( var ProductOrderOut in ProductOrderOutsToUpdate)
+                {
+                    var toggle = 0;
+                    var sum = ProductOrderOut.Count * (ProductOrderOut.Price - ProductOrderOut.Discount);
+                    //заменить article на id
+                    if(SelectedProduct.Article == ProductOrderOut.Product.Article)
+                    {
+                        SelectedProduct.Count -= ProductOrderOut.Count;
+                    }
+                    foreach (var OrderOutVisual in OrderOutVisuals)
+                    {
+                        if (OrderOutVisual.Product.Id == ProductOrderOut.Product.Id)
+                        {
+                            OrderOutVisual.Count += ProductOrderOut.Count;
+                            OrderOutVisual.Sum += sum;
+                            toggle = 1;
+                            break;
+                        }  
+                    }
+                    if (toggle == 0)
+                    OrderOutVisuals.Add(new OrderOutVisual { Count = ProductOrderOut.Count, Price = ProductOrderOut.Price, Product = ProductOrderOut.Product, Sum = sum, Discount = ProductOrderOut.Discount});
+                }
+               ChangeCountProduct();
+               IsEnableSaleType = false;
                 //if (productOrderIn.Count <= 0 || productOrderIn.Count == null)
                 //{
                 //    Update();
@@ -280,7 +361,6 @@ namespace ShopClient.ViewModels
                         }
                         if (a == 1) break;
                     }
-
                 }
             }
             SignalChanged("ProductTypeTreeViews");
@@ -306,13 +386,34 @@ namespace ShopClient.ViewModels
         }
         private void Update()
         {
-            GetList();
+            //GetList();
             SignalChanged("Units");
             SignalChanged("ProductTypes");
             SignalChanged("Products");
             SignalChanged("ProductOrderIns");
             SignalChanged("LegalClients");
+            SignalChanged("OrderOutVisuals");
             SelectedProductTypeFilter = ProductTypeFilter.Last();
+        }
+
+        public void ChangeCountProduct()
+        {
+            List<ProductOrderInApi> productOrderInApis = new List<ProductOrderInApi>(FullProductOrderIns);
+            foreach (ProductOrderInApi productOrderIn in FullProductOrderIns)
+            {
+                foreach (ProductOrderInApi productOrderInToUpdate in ProductOrderInsToUpdate)
+                {
+                    if (productOrderIn.Id == productOrderInToUpdate.Id)
+                    {
+                        productOrderInApis.Remove(productOrderIn);
+                        productOrderInApis.Add(productOrderInToUpdate);
+                    }
+                }
+            }
+            foreach (ProductApi product in Products)
+            {
+                product.Count = productOrderInApis.Where(s => s.IdProduct == product.Id).Select(s => s.Remains).Sum();
+            }
         }
     }
 }

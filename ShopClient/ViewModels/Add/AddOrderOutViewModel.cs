@@ -2,6 +2,7 @@
 using ShopClient.Core;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -22,8 +23,8 @@ namespace ShopClient.ViewModels.Add
             }
         }
 
-        private int count = 1;
-        public int Count
+        private int? count = 1;
+        public int? Count
         {
             get => count;
             set
@@ -94,22 +95,27 @@ namespace ShopClient.ViewModels.Add
         public CustomCommand Save { get; set; }
         public CustomCommand Cancel { get; set; }
         public CustomCommand AddOne { get; set; }
-
+        int ListCount = 0;
+        int? ProductCount = 0;
         decimal? buyPrice = 0;
+        decimal? thisPrice = 0;
+        ProductApi ThisProduct = new ProductApi();
+
         List<ProductOrderInApi> productOrderIns = new List<ProductOrderInApi>();
         List<ProductOrderInApi> ThisProductOrderIns = new List<ProductOrderInApi>();
-        List<OrderApi> Orders = new List<OrderApi>();
+        List<OrderApi> ThisProductOrders = new List<OrderApi>();
+        List<OrderApi> FullOrders = new List<OrderApi>();
         List<ProductApi> Products = new List<ProductApi>();
         List<UnitApi> Units = new List<UnitApi>();
         List<FabricatorApi> Fabricators = new List<FabricatorApi>();
 
-        public AddOrderOutViewModel(ProductOrderOutApi productOrderOut, SaleTypeApi saleType)
+        public AddOrderOutViewModel(List<ProductOrderOutApi> productOrderOuts, SaleTypeApi saleType, ObservableCollection<ProductOrderInApi> productOrderInsToUpdate , ProductApi SelectedProduct)
         {
             Discount = 0;
             Price = 0;
             Total = 0;
 
-            GetList(productOrderOut, saleType);
+            GetList(productOrderOuts, saleType, SelectedProduct);
 
             Save = new CustomCommand(() =>
             {
@@ -121,14 +127,14 @@ namespace ShopClient.ViewModels.Add
                         MessageBox.Show("Необходимо выбрать количество!");
                         return;
                     }
-                    if (Count > productOrderOut.Product.Count)
+                    if (Count > SelectedProduct.Count)
                     {
-                        MessageBox.Show($"Количество не соотвествует остаткам на складе ({productOrderOut.Product.Count})!");
+                        MessageBox.Show($"Количество не соотвествует остаткам на складе ({productOrderOuts.First().Product.Count})!");
                         return;
                     }
                     try
                     {
-
+                        PrepareList(productOrderOuts, productOrderInsToUpdate);
                         //productOrderIn.Price = Price;
                         //productOrderIn.Remains = Count;
                         //productOrderIn.Count = Count;
@@ -161,8 +167,9 @@ namespace ShopClient.ViewModels.Add
 
 
             AddOne = new CustomCommand(() =>
-            { 
-                if (Count > productOrderOut.Product.Count)
+            {
+                
+                if (Count > ProductCount)
                 {
                     return;
                 }
@@ -171,26 +178,117 @@ namespace ShopClient.ViewModels.Add
             });
         }
 
+        private void PrepareList(List<ProductOrderOutApi> productOrderOuts, ObservableCollection<ProductOrderInApi> productOrderInsToUpdate)
+        {
+            ThisProductOrderIns.ToArray();
+            int? countRemains = Count;
+            for (int i = 0; countRemains > 0; i++)
+            {
+                var countRemainsBefore = countRemains;
+                countRemains -= ThisProductOrderIns[i].Remains;
+                if (countRemains < 0)
+                {
+                      productOrderOuts.Add(new ProductOrderOutApi { IdProductOrderIn = ThisProductOrderIns[i].Id, Product = ThisProduct, Price = thisPrice, Count = countRemainsBefore, Discount = Discount });
+                      ThisProductOrderIns[i].Remains = Math.Abs((int)countRemains);
+                }
+                else
+                {
+                    productOrderOuts.Add(new ProductOrderOutApi { IdProductOrderIn = ThisProductOrderIns[i].Id, Product = ThisProduct, Price = thisPrice, Count = Count - countRemains, Discount = Discount});
+                      ThisProductOrderIns[i].Remains = 0;
+                }
+
+                productOrderInsToUpdate.Add(ThisProductOrderIns[i]);
+            }
+
+            //ThisProductOrderIns.ToArray();
+            //int? countRemains = Count;
+            //for (int i = 0; countRemains > 0; i++)
+            //{
+            //    var countRemainsBefore = countRemains;
+            //    countRemains -= ThisProductOrderIns[i].Remains;
+            //    if (countRemains < 0)
+            //    {
+            //        var toggle = 0;
+            //        foreach (var item in productOrderOuts)
+            //        {
+            //            if (ThisProductOrderIns[i].Id == item.IdProductOrderIn && item.Discount == Discount)
+            //            {
+            //                item.Count += countRemainsBefore;
+            //                toggle = 1;
+            //            }
+            //        }
+            //        if (toggle == 0)
+            //        {
+            //        productOrderOuts.Add(new ProductOrderOutApi { IdProductOrderIn = ThisProductOrderIns[i].Id, Product = ThisProduct, Price = thisPrice, Count = countRemainsBefore, Discount = Discount });
+            //        ThisProductOrderIns[i].Remains = Math.Abs((int)countRemains);
+            //        }
+
+            //    }
+            //    else
+            //    {
+            //        var toggle = 0;
+            //        foreach (var item in productOrderOuts)
+            //        {
+            //            if (ThisProductOrderIns[i].Id == item.IdProductOrderIn && item.Discount == Discount)
+            //            {
+            //                item.Count += Count - countRemains;
+            //                toggle = 1;
+            //            }
+            //        }
+            //        if (toggle == 0)
+            //        {
+            //            productOrderOuts.Add(new ProductOrderOutApi { IdProductOrderIn = ThisProductOrderIns[i].Id, Product = ThisProduct, Price = thisPrice, Count = Count - countRemains, Discount = Discount });
+            //            ThisProductOrderIns[i].Remains = 0;
+            //        }
+            //    }
+            //    var toggle1 = 0;
+            //    foreach (var item in productOrderInsToUpdate)
+            //    {
+            //        if (ThisProductOrderIns[i].Id == item.Id)
+            //        {
+            //            var orderOut = productOrderOuts.First(s => s.IdProductOrderIn == item.Id);
+            //            item.Remains = item.Count - orderOut.Count;
+            //            toggle1 = 1;
+            //        }
+            //    }
+            //    if (toggle1 == 0)
+            //    {
+            //        productOrderInsToUpdate.Add(ThisProductOrderIns[i]);
+            //    }
+            //}
+        }
+
         public void CloseWin(object obj)
         {
             Window win = obj as Window;
             win.Close();
         }
 
-        private async Task GetList(ProductOrderOutApi productOrderOut, SaleTypeApi saleType)
+        private async Task GetList(List<ProductOrderOutApi> productOrderOuts, SaleTypeApi saleType, ProductApi SelectedProduct)
         {
-            Orders = await Api.GetListAsync<List<OrderApi>>("Order");
+            FullOrders = await Api.GetListAsync<List<OrderApi>>("Order");
             productOrderIns = await Api.GetListAsync<List<ProductOrderInApi>>("ProductOrderIn");
             Fabricators = await Api.GetListAsync<List<FabricatorApi>>("Fabricator");
             Units = await Api.GetListAsync<List<UnitApi>>("Unit");
             Products = await Api.GetListAsync<List<ProductApi>>("Product");
 
-            productOrderOut.Product = Products.First(s => s.Id == productOrderOut.Product.Id);
-            productOrderOut.Product.Unit = Units.First(s => s.Id == productOrderOut.Product.IdUnit);
-            productOrderOut.Product.Fabricator = Fabricators.First(s => s.Id == productOrderOut.Product.IdFabricator);
-            ThisProductOrderIns = productOrderIns.Where(s => s.IdProduct == productOrderOut.Product.Id).ToList();
-            productOrderOut.Product.Count = ThisProductOrderIns.Select(s => s.Remains).Sum();
+          
+            ThisProductOrderIns = productOrderIns.Where(s => s.IdProduct == SelectedProduct.Id).ToList();
+            SelectedProduct.Count = ThisProductOrderIns.Select(s => s.Remains).Sum();
+            ThisProduct = SelectedProduct;
+            ProductCount = SelectedProduct.Count;
             //List<ProductOrderInApi> thisProductOrderin = productOrderIns.Where(c => c.IdProduct == productOrderIn.IdProduct).ToList();
+            ThisProductOrderIns.OrderBy(s => s.IdOrder);
+            foreach (var item in ThisProductOrderIns)
+            {
+                if (item.Remains <= 0)
+                {
+                    ThisProductOrderIns.Remove(item);
+                }
+            }
+           
+            //var result = ThisProductOrders.OrderBy(x => x.Date);
+
 
             //if (thisProductOrderin.Count != 0)
             //{
@@ -200,18 +298,20 @@ namespace ShopClient.ViewModels.Add
             //}
             if (saleType.Title == "Оптовая")
             {
-                Price = productOrderOut.Product.WholesalePrice;
+                Price = SelectedProduct.WholesalePrice; 
+                thisPrice = SelectedProduct.WholesalePrice;
             }
             else if (saleType.Title == "Розничная")
             {
-                Price = productOrderOut.Product.RetailPrice;
+                Price = SelectedProduct.RetailPrice;
+                thisPrice = SelectedProduct.RetailPrice;
             }
             PickedSaleType = $"Цена: ({saleType.Title})";
-            ProductTitle = $"{productOrderOut.Product.Fabricator.Title} " + productOrderOut.Product.Title + $" ({productOrderOut.Product.Unit.Title})";
+            ProductTitle = $"{SelectedProduct.Fabricator.Title} " + SelectedProduct.Title + $" ({SelectedProduct.Unit.Title})";
         }
         private void TotalCalculate()
         {
-            Total = Count * Price - Discount;
+            Total = Count * (Price - Discount);
             SignalChanged("Title");
         }
 

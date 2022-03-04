@@ -32,11 +32,6 @@
                                 <TextBox Text="{Binding Price, UpdateSourceTrigger=PropertyChanged}" Height="30" Width="120" FontSize="16" FontFamily="Century Gothic" IsReadOnly="True"/>
                             </StackPanel>
                         </GroupBox>
-                        <GroupBox Header="%" Width="Auto"  FontFamily="Century Gothic">
-                            <StackPanel Orientation="Horizontal">
-                                <TextBox Text="{Binding Percent, UpdateSourceTrigger=PropertyChanged}" Height="30" Width="25" FontSize="16" FontFamily="Century Gothic"/>
-                            </StackPanel>
-                        </GroupBox>
                         <GroupBox Header="Скидка" Width="Auto"  FontFamily="Century Gothic">
                             <StackPanel Orientation="Horizontal">
                                 <TextBox Text="{Binding Discount, UpdateSourceTrigger=PropertyChanged}" Height="30" Width="80" FontSize="16" FontFamily="Century Gothic"/>

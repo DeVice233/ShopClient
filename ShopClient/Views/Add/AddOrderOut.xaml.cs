@@ -2,6 +2,7 @@
 using ShopClient.ViewModels.Add;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -21,10 +22,10 @@ namespace ShopClient.Views.Add
     /// </summary>
     public partial class AddOrderOut : Window
     {
-        public AddOrderOut(ProductOrderOutApi productOrderOut, SaleTypeApi saleType)
+        public AddOrderOut(List<ProductOrderOutApi> productOrderOuts, SaleTypeApi saleType, ObservableCollection<ProductOrderInApi> productOrderInsToUpdate, ProductApi productApi)
         {
             InitializeComponent();
-            DataContext = new AddOrderOutViewModel(productOrderOut, saleType);
+            DataContext = new AddOrderOutViewModel(productOrderOuts, saleType, productOrderInsToUpdate, productApi);
         }
     }
 }

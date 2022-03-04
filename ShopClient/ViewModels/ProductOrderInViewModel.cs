@@ -203,7 +203,6 @@ namespace ShopClient.ViewModels
             });
             AddOrder = new CustomCommand(() =>
             {
-               
                 MessageBoxResult result = MessageBox.Show("Принять заказ?", "Подтвердите действие", MessageBoxButton.YesNo, MessageBoxImage.Question);
                 if (result == MessageBoxResult.Yes)
                 {
