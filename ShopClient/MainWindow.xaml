@@ -55,7 +55,7 @@
                                 <RadioButton Content="Списание"
                              FontSize="20" Foreground="white"
                              Style="{StaticResource MenuButtonThemeVertical}"
-                             Command="{Binding }">
+                             Command="{Binding OpenWriteOffView}">
                                 </RadioButton>
                                         
                             </StackPanel>

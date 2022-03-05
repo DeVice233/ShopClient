@@ -205,15 +205,30 @@ namespace ShopClient.ViewModels
                 SignalChanged();
             }
         }
+        private string clientName = "";
+        public string ClientName
+        {
+            get => clientName;
+            set
+            {
+                clientName = value;
+                SignalChanged();
+            }
+        }
 
         private List<ProductOrderInApi> FullProductOrderIns = new List<ProductOrderInApi>();
         private List<ProductApi> FullProducts = new List<ProductApi>();
         private List<ActionTypeApi> ActionTypes = new List<ActionTypeApi>();
         private List<FabricatorApi> Fabricators = new List<FabricatorApi>();
         public List<ProductOrderOutApi> ProductOrderOutsToUpdate = new List<ProductOrderOutApi>();
+        public ClientApi SelectedClient = new ClientApi();
+        public List<OrderApi> Orders = new List<OrderApi>();
         List<ProductApi> searchResult;
 
         public CustomCommand AddProduct { get; set; }
+        public CustomCommand AddOrder { get; set; }
+        public CustomCommand DeleteProductOrderOut { get; set; }
+        public CustomCommand ClientSelect { get; set; }
 
         public OrderOutViewModel()
         {
@@ -287,10 +302,103 @@ namespace ShopClient.ViewModels
                 Update();
             });
 
-            UpdateList();
+            DeleteProductOrderOut = new CustomCommand(() =>
+            {
+                if (SelectedOrderOutVisual == null) return;
+                var product = SelectedOrderOutVisual.Product;
+                ObservableCollection<ProductOrderOutApi> productOrderOutApis = new ObservableCollection<ProductOrderOutApi>(ProductOrderOutsToUpdate);
+                foreach (ProductOrderOutApi productOrderOutApi in productOrderOutApis)
+                {
+                    if (productOrderOutApi.Product.Id == product.Id)
+                    {
+                        ProductOrderOutsToUpdate.Remove(productOrderOutApi);
+                    }
+                }
+                List<ProductOrderInApi> productOrderInApis = new List<ProductOrderInApi>(ProductOrderInsToUpdate);
+                foreach (ProductOrderInApi productOrderInApi in productOrderInApis)
+                {
+                    if (productOrderInApi.IdProduct == product.Id)
+                    {
+                        ProductOrderInsToUpdate.Remove(productOrderInApi);
+                    }
+                }
+                OrderOutVisuals.Remove(SelectedOrderOutVisual);
+                ChangeCountProduct();
+                if (OrderOutVisuals.Count == 0)
+                {
+                    IsEnableSaleType = true;
+                }
+                Update();
+            });
+            ClientSelect = new CustomCommand(() =>
+            {
+                ClientSelect clientSelect = new ClientSelect(this);
+                clientSelect.ShowDialog();
+            });
+            AddOrder = new CustomCommand(() =>
+            {
+            MessageBoxResult result = MessageBox.Show("Принять заказ?", "Подтвердите действие", MessageBoxButton.YesNo, MessageBoxImage.Question);
+                if (result == MessageBoxResult.Yes)
+                {
+                    if (ProductOrderOutsToUpdate.Count == 0)
+                    {
+                        MessageBox.Show("Заказ пуст!", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
+                        return;
+                    }
+                    if (ClientName == "")
+                    {
+                        MessageBox.Show("Клиент не выбран!", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
+                        return;
+                    }
+
+                    try
+                    {
+                        ActionTypeApi actionType = ActionTypes.First(c => c.Name == "Продажа");
+                        ClientApi client = SelectedClient;
+                        OrderOutApi orderOut = new OrderOutApi { IdSaleType = SelectedSaleType.Id, ProductOrderOuts = ProductOrderOutsToUpdate};
+
+                        AddNewOrder(new OrderApi { Date = DateTime.Now, IdActionType = actionType.Id, IdClient = client.Id }, orderOut);
+                        PutProductOrderIns(ProductOrderInsToUpdate);
+                        MessageBox.Show("Заказ принят", "Успех", MessageBoxButton.OK, MessageBoxImage.Information);
+                    }
+                    catch (Exception e)
+                    {
+                        MessageBox.Show(e.Message);
+                    };
+                    Update();
+                }
+            });
+             UpdateList();
         }
 
-
+        private async Task AddNewOrderOut(OrderOutApi orderOut)
+        {
+            await GetListOrders();
+            var orderId = Orders.Last().Id;
+            orderOut.IdOrder = orderId;
+            var id = await Api.PostAsync<OrderOutApi>(orderOut, "OrderOut");
+            ProductOrderOutsToUpdate.Clear();
+            OrderOutVisuals.Clear();
+            
+            await GetList();
+        }
+        private async Task GetListOrders()
+        {
+            Orders = await Api.GetListAsync<List<OrderApi>>("Order");
+        }
+        private async Task PutProductOrderIns(ObservableCollection<ProductOrderInApi> productOrderIns)
+        {
+            foreach(ProductOrderInApi productOrderIn in productOrderIns)
+            {
+                var id = await Api.PutAsync<ProductOrderInApi>(productOrderIn,"ProductOrderIn");
+            }
+            ProductOrderInsToUpdate.Clear();
+        }
+        private async Task AddNewOrder(OrderApi order, OrderOutApi orderOut)
+        {
+            var id = await Api.PostAsync<OrderApi>(order, "Order");
+            await AddNewOrderOut(orderOut);
+        }
         private void Search()
         {
             var search = SearchText.ToLower();
@@ -334,6 +442,8 @@ namespace ShopClient.ViewModels
                 product.ProductType = ProductTypes.First(s => s.Id == product.IdProductType);
                 product.Fabricator = Fabricators.First(s => s.Id == product.IdFabricator);
             }
+            SelectedClient = new ClientApi();
+            ClientName = "";
             ProductTypeFilter = await Api.GetListAsync<List<ProductTypeApi>>("ProductType");
             ProductTypeFilter.Add(new ProductTypeApi { Title = "Все типы" });
             SelectedProductTypeFilter = ProductTypeFilter.Last();
@@ -415,5 +525,7 @@ namespace ShopClient.ViewModels
                 product.Count = productOrderInApis.Where(s => s.IdProduct == product.Id).Select(s => s.Remains).Sum();
             }
         }
+       
+       
     }
 }

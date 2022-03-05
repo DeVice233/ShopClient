@@ -273,19 +273,12 @@ namespace ShopClient.ViewModels.Add
             Products = await Api.GetListAsync<List<ProductApi>>("Product");
 
           
-            ThisProductOrderIns = productOrderIns.Where(s => s.IdProduct == SelectedProduct.Id).ToList();
+            ThisProductOrderIns = productOrderIns.Where(s => s.IdProduct == SelectedProduct.Id && s.Remains > 0).ToList();
             SelectedProduct.Count = ThisProductOrderIns.Select(s => s.Remains).Sum();
             ThisProduct = SelectedProduct;
             ProductCount = SelectedProduct.Count;
             //List<ProductOrderInApi> thisProductOrderin = productOrderIns.Where(c => c.IdProduct == productOrderIn.IdProduct).ToList();
             ThisProductOrderIns.OrderBy(s => s.IdOrder);
-            foreach (var item in ThisProductOrderIns)
-            {
-                if (item.Remains <= 0)
-                {
-                    ThisProductOrderIns.Remove(item);
-                }
-            }
            
             //var result = ThisProductOrders.OrderBy(x => x.Date);
 

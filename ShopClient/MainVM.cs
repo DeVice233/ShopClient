@@ -45,7 +45,7 @@ namespace ShopClient
         public CustomCommand OpenProductView { get; set; }
         public CustomCommand OpenOrderView { get; set; }
         public CustomCommand OpenOrderOutView { get; set; }
-
+        public CustomCommand OpenWriteOffView { get; set; }
         public MainVM()
         {
             GetList();
@@ -95,6 +95,11 @@ namespace ShopClient
             OpenOrderOutView = new CustomCommand(() =>
             {
                 CurrentPage = new OrderOutView();
+                SignalChanged("CurrentPage");
+            });
+            OpenWriteOffView = new CustomCommand(() =>
+            {
+                CurrentPage = new WriteOffView();
                 SignalChanged("CurrentPage");
             });
         } 
