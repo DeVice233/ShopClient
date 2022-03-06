@@ -47,9 +47,7 @@
             </ListView.View>
             <ListView.ContextMenu>
                 <ContextMenu>
-                    <MenuItem Header="Изменить цену" Command="{Binding ProductPriceChange}"/>
-                    <MenuItem Header="Редактировать" Command="{Binding EditProduct}"/>
-                    <MenuItem Header="Удалить" Command="{Binding DeleteProduct}"/>
+                    <MenuItem Header="Детали заказа" Command="{Binding OpenOrderDetails}"/>
                 </ContextMenu>
             </ListView.ContextMenu>
         </ListView>

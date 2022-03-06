@@ -31,8 +31,58 @@
             </StackPanel>
         </Grid>
 
-        <ListView Grid.Row="1" ItemsSource="{Binding Products}" FontSize="16" SelectedItem="{Binding SelectedProduct}">
-            <ListView.View>
+        <ListBox Grid.Row="1" ItemsSource="{Binding Products}" FontSize="16" SelectedItem="{Binding SelectedProduct}" HorizontalContentAlignment="Stretch">
+            <ListBox.ItemTemplate>
+                <DataTemplate >
+                    <Grid Background="{Binding ColorForXaml}" >
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="auto"/>
+                            <ColumnDefinition />
+                            <ColumnDefinition/>
+                        </Grid.ColumnDefinitions>
+                        <Image Source="{Binding Image}" Width="100" Height="100" Grid.Column="0" HorizontalAlignment="Left"/>
+                        <StackPanel Grid.Column="1" Orientation="Vertical" HorizontalAlignment="Left">
+                            <StackPanel Orientation="Horizontal">
+                                <Label Content="{Binding ProductType.Title}"/>
+                                <Label Content="|"/>
+                                <Label Content="{Binding Title}"/>
+                                <Label Content="|"/>
+                                <Label Content="{Binding Fabricator.Title}"/>
+                            </StackPanel>
+
+
+                            <StackPanel Orientation="Horizontal" >
+                                <Label Content="Артикул :"/>
+                                <Label Content="{Binding Article}"/>
+                                <Label Content="Штрихкод :"/>
+                                <Label Content="{Binding Barcode}"/>
+                            </StackPanel>
+                            <StackPanel Orientation="Horizontal" >
+                                <Label Content="Розн.цена :"/>
+                                <Label Content="{Binding RetailPrice}"/>
+                                <Label Content="Опт.цена :"/>
+                                <Label Content="{Binding WholesalePrice}"/>
+                            </StackPanel>
+
+
+                        </StackPanel>
+                        <StackPanel Orientation="Vertical" Grid.Column="2" HorizontalAlignment="Right">
+                            <StackPanel Orientation="Horizontal">
+                                <Label Content="Минимальное Количество:"/>
+                                <Label Content="{Binding MinCount}"/>
+                            </StackPanel>
+                            <StackPanel Orientation="Horizontal">
+                                <Label Content="Остаток:"/>
+                                <Label  Content="{Binding Count}"/>
+                                <Label  Content="{Binding Unit.Title}"/>
+                            </StackPanel>
+                        </StackPanel>
+
+                    </Grid>
+
+                </DataTemplate>
+            </ListBox.ItemTemplate>
+            <!--<ListView.View>
                 <GridView>
                     <GridViewColumn Header="Артикул" DisplayMemberBinding="{Binding Article}"/>
                     <GridViewColumn Header="Штрихкод" DisplayMemberBinding="{Binding Barcode}"/>
@@ -44,15 +94,15 @@
                     <GridViewColumn Header="Опт. цена" DisplayMemberBinding="{Binding WholesalePrice}"/>
                     <GridViewColumn Header="Кол-во" DisplayMemberBinding="{Binding Count}"/>
                 </GridView>
-            </ListView.View>
-            <ListView.ContextMenu>
+            </ListView.View>-->
+            <ListBox.ContextMenu>
                 <ContextMenu>
                     <MenuItem Header="Изменить цену" Command="{Binding ProductPriceChange}"/>
                     <MenuItem Header="Редактировать" Command="{Binding EditProduct}"/>
                     <MenuItem Header="Удалить" Command="{Binding DeleteProduct}"/>
                 </ContextMenu>
-            </ListView.ContextMenu>
-        </ListView>
+            </ListBox.ContextMenu>
+        </ListBox>
         <Grid Background="#FF1A315B" Grid.Row="2">
             <StackPanel Orientation="Horizontal">
                 <Button Width="auto" Background="Transparent" 

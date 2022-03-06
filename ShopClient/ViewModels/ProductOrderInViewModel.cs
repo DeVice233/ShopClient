@@ -223,10 +223,7 @@ namespace ShopClient.ViewModels
 
                         AddNewOrder(new OrderApi {Date = DateTime.Now, IdActionType = actionType.Id, IdClient =client.Id });
                         
-                        foreach (ProductOrderInApi productOrderIn in ProductOrderIns)
-                        {
-                            AddProductOrdersIn(productOrderIn);
-                        }
+                       
                      
                         MessageBox.Show("Заказ принят", "Успех", MessageBoxButton.OK, MessageBoxImage.Information);
 
@@ -364,6 +361,11 @@ namespace ShopClient.ViewModels
         private async Task AddNewOrder(OrderApi order)
         {
             var id = await Api.PostAsync<OrderApi>(order, "Order");
+
+            foreach (ProductOrderInApi productOrderIn in ProductOrderIns)
+            {
+                await AddProductOrdersIn(productOrderIn);
+            }
         }
         private async Task AddNewProductOrderIn(ProductOrderInApi productOrderIn)
         {

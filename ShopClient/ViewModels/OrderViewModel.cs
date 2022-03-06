@@ -1,5 +1,6 @@
 ﻿using ModelsApi;
 using ShopClient.Core;
+using ShopClient.Views;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -152,6 +153,7 @@ namespace ShopClient.ViewModels
 
         public CustomCommand BackPage { get; set; }
         public CustomCommand ForwardPage { get; set; }
+        public CustomCommand OpenOrderDetails { get; set; }
 
         private List<OrderApi> FullOrders = new List<OrderApi>();
         public int rows = 0;
@@ -200,7 +202,16 @@ namespace ShopClient.ViewModels
                 Pagination();
 
             });
+            OpenOrderDetails = new CustomCommand(() =>
+            {
+                if (SelectedOrder == null) return;
+                if(SelectedOrder.ActionType.Name == "Поступление")
+                {
+                    OrderInDetails orderInDetails = new OrderInDetails(SelectedOrder);
+                    orderInDetails.ShowDialog();
+                }
 
+            });
         }
 
         private void InitPagination()

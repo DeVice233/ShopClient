@@ -33,6 +33,7 @@
                             <Label Content="Артикул:" Style="{StaticResource PropertyLabel}"/>
                             <Label Content="Штрихкод:" Style="{StaticResource PropertyLabel}"/>
                             <Label Content="Название:" Style="{StaticResource PropertyLabel}"/>
+                            <Label Content="Мин. кол-во:" Style="{StaticResource PropertyLabel}"/>
                             <Label Content="Опт. цена:" Style="{StaticResource PropertyLabel}"/>
                             <Label Content="Розн. цена:" Style="{StaticResource PropertyLabel}"/>
                         </StackPanel>
@@ -41,6 +42,7 @@
                             <TextBox Text="{Binding Article}" Style="{StaticResource PropertyTextBox}" Width="150"/>
                             <TextBox Text="{Binding Barcode}" Style="{StaticResource PropertyTextBox}" />
                             <TextBox Text="{Binding Title}" Style="{StaticResource PropertyTextBox}"   />
+                            <TextBox Text="{Binding MinCount}" Style="{StaticResource PropertyTextBox}"   />
                             <TextBox Text="{Binding WholesalePrice}" Style="{StaticResource PropertyTextBox}" IsEnabled="False"/>
                             <TextBox Text="{Binding RetailPrice}" Style="{StaticResource PropertyTextBox}" IsEnabled="False"/>
 

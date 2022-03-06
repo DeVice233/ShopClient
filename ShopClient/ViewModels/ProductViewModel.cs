@@ -211,6 +211,8 @@ namespace ShopClient.ViewModels
             EditProduct = new CustomCommand(() =>
             {
                 if (SelectedProduct == null) return;
+                int pos = SelectedProduct.Image.LastIndexOf('/');
+                SelectedProduct.Image = SelectedProduct.Image.Substring(pos + 1);
                 AddProduct addProduct = new AddProduct(SelectedProduct);
                 addProduct.ShowDialog();
                 Update();
@@ -321,11 +323,20 @@ namespace ShopClient.ViewModels
             FullProducts = Products;
             foreach (ProductApi product in Products)
             {
+                product.Image = Environment.CurrentDirectory + "/Products/" + product.Image;
                 product.Count = ProductOrderIns.Where(s => s.IdProduct == product.Id).Select(s => s.Remains).Sum();
                 product.Fabricator = Fabricators.First(s => s.Id == product.IdFabricator);
                 product.Unit = Units.First(s => s.Id == product.IdUnit);
                 product.ProductType = ProductTypes.First(s => s.Id == product.IdProductType);
-            } 
+                if (product.Count < product.MinCount)
+                {
+                    product.ColorForXaml = "#FFE26464";
+                }
+                else if (product.Count > product.MinCount * 3)
+                {
+                    product.ColorForXaml = "#FF9EEA82";
+             }
+            }
             ProductTypeFilter = await Api.GetListAsync<List<ProductTypeApi>>("ProductType");
             ProductTypeFilter.Add(new ProductTypeApi { Title = "Все типы" });
             SelectedProductTypeFilter = ProductTypeFilter.Last();

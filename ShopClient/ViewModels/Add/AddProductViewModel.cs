@@ -159,6 +159,7 @@ namespace ShopClient.ViewModels.Add
                     IdUnit = product.IdUnit,
                     IdProductType = product.IdProductType,
                     RetailPrice = product.RetailPrice,
+                    MinCount = product.MinCount,
                     WholesalePrice = product.WholesalePrice
                 };
 
@@ -183,7 +184,7 @@ namespace ShopClient.ViewModels.Add
                 {
                     try
                     {
-                      
+                        
                         AddProduct.IdProductType = SelectedProductType.Id;
                         AddProduct.IdFabricator = SelectedFabricator.Id;
                         AddProduct.IdUnit = SelectedUnit.Id;

@@ -16,7 +16,7 @@
                 </Grid.RowDefinitions>
                 <StackPanel Orientation="Vertical">
                     <StackPanel>
-                        <Label Content="Внести в документ:" FontFamily="Century Gothic" FontSize="16"/>
+                        <Label Content="Внести в документ:" FontFamily="Century Gothic" FontSize="16" />
                         <Label Content="Наименование:" FontFamily="Century Gothic" FontSize="14"/>
                         <Label Content="{Binding ProductTitle}" Height="35" FontFamily="Century Gothic" FontWeight="Bold" FontSize="16"/>
                     </StackPanel>
