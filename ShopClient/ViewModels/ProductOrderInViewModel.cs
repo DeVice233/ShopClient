@@ -162,7 +162,16 @@ namespace ShopClient.ViewModels
                 SignalChanged();
             }
         }
-
+        private string total;
+        public string Total
+        {
+            get => total;
+            set
+            {
+                total = value;
+                SignalChanged();
+            }
+        }
         public CustomCommand AddProduct { get; set; }
         public CustomCommand AddOrder { get; set; }
         public CustomCommand DeleteProductOrderIn { get; set; }
@@ -305,6 +314,7 @@ namespace ShopClient.ViewModels
             ProductTypeFilter = await Api.GetListAsync<List<ProductTypeApi>>("ProductType");
             ProductTypeFilter.Add(new ProductTypeApi { Title = "Все типы" });
             SelectedProductTypeFilter = ProductTypeFilter.Last();
+            TotalCalculate();
             PrepareTreeView();
         }
         private void PrepareTreeView()
@@ -379,7 +389,18 @@ namespace ShopClient.ViewModels
             SignalChanged("Products");
             SignalChanged("ProductOrderIns");
             SignalChanged("LegalClients");
+            TotalCalculate();
             SelectedProductTypeFilter = ProductTypeFilter.Last();
+        }
+        private void TotalCalculate()
+        {
+            decimal total = 0;
+            foreach(ProductOrderInApi productOrderInApi in ProductOrderIns)
+            {
+                total += (decimal)(productOrderInApi.Count * productOrderInApi.Price);
+            }
+            Total = total.ToString();
+            SignalChanged("Total");
         }
     }
 }

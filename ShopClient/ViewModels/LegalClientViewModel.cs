@@ -72,6 +72,7 @@ namespace ShopClient.ViewModels
 
         private List<LegalClientApi> FullLegalClients = new List<LegalClientApi>();
         List<LegalClientApi> searchResult;
+        public   List<OrderApi> Orders;
 
         public LegalClientViewModel()
         {
@@ -137,8 +138,8 @@ namespace ShopClient.ViewModels
 
         private void UpdateList()
         {
-
             LegalClients = searchResult;
+
         }
 
         private async Task Delete(LegalClientApi legalClient)
@@ -149,11 +150,19 @@ namespace ShopClient.ViewModels
         private async Task GetList()
         {
             LegalClients = await Api.GetListAsync<List<LegalClientApi>>("LegalClient");
+            Orders = await Api.GetListAsync<List<OrderApi>>("Order");
+            foreach (LegalClientApi legal in LegalClients)
+            {
+                legal.Client.OrdersCount = Orders.FindAll(s => s.IdClient == legal.IdClient).ToList().Count;
+            }
             FullLegalClients = LegalClients;
+            Search();
         }
+        
 
         private void Update()
         {
+           
             SignalChanged("Clients");
             GetList();
             SignalChanged("LegalClients");

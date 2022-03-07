@@ -23,16 +23,6 @@ namespace ShopClient.ViewModels
             }
         }
 
-        private ProductTypeApi selectedProductOrderIn;
-        public ProductTypeApi SelectedProductOrderIn
-        {
-            get => selectedProductOrderIn;
-            set
-            {
-                selectedProductOrderIn = value;
-                SignalChanged();
-            }
-        }
         private string orderDate;
         public string OrderDate
         { 

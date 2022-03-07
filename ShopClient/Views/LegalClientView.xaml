@@ -3,11 +3,14 @@
       xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      xmlns:helper="clr-namespace:ShopClient.Helper"
       xmlns:local="clr-namespace:ShopClient.Views"
       mc:Ignorable="d" 
       d:DesignHeight="450" d:DesignWidth="800" Background="White"
       Title="LegalClientView">
-
+    <Page.Resources>
+        <helper:SupplierStatusConverter x:Shared="false" x:Key="supplierStatusConverter"/>
+    </Page.Resources>
     <Grid>
         <Grid.RowDefinitions> 
             <RowDefinition Height="60"/>
@@ -34,7 +37,14 @@
                     <GridViewColumn Header="Email" DisplayMemberBinding="{Binding Email}"/>
                     <GridViewColumn Header="Телефон" DisplayMemberBinding="{Binding Client.Phone}"/>
                     <GridViewColumn Header="Адрес" DisplayMemberBinding="{Binding Client.Address}"/>
-                    <GridViewColumn Header="Поставщик" DisplayMemberBinding="{Binding IsSupplier}"/>
+                    <GridViewColumn Header="Кол-во заказов" DisplayMemberBinding="{Binding Client.OrdersCount}"/>
+                    <GridViewColumn Header="Поставщик">
+                        <GridViewColumn.CellTemplate>
+                            <DataTemplate>
+                                <TextBlock Text="{Binding Path=IsSupplier, Converter={StaticResource supplierStatusConverter}}"/>
+                            </DataTemplate>
+                        </GridViewColumn.CellTemplate>
+                    </GridViewColumn>
                 </GridView>
             </ListView.View>
             <ListView.ContextMenu>

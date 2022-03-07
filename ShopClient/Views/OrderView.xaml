@@ -43,6 +43,7 @@
                         </GridViewColumn.HeaderTemplate>
                     </GridViewColumn>
                     <GridViewColumn Header="Тип операции" DisplayMemberBinding="{Binding ActionType.Name}"/>
+                    <GridViewColumn Header="Клиент" DisplayMemberBinding="{Binding Client.Phone}"/>
                 </GridView>
             </ListView.View>
             <ListView.ContextMenu>

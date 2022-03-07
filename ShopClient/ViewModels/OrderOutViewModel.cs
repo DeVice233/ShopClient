@@ -215,6 +215,16 @@ namespace ShopClient.ViewModels
                 SignalChanged();
             }
         }
+        private string total;
+        public string Total
+        {
+            get => total;
+            set
+            {
+                total = value;
+                SignalChanged();
+            }
+        }
 
         private List<ProductOrderInApi> FullProductOrderIns = new List<ProductOrderInApi>();
         private List<ProductApi> FullProducts = new List<ProductApi>();
@@ -503,6 +513,7 @@ namespace ShopClient.ViewModels
             SignalChanged("ProductOrderIns");
             SignalChanged("LegalClients");
             SignalChanged("OrderOutVisuals");
+            TotalCalculate();
             SelectedProductTypeFilter = ProductTypeFilter.Last();
         }
 
@@ -525,7 +536,16 @@ namespace ShopClient.ViewModels
                 product.Count = productOrderInApis.Where(s => s.IdProduct == product.Id).Select(s => s.Remains).Sum();
             }
         }
-       
-       
+
+        private void TotalCalculate()
+        {
+            decimal total = 0;
+            foreach (OrderOutVisual orderOutVisual in OrderOutVisuals)
+            {
+                total += (decimal)(orderOutVisual.Count * (orderOutVisual.Price - orderOutVisual.Discount));
+            }
+            Total = total.ToString();
+            SignalChanged("Total");
+        }
     }
 }

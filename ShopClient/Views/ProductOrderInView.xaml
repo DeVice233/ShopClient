@@ -106,7 +106,11 @@
             <Label Content="Поставщик:"/>
             <ComboBox ItemsSource="{Binding LegalClients}" SelectedItem="{Binding SelectedLegalClient}" DisplayMemberPath="Title"/>
         </StackPanel>
-        <StackPanel Grid.Row="3" Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Right">
+        <StackPanel Grid.Row="3" Grid.Column="1" Orientation="Vertical" HorizontalAlignment="Right">
+            <StackPanel Orientation="Horizontal">
+                <Label Content="Итого:" FontSize="16"/>
+                <Label Content="{Binding Total}" FontSize="16"/>
+            </StackPanel>
             <Button Content="Принять" Height="25" Width="120" Command="{Binding AddOrder}" FontSize="16"/>
         </StackPanel>
 

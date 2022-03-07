@@ -73,6 +73,7 @@ namespace ShopClient.ViewModels
 
         private List<PhysicalClientApi> FullPhysicalClients = new List<PhysicalClientApi>();
         List<PhysicalClientApi> searchResult;
+        List<OrderApi> Orders;
 
         public PhysicalClientViewModel()
         {    
@@ -147,13 +148,20 @@ namespace ShopClient.ViewModels
         private async Task GetList()
         {
             PhysicalClients = await Api.GetListAsync<List<PhysicalClientApi>>("PhysicalClient");
+            Orders = await Api.GetListAsync<List<OrderApi>>("Order");
+            foreach(PhysicalClientApi physicalClientApi in PhysicalClients)
+            {
+                physicalClientApi.Client.OrdersCount = Orders.FindAll(s => s.IdClient == physicalClientApi.IdClient).ToList().Count;
+            }
             FullPhysicalClients = PhysicalClients;
+            Search();
         }
 
         private void Update()
         {
-            SignalChanged("Clients");
+            
             GetList();
+            SignalChanged("Clients");
             SignalChanged("PhysicalClients");
         }
     }

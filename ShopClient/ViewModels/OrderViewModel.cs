@@ -210,7 +210,11 @@ namespace ShopClient.ViewModels
                     OrderInDetails orderInDetails = new OrderInDetails(SelectedOrder);
                     orderInDetails.ShowDialog();
                 }
-
+            if (SelectedOrder.ActionType.Name == "Продажа")
+            {
+                    OrderOutDetails orderOutDetails = new OrderOutDetails(SelectedOrder);
+                    orderOutDetails.ShowDialog();
+                }
             });
         }
 
