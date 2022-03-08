@@ -28,6 +28,11 @@ namespace ShopClient
             //Test();
            
         }
+
+        private void TabItem_MouseDown(object sender, MouseButtonEventArgs e)
+        {
+
+        }
         //async Task Test()
         //{
         //    var result = await Api.GetAsync<UnitApi>(1, "Unit");
@@ -35,7 +40,7 @@ namespace ShopClient
         //    //var id = await Api.PostAsync(new UnitApi { Title = "шт2"}, "Unit");
         //    List<UnitApi> unitApis = new List<UnitApi>();
         //    unitApis = (List<UnitApi>)units;
-           
+
         //}
     }
 }

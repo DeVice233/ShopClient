@@ -111,6 +111,8 @@ namespace ShopClient
                 AddSaleType(new SaleTypeApi { Title="Розничная" });
                 AddSaleType(new SaleTypeApi { Title = "Оптовая" });
 
+                AddClient(new ClientApi { Address = "Списание", Phone = "Списание" });
+
                 AddActionType(new ActionTypeApi { Name = "Продажа" });
                 AddActionType(new ActionTypeApi { Name = "Возврат" });
                 AddActionType(new ActionTypeApi { Name = "Переоценка" });
@@ -121,6 +123,10 @@ namespace ShopClient
         private async Task AddSaleType(SaleTypeApi saleType)
         {
             var id = await Api.PostAsync<SaleTypeApi>(saleType, "SaleType");
+        }
+        private async Task AddClient(ClientApi client)
+        {
+            var id = await Api.PostAsync<ClientApi>(client, "Client");
         }
         private async Task AddActionType(ActionTypeApi actionType)
         {

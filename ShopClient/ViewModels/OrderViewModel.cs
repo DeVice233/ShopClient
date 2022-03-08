@@ -214,8 +214,13 @@ namespace ShopClient.ViewModels
             {
                     OrderOutDetails orderOutDetails = new OrderOutDetails(SelectedOrder);
                     orderOutDetails.ShowDialog();
-                }
-            });
+            }
+                if (SelectedOrder.ActionType.Name == "Списание")
+            {
+                WriteOffDetails writeOffDetails = new WriteOffDetails(SelectedOrder);
+                writeOffDetails.ShowDialog();
+            }
+        });
         }
 
         private void InitPagination()

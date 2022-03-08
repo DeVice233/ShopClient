@@ -8,7 +8,7 @@
         Title="Shop" Height="720" Width="1280"  WindowState="Normal" WindowStartupLocation="CenterScreen" WindowStyle="ThreeDBorderWindow" ResizeMode="CanResize">
     <Grid>
         <TabControl >
-            <TabItem Header="Документы">
+            <TabItem Header="Документы" MouseDown="TabItem_MouseDown">
                 <TabItem.Content>
                     <Grid>
                         <Grid.ColumnDefinitions>
@@ -40,11 +40,6 @@
                              Style="{StaticResource MenuButtonThemeVertical}"
                              Command="{Binding OpenOrderOutView}">
 
-                                        </RadioButton>
-                                        <RadioButton Content="Возврат"
-                             FontSize="20" Foreground="white"
-                             Style="{StaticResource MenuButtonThemeVertical}"
-                             Command="{Binding }">
                                         </RadioButton>
                                         <RadioButton Content="Поступление" 
                              FontSize="20" Foreground="white"

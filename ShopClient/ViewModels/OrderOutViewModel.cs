@@ -365,7 +365,7 @@ namespace ShopClient.ViewModels
                     {
                         ActionTypeApi actionType = ActionTypes.First(c => c.Name == "Продажа");
                         ClientApi client = SelectedClient;
-                        OrderOutApi orderOut = new OrderOutApi { IdSaleType = SelectedSaleType.Id, ProductOrderOuts = ProductOrderOutsToUpdate};
+                        OrderOutApi orderOut = new OrderOutApi { IdSaleType = SelectedSaleType.Id, ProductOrderOuts = ProductOrderOutsToUpdate, Status = "Подтвержден"};
 
                         AddNewOrder(new OrderApi { Date = DateTime.Now, IdActionType = actionType.Id, IdClient = client.Id }, orderOut);
                         PutProductOrderIns(ProductOrderInsToUpdate);

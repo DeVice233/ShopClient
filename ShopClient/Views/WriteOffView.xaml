@@ -43,7 +43,7 @@
                 <Label  Content="СПИСАНИЕ"  FontFamily="Century Gothic" FontSize="20" FontWeight="ExtraBold" />
             </StackPanel>
         </Grid>
-        <!--<TreeView FontSize="16" Grid.Row="0" Grid.Column="0" Grid.RowSpan="3"  Margin="0 5 5 0" Background="Beige" BorderThickness="1" TreeViewItem.Selected="TreeViewItem_OnItemSelected" x:Name="trvName" Tag="{Binding ClickedTreeElement, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
+        <TreeView FontSize="16" Grid.Row="0" Grid.Column="0" Grid.RowSpan="3"  Margin="0 5 5 0" Background="Beige" BorderThickness="1" TreeViewItem.Selected="TreeViewItem_OnItemSelected" x:Name="trvName" Tag="{Binding ClickedTreeElement, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
             <TreeViewItem Header="Все" ItemsSource="{Binding ProductTypeTreeViews}">
                 <TreeViewItem.ItemTemplate>
                     <HierarchicalDataTemplate ItemsSource="{Binding Path=Fabricators}">
@@ -62,38 +62,37 @@
                     </HierarchicalDataTemplate>
                 </TreeViewItem.ItemTemplate>
             </TreeViewItem>
-        </TreeView>-->
-        <ListView Grid.Row="1" Grid.Column="1" FontSize="15" ItemsSource="{Binding Products}"  SelectedItem="{Binding SelectedProduct}" Background="AliceBlue">
+        </TreeView>
+        <ListView Grid.Row="1" Grid.Column="1" FontSize="15" ItemsSource="{Binding ProductOrderIns}"  SelectedItem="{Binding SelectedProductOrderIn}" Background="AliceBlue">
             <ListView.View>
                 <GridView>
-                    <GridViewColumn Header="Артикул" DisplayMemberBinding="{Binding Article}"/>
-                    <GridViewColumn Header="Штрихкод" DisplayMemberBinding="{Binding Barcode}"/>
-                    <GridViewColumn Header="Название" DisplayMemberBinding="{Binding Title}"/>
-                    <GridViewColumn Header="Производитель" DisplayMemberBinding="{Binding Fabricator.Title}"  Width="130"/>
-                    <GridViewColumn Header="Тип" DisplayMemberBinding="{Binding ProductType.Title}"  Width="70"/>
-                    <GridViewColumn Header="Ед." DisplayMemberBinding="{Binding Unit.Title}" Width="50"/>
-                    <GridViewColumn Header="Розн. цена" DisplayMemberBinding="{Binding RetailPrice}"/>
-                    <GridViewColumn Header="Опт. цена" DisplayMemberBinding="{Binding WholesalePrice}"/>
-                    <GridViewColumn Header="Кол-во" DisplayMemberBinding="{Binding Count}"/>
+                    <GridViewColumn Header="№ партии" DisplayMemberBinding="{Binding Id}"/>
+                    <GridViewColumn Header="Артикул" DisplayMemberBinding="{Binding Product.Article}"/>
+                    <GridViewColumn Header="Название" DisplayMemberBinding="{Binding Product.Title}"/>
+                    <GridViewColumn Header="Производитель" DisplayMemberBinding="{Binding Product.Fabricator.Title}"/>
+                    <GridViewColumn Header="Тип" DisplayMemberBinding="{Binding Product.ProductType.Title}"/>
+                    <GridViewColumn Header="Дата" DisplayMemberBinding="{Binding Order.Date, StringFormat='{}{0:dd.MM.yyyy}'}"/>
+                    <GridViewColumn Header="Кол-во в партии" DisplayMemberBinding="{Binding Count}"  Width="100"/>
+                    <GridViewColumn Header="Остаток" DisplayMemberBinding="{Binding Remains}" Width="50"/>
+                    <GridViewColumn Header="Цена" DisplayMemberBinding="{Binding Price}"/>
                 </GridView>
             </ListView.View>
             <ListView.ContextMenu>
                 <ContextMenu>
-                    <MenuItem Command="{Binding AddProduct}" Header="Добавить в список"/>
+                    <MenuItem Command="{Binding AddProductOrderIn}" Header="Добавить в список"/>
                 </ContextMenu>
             </ListView.ContextMenu>
         </ListView>
         <ListView FontSize="15" Grid.Row="2" Grid.Column="1" Margin="0 10 0 0" ItemsSource="{Binding OrderOutVisuals}"  SelectedItem="{Binding SelectedOrderOutVisual}" HorizontalContentAlignment="Right" Background="#FFF9E4E4">
             <ListView.View>
                 <GridView>
+                    <GridViewColumn Header="№ партии" DisplayMemberBinding="{Binding OrderInId}"  />
                     <GridViewColumn Header="Артикул" DisplayMemberBinding="{Binding Product.Article}"  />
-                    <GridViewColumn Header="Наименование" DisplayMemberBinding="{Binding Product.Title}"/>
+                    <GridViewColumn Header="Название" DisplayMemberBinding="{Binding Product.Title}"/>
+                    <GridViewColumn Header="Производитель" DisplayMemberBinding="{Binding Product.Fabricator.Title}"/>
                     <GridViewColumn Header="Тип" DisplayMemberBinding="{Binding Product.ProductType.Title}"/>
-                    <GridViewColumn Header="Ед." DisplayMemberBinding="{Binding Product.Unit.Title}"/>
                     <GridViewColumn Header="Кол-во" DisplayMemberBinding="{Binding Count}"/>
                     <GridViewColumn Header="Цена" DisplayMemberBinding="{Binding Price}"/>
-                    <GridViewColumn Header="Разница" DisplayMemberBinding="{Binding Discount}"/>
-                    <GridViewColumn Header="Сумма" DisplayMemberBinding="{Binding Sum}"/>
                 </GridView>
             </ListView.View>
             <ListView.ContextMenu>
@@ -103,11 +102,7 @@
             </ListView.ContextMenu>
         </ListView>
         <StackPanel Grid.Row="3" Grid.Column="1" Orientation="Vertical" HorizontalAlignment="Left" Width="320">
-            <StackPanel Orientation="Horizontal">
-                <Label Content="Заказчик:" FontSize="16"/>
-                <Label Content="{Binding ClientName}" FontSize="16"/>
-            </StackPanel>
-            <Button Content="Выбрать заказчика" Command="{Binding ClientSelect}" Width="120" Height="25"/>
+          
         </StackPanel>
         <StackPanel Grid.Row="3" Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Right">
             <Button Content="Принять" Height="25" Width="120" Command="{Binding AddOrder}" FontSize="16"/>
