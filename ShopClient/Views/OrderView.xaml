@@ -38,7 +38,10 @@
                     <GridViewColumn  DisplayMemberBinding="{Binding Date, StringFormat='{}{0:dd.MM.yyyy}'}">
                         <GridViewColumn.HeaderTemplate>
                             <DataTemplate>
-                                <Label Content="Дата"  FontSize="14" Tag="Date" MouseDown="ClickColumn"/>
+                                <StackPanel Orientation="Horizontal">
+                                    <Label Content="Дата"  FontSize="14" Tag="Date" MouseDown="ClickColumn"/>
+                                    <Image Source="/Images/filter.png" Width="15"/>
+                                </StackPanel>
                             </DataTemplate>
                         </GridViewColumn.HeaderTemplate>
                     </GridViewColumn>

@@ -29,6 +29,8 @@ namespace ShopClient
            
         }
 
+   
+
         private void TabItem_MouseDown(object sender, MouseButtonEventArgs e)
         {
 
