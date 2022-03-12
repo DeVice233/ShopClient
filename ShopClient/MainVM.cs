@@ -26,67 +26,18 @@ namespace ShopClient
                 SignalChanged("CurrentListPage");
             }
         }
+        private object _currentReportPage;
+        public object CurrentReportPage
+        {
+            get { return _currentReportPage; }
+            set
+            {
+                _currentReportPage = value;
+                SignalChanged("CurrentReportPage");
+            }
+        }
 
-        private DateTime dateStart;
-        public DateTime DateStart
-        {
-            get => dateStart; 
-            set
-            {
-                dateStart = value;
-                SignalChanged();
-            }
-        }
-        private DateTime dateFinish;
-        public DateTime DateFinish
-        {
-            get => dateFinish;
-            set
-            {
-                dateFinish = value;
-                SignalChanged();
-            }
-        }
-        private bool orderIn;
-        public bool OrderIn
-        {
-            get => orderIn;
-            set
-            {
-                orderIn = value;
-                SignalChanged();
-            }
-        }
-        private bool orderOut;
-        public bool OrderOut
-        {
-            get => orderOut;
-            set
-            {
-                orderOut = value;
-                SignalChanged();
-            }
-        }
-        private bool writeOff;
-        public bool WriteOff
-        {
-            get => writeOff;
-            set
-            {
-                writeOff = value;
-                SignalChanged();
-            }
-        }
-        private string productArticle;
-        public string ProductArticle
-        {
-            get => productArticle;
-            set
-            {
-                productArticle = value;
-                SignalChanged();
-            }
-        }
+ 
         
         private object _currentPage;
         public object CurrentPage
@@ -112,12 +63,14 @@ namespace ShopClient
 
         public CustomCommand ClickCommandLists { get; set; }
         public CustomCommand ClickCommand { get; set; }
+        public CustomCommand ClickCommandReports { get; set; }
 
         public MainVM()
         {
             GetList();
             CurrentListPage = new ProductView();
             CurrentPage = new OrderOutView();
+            CurrentReportPage = new ReportView();
 
             OpenUnitView = new CustomCommand(()=>
             {
@@ -178,6 +131,11 @@ namespace ShopClient
             {
                 CurrentListPage = new ProductView();
                 SignalChanged("CurrentListPage");
+            });
+            ClickCommandReports = new CustomCommand(() =>
+            {
+                CurrentReportPage = new ReportView();
+                SignalChanged("CurrentReportPage");
             });
         }
         public void FirstStart()

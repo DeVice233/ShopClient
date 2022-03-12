@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:ShopClient.Views.Add"
         xmlns:lvc="clr-namespace:LiveCharts.Wpf;assembly=LiveCharts.Wpf"
         mc:Ignorable="d"
-        Title="AddProduct" Height="480" Width="900" WindowStartupLocation="CenterScreen" ResizeMode="NoResize" WindowStyle="None">
+        Title="AddProduct" Height="500" Width="900" WindowStartupLocation="CenterScreen" ResizeMode="NoResize" WindowStyle="None">
     <Grid>
         <Grid.Resources>
             <Style x:Key="CleanSeparator" TargetType="lvc:Separator">
@@ -32,7 +32,8 @@
                         <StackPanel Orientation="Vertical" >
                             <Label Content="Артикул:" Style="{StaticResource PropertyLabel}"/>
                             <Label Content="Штрихкод:" Style="{StaticResource PropertyLabel}"/>
-                            <Label Content="Название:" Style="{StaticResource PropertyLabel}"/>
+                            <Label Content="" Style="{StaticResource PropertyLabel}"/>
+                            <Label Content="Название:" Style="{StaticResource PropertyLabel}" Margin="0 20 0 0"/>
                             <Label Content="Мин. кол-во:" Style="{StaticResource PropertyLabel}"/>
                             <Label Content="Опт. цена:" Style="{StaticResource PropertyLabel}"/>
                             <Label Content="Розн. цена:" Style="{StaticResource PropertyLabel}"/>
@@ -41,6 +42,7 @@
                         <StackPanel Orientation="Vertical">
                             <TextBox Text="{Binding Article}" Style="{StaticResource PropertyTextBox}" Width="150"/>
                             <TextBox Text="{Binding Barcode}" Style="{StaticResource PropertyTextBox}" />
+                            <Image  x:Name="img" Width="150" Height="50"/>
                             <TextBox Text="{Binding Title}" Style="{StaticResource PropertyTextBox}"   />
                             <TextBox Text="{Binding MinCount}" Style="{StaticResource PropertyTextBox}"   />
                             <TextBox Text="{Binding WholesalePrice}" Style="{StaticResource PropertyTextBox}" IsEnabled="False"/>

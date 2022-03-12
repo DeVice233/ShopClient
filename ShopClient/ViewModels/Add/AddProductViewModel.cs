@@ -14,6 +14,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Controls;
 using System.Windows.Media;
 using ShopClient.Views.Add;
+using Spire.Barcode;
 
 namespace ShopClient.ViewModels.Add
 {
@@ -116,6 +117,8 @@ namespace ShopClient.ViewModels.Add
                 SignalChanged();
             }
         }
+      
+      
         public CustomCommand Save { get; set; }
         public CustomCommand Cancel { get; set; }
         public CustomCommand SelectImage { get; set; }
@@ -141,7 +144,7 @@ namespace ShopClient.ViewModels.Add
 
             if (product == null)
             {
-                AddProduct = new ProductApi { Image="picture.JPG" };
+                AddProduct = new ProductApi { Image="picture.JPG", Barcode = 0 };
                 GetList(product);
             }
             else
@@ -176,7 +179,6 @@ namespace ShopClient.ViewModels.Add
                 ImageProduct = GetImageFromPath(Environment.CurrentDirectory + "/Products/" + product.Image);
             }
 
-
             Save = new CustomCommand(() =>
             {
                 MessageBoxResult result = MessageBox.Show("Сохранить изменения?", "Подтвердите действие", MessageBoxButton.YesNo, MessageBoxImage.Question);
@@ -184,7 +186,11 @@ namespace ShopClient.ViewModels.Add
                 {
                     try
                     {
-                        
+                        if (AddProduct.Barcode.ToString().Length != 8 )
+                        {
+                            MessageBox.Show("Длина штрихкода - 8 символов", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
+                            return;
+                        }
                         AddProduct.IdProductType = SelectedProductType.Id;
                         AddProduct.IdFabricator = SelectedFabricator.Id;
                         AddProduct.IdUnit = SelectedUnit.Id;

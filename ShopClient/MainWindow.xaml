@@ -78,7 +78,7 @@
             </TabItem>
             <TabItem>
                 <TabItem.Header>
-                    <TextBlock Text="Документы" x:Name="tabItemLists"/>
+                    <TextBlock Text="Списки" x:Name="tabItemLists"/>
                 </TabItem.Header>
                 <behaviors:Interaction.Triggers>
                     <behaviors:EventTrigger EventName="MouseDown" SourceObject="{Binding ElementName=tabItemLists}">
@@ -139,58 +139,19 @@
                     </Grid>
                 </TabItem.Content>
             </TabItem>
-            <TabItem Header="Отчеты">
+            <TabItem>
+                <TabItem.Header>
+                    <TextBlock Text="Отчеты" x:Name="tabItemReport"/>
+                </TabItem.Header>
+                <behaviors:Interaction.Triggers>
+                    <behaviors:EventTrigger EventName="MouseDown" SourceObject="{Binding ElementName=tabItemReport}">
+                        <behaviors:InvokeCommandAction Command="{Binding ClickCommandReports}" />
+                    </behaviors:EventTrigger>
+                </behaviors:Interaction.Triggers>
                 <TabItem.Content>
-                    <Grid Background="#FFBBBBBB">
-                        <Grid HorizontalAlignment="Center" VerticalAlignment="Center" Background="White" Width="380" Height="400">
-                            <Grid.RowDefinitions>
-                                <RowDefinition Height="auto"/>
-                                <RowDefinition  Height="auto"/>
-                                <RowDefinition  Height="auto"/>
-                                <RowDefinition  Height="auto"/>
-                                <RowDefinition  Height="auto"/>
-                            </Grid.RowDefinitions>
-                            <Label Content="Сформировать отчет:" Grid.Row="0" FontSize="18"/>
-                            <StackPanel Orientation="Horizontal" Grid.Row="1" HorizontalAlignment="Center" Margin="0 20 0 0">
-                                <Label Content="C" FontSize="16"/>
-                                <DatePicker  Width="150" 
-                         SelectedDate="{Binding DateStart, StringFormat='{}{0:dd.MM.yyyy}'}" FontSize="16"  Height="30"/>
-                                <Label Content="ПО" FontSize="16"/>
-                                <DatePicker  Width="150"  
-                         SelectedDate="{Binding DateFinish, StringFormat='{}{0:dd.MM.yyyy}'}" FontSize="16" Height="30"/>
-                            </StackPanel>
-                            <StackPanel Grid.Row="2" HorizontalAlignment="Center" Margin="0 30 0 0">
-                                <CheckBox IsChecked="{Binding OrderOut}" Content="Продажи" FontSize="17"/>
-                                <CheckBox IsChecked="{Binding OrderIn}" Content="Поступления"  FontSize="17"/>
-                                <CheckBox IsChecked="{Binding WriteOff}" Content="Списание" FontSize="17"/>
-                            </StackPanel>
-                            <TextBox Grid.Row="3" Margin="0 20 0 0" Height="30" FontSize="16" Width="250" Text="{Binding ProductArticle}" Name="hintTextBox">
-                                <TextBox.Style>
-                                    <Style TargetType="TextBox" xmlns:sys="clr-namespace:System;assembly=mscorlib">
-                                        <Style.Resources>
-                                            <VisualBrush x:Key="CueBannerBrush" AlignmentX="Left" AlignmentY="Center" Stretch="None">
-                                                <VisualBrush.Visual>
-                                                    <Label Content="Код товара(не обязательно)" Foreground="DarkGray" FontSize="16"/>
-                                                </VisualBrush.Visual>
-                                            </VisualBrush>
-                                        </Style.Resources>
-                                        <Style.Triggers>
-                                            <Trigger Property="Text" Value="{x:Static sys:String.Empty}">
-                                                <Setter Property="Background" Value="{StaticResource CueBannerBrush}" />
-                                            </Trigger>
-                                            <Trigger Property="Text" Value="{x:Null}">
-                                                <Setter Property="Background" Value="{StaticResource CueBannerBrush}" />
-                                            </Trigger>
-                                            <Trigger Property="IsKeyboardFocused" Value="True">
-                                                <Setter Property="Background" Value="White" />
-                                            </Trigger>
-                                        </Style.Triggers>
-                                    </Style>
-                                </TextBox.Style>
-                            </TextBox>
-                            <Button Content="OK" Command="{Binding MakeReport}" Grid.Row="4" Margin="0 100 0 0" Width="140" Height="25" FontSize="16" VerticalAlignment="Bottom"/>
-                        </Grid>
-                    </Grid>
+                    <Frame  NavigationUIVisibility="Hidden"
+                        Margin="0" 
+                        Content="{Binding CurrentReportPage}"/>
                 </TabItem.Content>
             </TabItem>
         </TabControl>
