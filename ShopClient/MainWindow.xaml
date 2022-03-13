@@ -9,9 +9,9 @@
         Title="Shop" Height="720" Width="1280"  WindowState="Normal" WindowStartupLocation="CenterScreen" WindowStyle="ThreeDBorderWindow" ResizeMode="CanResize">
     <Grid>
         <TabControl >
-            <TabItem  MouseDown="TabItem_MouseDown" >
+            <TabItem >
                 <TabItem.Header>
-                    <TextBlock Text="Документы" x:Name="tabItem"/>
+                    <TextBlock Text="Документы" x:Name="tabItem" MouseDown="tabItem_MouseDown_1"/>
                 </TabItem.Header>
                 <behaviors:Interaction.Triggers>
                     <behaviors:EventTrigger EventName="MouseDown" SourceObject="{Binding ElementName=tabItem}">
@@ -44,7 +44,7 @@
                                 <StackPanel Orientation="Vertical">
                                     <StackPanel Orientation="Horizontal">
 
-                                        <RadioButton Content="Продажа"
+                                        <RadioButton Content="Продажа" x:Name="mainRadio"
                              FontSize="20" Foreground="white" IsChecked="True"
                              Style="{StaticResource MenuButtonThemeVertical}"
                              Command="{Binding OpenOrderOutView}">
@@ -78,7 +78,7 @@
             </TabItem>
             <TabItem>
                 <TabItem.Header>
-                    <TextBlock Text="Списки" x:Name="tabItemLists"/>
+                    <TextBlock Text="Списки" x:Name="tabItemLists" MouseDown="tabItemLists_MouseDown"/>
                 </TabItem.Header>
                 <behaviors:Interaction.Triggers>
                     <behaviors:EventTrigger EventName="MouseDown" SourceObject="{Binding ElementName=tabItemLists}">
@@ -93,7 +93,7 @@
                         </Grid.ColumnDefinitions>
                         <Grid Background="#FF1A315B">
                             <StackPanel Margin="0,10,0,0">
-                                <RadioButton Content="Продукты" Height="60"
+                                <RadioButton Content="Продукты" Height="60" x:Name="listRadio"
                              FontSize="20" Foreground="white"  IsChecked="True"
                              Style="{StaticResource MenuButtonThemeHorizontal}"
                              Command="{Binding OpenProductView}">

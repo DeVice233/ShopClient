@@ -1,10 +1,13 @@
-﻿using ModelsApi;
+﻿using iTextSharp.text;
+using iTextSharp.text.pdf;
+using ModelsApi;
 using ShopClient.Core;
 using Spire.Xls;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Drawing;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -34,7 +37,7 @@ namespace ShopClient.ViewModels
                 SignalChanged();
             }
         }
-        private bool isRetail;
+        private bool isRetail = true;
         public bool IsRetail
         {
             get => isRetail;
@@ -44,7 +47,7 @@ namespace ShopClient.ViewModels
                 SignalChanged();
             }
         }
-        private bool isWholesale;
+        private bool isWholesale = true;
         public bool IsWholesale
         {
             get => isWholesale;
@@ -86,6 +89,11 @@ namespace ShopClient.ViewModels
                 int res;
                 bool isConvert;
                 isConvert = Int32.TryParse(ProductArticle, out res);
+                if (IsRetail == false && IsWholesale == false)
+                {
+                    MessageBox.Show("Необходимо выбрать хотя бы один тип продажи", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
+                    return;
+                }
                 if (ProductArticle.Length != 0 && !isConvert)
                 {
                     MessageBox.Show("Неверный Артикул", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
@@ -116,6 +124,8 @@ namespace ShopClient.ViewModels
         {
             ThisProductOrderOuts.Clear();
             ThisOrderOuts.Clear();
+            var RetaileSale = SaleTypes.First(s => s.Title == "Розничная");
+            var WholesaleSale = SaleTypes.First(s => s.Title == "Оптовая");
             var saleActionType = ActionTypes.First(s=>s.Name == "Продажа");
             var Orders = FullOrders.Where(s => s.IdActionType == saleActionType.Id).ToList();
 
@@ -127,8 +137,15 @@ namespace ShopClient.ViewModels
                 {
                      if (order.Date >= DateStart && order.Date <= DateFinish)
                 {
-                    ThisOrderOuts.Add(orderOut);
-                }
+                        if (IsRetail == true && orderOut.IdSaleType == RetaileSale.Id)
+                        {
+                            ThisOrderOuts.Add(orderOut);
+                        }
+                        if (IsWholesale == true && orderOut.IdSaleType == WholesaleSale.Id)
+                        {
+                            ThisOrderOuts.Add(orderOut);
+                        }
+                    }
                 }
             }
 
@@ -150,7 +167,35 @@ namespace ShopClient.ViewModels
                     }
                 }
             }
-            GenerateReport(ThisProductOrderOuts);
+            //GenerateReport(ThisProductOrderOuts);
+            GenerateReportPdf(ThisProductOrderOuts);
+        }
+        private void GenerateReportPdf(List<ProductOrderOutApi> productOrderOuts)
+        {
+            var doc = new Document();
+            PdfWriter.GetInstance(doc, new FileStream(Environment.CurrentDirectory + @"\Document.pdf", FileMode.Create));
+            doc.Open();
+            //doc.Add(new Paragraph("Отчет по продажам"));
+            PdfPTable table = new PdfPTable(10);
+            table.AddCell("Артикул");
+            table.AddCell("Дата");
+            table.AddCell("Наименование");
+            table.AddCell("Кол-во");
+            table.AddCell("Тип продажи");
+            table.AddCell("Закупочная цена");
+            table.AddCell("Цена продажи");
+            table.AddCell("Cкидка");
+            table.AddCell("Сумма со скидкой");
+            table.AddCell("Прибыль");
+
+            doc.Add(table);
+            doc.Close();
+            Process p = new Process();
+            p.StartInfo = new ProcessStartInfo(Environment.CurrentDirectory + "/Document.pdf")
+            {
+                UseShellExecute = true
+            };
+            p.Start();
         }
         private void GenerateReport(List<ProductOrderOutApi> productOrderOuts)
         {
@@ -193,13 +238,18 @@ namespace ShopClient.ViewModels
                 TotalCount += (int)productOrderOut.Count;
                 sheet.Range[$"E{index}"].Value = saleType.Title;
                 sheet.Range[$"F{index}"].Value = productOrderIn.Price.ToString();
-                TotalPurchase += (decimal)productOrderIn.Price;
+                sheet.Range[$"F{index}"].NumberFormat = "0.00 ₽";
+                TotalPurchase += (decimal)(productOrderIn.Price * productOrderOut.Count);
                 sheet.Range[$"G{index}"].Value = productOrderOut.Price.ToString();
+                sheet.Range[$"G{index}"].NumberFormat = "0.00 ₽";
                 sheet.Range[$"H{index}"].Value = productOrderOut.Discount.ToString();
-                sheet.Range[$"I{index}"].Value = (productOrderOut.Price - productOrderOut.Discount).ToString();
-                TotalPriceWithDiscount += (decimal)(productOrderOut.Price - productOrderOut.Discount);
-                var a = (decimal)(productOrderIn.Price - (productOrderOut.Price - productOrderOut.Discount));
+                sheet.Range[$"H{index}"].NumberFormat = "0.00 ₽";
+                sheet.Range[$"I{index}"].Value = ((productOrderOut.Price - productOrderOut.Discount) * productOrderOut.Count).ToString();
+                sheet.Range[$"I{index}"].NumberFormat = "0.00 ₽";
+                TotalPriceWithDiscount += (decimal)((productOrderOut.Price - productOrderOut.Discount) * productOrderOut.Count);
+                var a = (decimal)((productOrderIn.Price - (productOrderOut.Price - productOrderOut.Discount)) * productOrderOut.Count);
                 sheet.Range[$"J{index}"].Value = Math.Abs(a).ToString();
+                sheet.Range[$"J{index}"].NumberFormat = "0.00 ₽";
                 TotalProfit += Math.Abs(a);
                 index++;
             }
@@ -209,11 +259,16 @@ namespace ShopClient.ViewModels
             sheet.Range[$"D{index}"].Value = TotalCount.ToString();
             sheet.Range[$"E{index}"].Style.Color = Color.Gray;
             sheet.Range[$"F{index}"].Value = TotalPurchase.ToString();
+            sheet.Range[$"F{index}"].NumberFormat = "0.00 ₽";
             sheet.Range[$"G{index}"].Style.Color = Color.Gray;
             sheet.Range[$"H{index}"].Style.Color = Color.Gray;
             sheet.Range[$"I{index}"].Value = TotalPriceWithDiscount.ToString();
-            
+            sheet.Range[$"I{index}"].NumberFormat = "0.00 ₽";
             sheet.Range[$"J{index}"].Value = TotalProfit.ToString();
+            sheet.Range[$"J{index}"].NumberFormat = "0.00 ₽";
+
+            sheet.Range[$"A3:J{index}"].BorderInside(LineStyleType.Thin);
+            sheet.Range[$"A3:J{index}"].BorderAround(LineStyleType.Medium);
 
             sheet.AllocatedRange.AutoFitColumns();
 

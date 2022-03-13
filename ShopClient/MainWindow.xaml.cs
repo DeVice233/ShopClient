@@ -29,11 +29,16 @@ namespace ShopClient
            
         }
 
-   
+ 
 
-        private void TabItem_MouseDown(object sender, MouseButtonEventArgs e)
+        private void tabItem_MouseDown_1(object sender, MouseButtonEventArgs e)
         {
+            mainRadio.IsChecked = true;
+        }
 
+        private void tabItemLists_MouseDown(object sender, MouseButtonEventArgs e)
+        {
+            listRadio.IsChecked = true;
         }
         //async Task Test()
         //{

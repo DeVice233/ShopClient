@@ -2,6 +2,7 @@
 using ShopClient.Core;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -12,14 +13,15 @@ namespace ShopClient.ViewModels
     public class OrderInDetailsViewModel : BaseViewModel
     {
       
-        private List<ProductOrderInApi> productOrderIns;
-        public List<ProductOrderInApi> ProductOrderIns
+        private ObservableCollection<ProductOrderInApi> productOrderIns;
+        public ObservableCollection<ProductOrderInApi> ProductOrderIns
         {
             get => productOrderIns;
             set
             {
+                productOrderIns = value;
                 SignalChanged();
-                Set(ref productOrderIns, value);
+                SignalChanged("ProductOrderIns");
             }
         }
 
@@ -86,13 +88,17 @@ namespace ShopClient.ViewModels
         }
         public void GenerateProductOrderIns(OrderApi order)
         {
-            ProductOrderIns = new List<ProductOrderInApi>();
-
-            ProductOrderIns.AddRange(FullProductOrderIns.Where(s=>s.IdOrder == order.Id).ToList());
-            foreach (var item in ProductOrderIns)
+            ProductOrderIns = new ObservableCollection<ProductOrderInApi>();
+            var thisOrdersIns = FullProductOrderIns.Where(s => s.IdOrder == order.Id).ToList();
+            foreach (var item in thisOrdersIns)
             {
-                item.Product = Products.First(s => s.Id == item.IdProduct);
+                ProductOrderIns.Add(item);
             }
+            //ProductOrderIns.AddRange(FullProductOrderIns.Where(s=>s.IdOrder == order.Id).ToList());
+            //foreach (var item in ProductOrderIns)
+            //{
+            //    item.Product = Products.First(s => s.Id == item.IdProduct);
+            //}
             var legalcli = LegalClients.Find(s => s.IdClient == order.IdClient);
             Supplier = legalcli.Title;
             SignalChanged("Supplier");

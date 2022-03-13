@@ -42,6 +42,7 @@
                 <ListView ItemsSource="{Binding ProductOrderOuts}"  Grid.Row="1" Margin="5" FontSize="16">
                     <ListView.View>
                         <GridView>
+                            <GridViewColumn Header="№ поставки" DisplayMemberBinding="{Binding IdProductOrderIn}"/>
                             <GridViewColumn Header="Наименование" DisplayMemberBinding="{Binding Product.Title}"/>
                             <GridViewColumn Header="Кол-во" DisplayMemberBinding="{Binding Count}"/>
                             <GridViewColumn Header="Разница" DisplayMemberBinding="{Binding Discount}"/>

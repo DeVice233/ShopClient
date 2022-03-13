@@ -216,8 +216,8 @@ namespace ShopClient.ViewModels
             ProductOrderOuts.AddRange(orderOut.ProductOrderOuts);
             foreach (var item in ProductOrderOuts)
             {
-                var productOrderIn = FullProductOrderIns.First(s => s.Id == item.IdProductOrderIn);
-                item.Product = Products.First(s => s.Id == productOrderIn.Id);
+                item.Product = FullProductOrderIns.First(s => s.Id == item.IdProductOrderIn).Product;
+                //item.Product = Products.First(s => s.Id == productOrderIn.Id);
             }
             var legalcli = LegalClients.Find(s => s.IdClient == order.IdClient);
             if (legalcli != null)
