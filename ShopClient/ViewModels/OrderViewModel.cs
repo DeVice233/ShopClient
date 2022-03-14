@@ -174,7 +174,7 @@ namespace ShopClient.ViewModels
             selectedViewCountRows = ViewCountRows.First();
 
             SearchType = new List<string>();
-            SearchType.AddRange(new string[] { "Наименование", "Артикул" });
+            SearchType.AddRange(new string[] { "Клиент", "Дата" });
             selectedSearchType = SearchType.First();
 
             BackPage = new CustomCommand(() =>
@@ -257,15 +257,21 @@ namespace ShopClient.ViewModels
                 SelectedActionTypeFilter = ActionTypeFilter.Last();
             if (SelectedActionTypeFilter.Name == "Все типы")
             {
-                if (SelectedSearchType == "Наименование")
+                if (SelectedSearchType == "Клиент")
                     searchResult = FullOrders
-                        .Where(c => c.ActionType.Name.ToLower().Contains(search)).ToList();
+                        .Where(c => c.Client.Phone.ToLower().Contains(search)).ToList();
+                else if(SelectedSearchType == "Дата")
+                    searchResult = FullOrders
+                     .Where(c => c.Date.ToString().ToLower().Contains(search)).ToList();
             }
             else
             {
-                if (SelectedSearchType == "Наименование")
+                if (SelectedSearchType == "Клиент")
                     searchResult = FullOrders
-                        .Where(c => c.ActionType.Name.ToLower().Contains(search) && c.ActionType.Name.Contains(SelectedActionTypeFilter.Name)).ToList();
+                        .Where(c => c.Client.Phone.ToLower().Contains(search) && c.ActionType.Name.Contains(SelectedActionTypeFilter.Name)).ToList();
+                else if (SelectedSearchType == "Дата")
+                    searchResult = FullOrders
+                     .Where(c => c.Date.ToString().ToLower().Contains(search) && c.ActionType.Name.Contains(SelectedActionTypeFilter.Name)).ToList();
             }
             InitPagination();
             Pagination();

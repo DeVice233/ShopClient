@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 
@@ -17,9 +18,9 @@ namespace ShopClient.ViewModels
         {
             get => productTypes;
             set
-            {
-                SignalChanged();
+            {    
                 Set(ref productTypes, value);
+                SignalChanged();
             }
         }
 
@@ -49,16 +50,16 @@ namespace ShopClient.ViewModels
             {
                 AddProductType addProductType = new AddProductType();
                 addProductType.ShowDialog();
+                Thread.Sleep(200);
                 GetList();
-                SignalChanged("ProductTypes");
             });
             EditProductType = new CustomCommand(() =>
             {
                 if (SelectedProductType == null) return;
                 AddProductType addProductType = new AddProductType(SelectedProductType);
                 addProductType.ShowDialog();
+                Thread.Sleep(200);
                 GetList();
-                SignalChanged("ProductTypes");
             }); 
             DeleteProductType = new CustomCommand(() =>
             {
@@ -70,7 +71,6 @@ namespace ShopClient.ViewModels
                     {
                         Delete(SelectedProductType);
                         GetList();
-                        SignalChanged("ProductTypes");
                     }
                     catch (Exception e)
                     {
@@ -90,7 +90,7 @@ namespace ShopClient.ViewModels
         private async Task GetList()
         {
             ProductTypes = await Api.GetListAsync<List<ProductTypeApi>>("ProductType");
-       
+            SignalChanged("ProductTypes");
         }
        
     }

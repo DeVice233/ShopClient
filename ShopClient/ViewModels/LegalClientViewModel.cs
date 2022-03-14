@@ -65,6 +65,22 @@ namespace ShopClient.ViewModels
                 SignalChanged();
             }
         }
+        private bool isOnlySuppliers = false;
+        public bool IsOnlySuppliers
+        {
+            get => isOnlySuppliers;
+            set
+            {
+                if (value != isOnlySuppliers)
+                {
+                    isOnlySuppliers = value;
+                    SignalChanged();
+                    Search();
+
+                }
+            }
+        }
+        
 
         public CustomCommand AddLegalClient { get; set; }
         public CustomCommand EditLegalClient { get; set; }
@@ -133,6 +149,11 @@ namespace ShopClient.ViewModels
             else if (SelectedSearchType == "Телефон")
                 searchResult = FullLegalClients
                     .Where(c => c.Client.Phone.ToString().Contains(search)).ToList();
+            var a = searchResult;
+            if (IsOnlySuppliers == true)
+            {
+                searchResult = a.Where(c=>c.IsSupplier == 1).ToList();
+            }
             UpdateList();
         }
 

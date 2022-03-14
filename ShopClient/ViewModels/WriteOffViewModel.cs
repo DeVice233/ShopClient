@@ -162,7 +162,7 @@ namespace ShopClient.ViewModels
             ProductOrderIns = new List<ProductOrderInApi>();
             GetList();
             SearchType = new List<string>();
-            SearchType.AddRange(new string[] { "Наименование", "Артикул" });
+            SearchType.AddRange(new string[] { "Наименование", "Артикул", "Производитель", "Дата" });
             selectedSearchType = SearchType.First();
 
             AddProductOrderIn = new CustomCommand(() =>
@@ -266,6 +266,12 @@ namespace ShopClient.ViewModels
                 else if (SelectedSearchType == "Артикул")
                     searchResult = ProductOrderInsWithRemains
                         .Where(c => c.Product.Article.ToString().Contains(search)).ToList();
+                else if (SelectedSearchType == "Производитель")
+                    searchResult = ProductOrderInsWithRemains
+                        .Where(c => c.Product.Fabricator.Title.ToLower().ToString().Contains(search)).ToList();
+                else if (SelectedSearchType == "Дата")
+                    searchResult = ProductOrderInsWithRemains
+                        .Where(c => c.Order.Date.ToString().Contains(search)).ToList();
             }
             else
             {
@@ -275,6 +281,12 @@ namespace ShopClient.ViewModels
                 else if (SelectedSearchType == "Артикул")
                     searchResult = ProductOrderInsWithRemains
                         .Where(c => c.Product.Article.ToString().Contains(search) && c.Product.ProductType.Title.Contains(SelectedProductTypeFilter.Title)).ToList();
+                else if (SelectedSearchType == "Производитель")
+                    searchResult = ProductOrderInsWithRemains
+                        .Where(c => c.Product.Fabricator.Title.ToLower().ToString().Contains(search) && c.Product.ProductType.Title.Contains(SelectedProductTypeFilter.Title)).ToList();
+                else if (SelectedSearchType == "Дата")
+                    searchResult = ProductOrderInsWithRemains
+                        .Where(c => c.Order.Date.ToString().Contains(search) && c.Product.ProductType.Title.Contains(SelectedProductTypeFilter.Title)).ToList();
             }
             UpdateList();
         }

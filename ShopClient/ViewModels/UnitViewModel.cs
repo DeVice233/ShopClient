@@ -8,6 +8,7 @@ using System.ComponentModel;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 
@@ -21,8 +22,8 @@ namespace ShopClient.ViewModels
             get => unitApis;
             set
             {
+                Set(ref unitApis, value);  
                 SignalChanged();
-                Set(ref unitApis, value);
             }
         }
 
@@ -50,6 +51,7 @@ namespace ShopClient.ViewModels
             {
                 AddUnit addunit = new AddUnit();
                 addunit.ShowDialog();
+                Thread.Sleep(200);
                 GetList();
             });
             EditUnit = new CustomCommand(() =>
@@ -57,6 +59,7 @@ namespace ShopClient.ViewModels
                 if (SelectedUnit == null) return;
                 AddUnit addunit = new AddUnit(SelectedUnit);
                 addunit.ShowDialog();
+                Thread.Sleep(200);
                 GetList();
             });
             DeleteUnit = new CustomCommand(() =>
@@ -68,7 +71,6 @@ namespace ShopClient.ViewModels
                     try
                     {
                         Delete(SelectedUnit);
-                        SignalChanged("Units");
                         GetList();
                     }
                     catch (Exception e)
@@ -84,6 +86,8 @@ namespace ShopClient.ViewModels
         private async Task GetList()
         {
             Units = await Api.GetListAsync<List<UnitApi>>("Unit");
+            SignalChanged("Units");
+
         }
         private async Task Delete(UnitApi unit)
         {
@@ -91,6 +95,6 @@ namespace ShopClient.ViewModels
             GetList();
         }
 
-        
+
     }
 }

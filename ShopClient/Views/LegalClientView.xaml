@@ -27,6 +27,9 @@
                     <Label Grid.Column="1" Content="Критерий поиска:"  FontFamily="Century Gothic"/>
                     <ComboBox Width="160"  ItemsSource="{Binding SearchType}" SelectedItem="{Binding SelectedSearchType}"/>
                 </StackPanel>
+                <StackPanel Orientation="Horizontal" VerticalAlignment="Bottom" Margin="100 0 0 5">
+                    <CheckBox Content="Только поставщики" FontFamily="Century Gothic" FontSize="15" IsChecked="{Binding IsOnlySuppliers,  UpdateSourceTrigger=PropertyChanged}"/>
+                </StackPanel>
             </StackPanel>
         </Grid>
         <ListView Grid.Row="1" ItemsSource="{Binding LegalClients, UpdateSourceTrigger=PropertyChanged}" FontSize="16" SelectedItem="{Binding SelectedLegalClient}">

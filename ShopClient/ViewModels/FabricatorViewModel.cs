@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 
@@ -13,14 +14,18 @@ namespace ShopClient.ViewModels
 {
     public class FabricatorViewModel : BaseViewModel
     {
-        private ObservableCollection<FabricatorApi> fabricators;
-        public ObservableCollection<FabricatorApi> Fabricators
+        private List<FabricatorApi> fabricators;
+        public List<FabricatorApi> Fabricators
         {
             get => fabricators;
             set
             {
-                SignalChanged();
-                Set(ref fabricators, value);
+                if (value != fabricators)
+                {
+                  Set(ref fabricators, value); 
+                  SignalChanged();
+                  SignalChanged("Fabricators");
+                }
             }
         }
 
@@ -41,13 +46,14 @@ namespace ShopClient.ViewModels
 
         public FabricatorViewModel()
         {
-            Fabricators = new ObservableCollection<FabricatorApi>();
+            Fabricators = new List<FabricatorApi>();
             GetList();
 
             AddFabricator = new CustomCommand(() =>
             {
                 AddFabricator addFabricator = new AddFabricator();
                 addFabricator.ShowDialog();
+                Thread.Sleep(200);
                 GetList();
             });
             EditFabricator = new CustomCommand(() =>
@@ -55,6 +61,7 @@ namespace ShopClient.ViewModels
                 if (SelectedFabricator == null) return;
                 AddFabricator addunit = new AddFabricator(SelectedFabricator);
                 addunit.ShowDialog();
+                Thread.Sleep(200);
                 GetList();
             });
             DeleteFabricator = new CustomCommand(() =>
@@ -66,7 +73,6 @@ namespace ShopClient.ViewModels
                     try
                     {
                         Delete(SelectedFabricator);
-                        SignalChanged("Units");
                         GetList();
                     }
                     catch (Exception e)
@@ -81,12 +87,8 @@ namespace ShopClient.ViewModels
 
         private async Task GetList()
         {
-            var fabricatorsList = await Api.GetListAsync<List<FabricatorApi>>("Fabricator");
-            Fabricators.Clear();
-            foreach (FabricatorApi fabricator in fabricatorsList)
-            {
-                Fabricators.Add(fabricator);
-            }
+            Fabricators = await Api.GetListAsync<List<FabricatorApi>>("Fabricator");
+            SignalChanged("Fabricators");
         }
         private async Task Delete(FabricatorApi fabricator)
         {

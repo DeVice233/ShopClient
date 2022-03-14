@@ -249,7 +249,7 @@ namespace ShopClient.ViewModels
             GetList();
 
             SearchType = new List<string>();
-            SearchType.AddRange(new string[] { "Наименование", "Артикул" });
+            SearchType.AddRange(new string[] { "Наименование", "Артикул", "Производитель" });
             selectedSearchType = SearchType.First();
 
             AddProduct = new CustomCommand(() =>
@@ -422,6 +422,9 @@ namespace ShopClient.ViewModels
                 else if (SelectedSearchType == "Артикул")
                     searchResult = FullProducts
                         .Where(c => c.Article.ToString().Contains(search)).ToList();
+                else if (SelectedSearchType == "Производитель")
+                    searchResult = FullProducts
+                        .Where(c => c.Fabricator.Title.ToLower().ToString().Contains(search)).ToList();
             }
             else
             {
@@ -431,6 +434,9 @@ namespace ShopClient.ViewModels
                 else if (SelectedSearchType == "Артикул")
                     searchResult = FullProducts
                         .Where(c => c.Article.ToString().Contains(search) && c.ProductType.Title.Contains(SelectedProductTypeFilter.Title)).ToList();
+                else if (SelectedSearchType == "Производитель")
+                    searchResult = FullProducts
+                        .Where(c => c.Fabricator.Title.ToLower().ToString().Contains(search) && c.ProductType.Title.Contains(SelectedProductTypeFilter.Title)).ToList();
             }
             UpdateList();
         }
