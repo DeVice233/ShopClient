@@ -14,7 +14,6 @@
   <ItemGroup>
     <PackageReference Include="FreeSpire.Barcode" Version="6.1.0" />
     <PackageReference Include="FreeSpire.XLS" Version="10.10.0" />
-    <PackageReference Include="iTextSharp" Version="5.5.13.3" />
     <PackageReference Include="LiveCharts.Wpf" Version="0.9.7" />
     <PackageReference Include="Microsoft.Xaml.Behaviors.Wpf" Version="1.1.39" />
   </ItemGroup>

@@ -1,5 +1,4 @@
-﻿using iTextSharp.text;
-using iTextSharp.text.pdf;
+﻿
 using ModelsApi;
 using ShopClient.Core;
 using Spire.Xls;
@@ -167,35 +166,12 @@ namespace ShopClient.ViewModels
                     }
                 }
             }
-            //GenerateReport(ThisProductOrderOuts);
-            GenerateReportPdf(ThisProductOrderOuts);
+            GenerateReport(ThisProductOrderOuts);
+            //GenerateReportPdf(ThisProductOrderOuts);
         }
         private void GenerateReportPdf(List<ProductOrderOutApi> productOrderOuts)
         {
-            var doc = new Document();
-            PdfWriter.GetInstance(doc, new FileStream(Environment.CurrentDirectory + @"\Document.pdf", FileMode.Create));
-            doc.Open();
-            //doc.Add(new Paragraph("Отчет по продажам"));
-            PdfPTable table = new PdfPTable(10);
-            table.AddCell("Артикул");
-            table.AddCell("Дата");
-            table.AddCell("Наименование");
-            table.AddCell("Кол-во");
-            table.AddCell("Тип продажи");
-            table.AddCell("Закупочная цена");
-            table.AddCell("Цена продажи");
-            table.AddCell("Cкидка");
-            table.AddCell("Сумма со скидкой");
-            table.AddCell("Прибыль");
-
-            doc.Add(table);
-            doc.Close();
-            Process p = new Process();
-            p.StartInfo = new ProcessStartInfo(Environment.CurrentDirectory + "/Document.pdf")
-            {
-                UseShellExecute = true
-            };
-            p.Start();
+           
         }
         private void GenerateReport(List<ProductOrderOutApi> productOrderOuts)
         {

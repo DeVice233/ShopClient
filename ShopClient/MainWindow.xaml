@@ -154,6 +154,21 @@
                         Content="{Binding CurrentReportPage}"/>
                 </TabItem.Content>
             </TabItem>
+            <TabItem>
+                <TabItem.Header>
+                    <TextBlock Text="Статистика" x:Name="tabItemDash"/>
+                </TabItem.Header>
+                <behaviors:Interaction.Triggers>
+                    <behaviors:EventTrigger EventName="MouseDown" SourceObject="{Binding ElementName=tabItemDash}">
+                        <behaviors:InvokeCommandAction Command="{Binding ClickCommandDash}" />
+                    </behaviors:EventTrigger>
+                </behaviors:Interaction.Triggers>
+                <TabItem.Content>
+                    <Frame  NavigationUIVisibility="Hidden"
+                        Margin="0" 
+                        Content="{Binding CurrentDashPage}"/>
+                </TabItem.Content>
+            </TabItem>
         </TabControl>
     </Grid>
 </Window>

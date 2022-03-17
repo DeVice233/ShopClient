@@ -15,6 +15,7 @@ using System.Windows.Controls;
 using System.Windows.Media;
 using ShopClient.Views.Add;
 using Spire.Barcode;
+using ShopClient.Helper;
 
 namespace ShopClient.ViewModels.Add
 {
@@ -125,12 +126,15 @@ namespace ShopClient.ViewModels.Add
         public CustomCommand UpdateChart { get; set; }
 
         public List<ProductApi> Products;
+        private List<ProductOrderInApi> FullProductOrderIns = new List<ProductOrderInApi>();
+        private List<OrderApi> FullOrders = new List<OrderApi>();
         private List<ProductCostHistoryApi> ProductCostHistories = new List<ProductCostHistoryApi>();
         private List<ProductCostHistoryApi> ThisProductCostHistory = new List<ProductCostHistoryApi>();
         ChartValues<double> Retail = new ChartValues<double>();
         ChartValues<double> Wholesale = new ChartValues<double>();
+        ChartValues<double> Purchase = new ChartValues<double>();
         List<DateTime> Dates = new List<DateTime>();
-        DateTime[] DatesArray; 
+        List<DateTime> DatesPurchase = new List<DateTime>();
 
         public AddProductViewModel(ProductApi product)
         {
@@ -286,8 +290,20 @@ namespace ShopClient.ViewModels.Add
                 SignalChanged();
             }
         }
-
         public Func<double, string> YFormatter { get; set; }
+
+        public SeriesCollection SeriesCollectionPurchase { get; set; }
+        private string[] labelsPurchase;
+        public string[] LabelsPurchase
+        {
+            get => labelsPurchase;
+            set
+            {
+                labelsPurchase = value;
+                SignalChanged();
+            }
+        }
+        public Func<double, string> YFormatterPurchase { get; set; }
 
         public void CloseWin(object obj)
         {
@@ -306,12 +322,21 @@ namespace ShopClient.ViewModels.Add
         }
         private async Task GetList(ProductApi product)
         {
+            FullOrders = await Api.GetListAsync<List<OrderApi>>("Order");
+            FullProductOrderIns = await Api.GetListAsync<List<ProductOrderInApi>>("ProductOrderIn");
             ProductCostHistories = await Api.GetListAsync<List<ProductCostHistoryApi>>("ProductCostHistory");
             ProductTypes = await Api.GetListAsync<List<ProductTypeApi>>("ProductType");
             if (product != null)
             {
+                List<ChartProductOrderIn> purchaseHistory = new List<ChartProductOrderIn>();
                 ThisProductCostHistory = ProductCostHistories.Where(c => c.IdProduct == product.Id).ToList();
-                PrepareChart(ThisProductCostHistory);
+                var thisOrderIns = FullProductOrderIns.Where(p => p.IdProduct == product.Id).ToList();
+                foreach (var productOrderin in thisOrderIns)
+                {
+                    var order = FullOrders.First(s => s.Id == productOrderin.IdOrder);
+                    purchaseHistory.Add(new ChartProductOrderIn { Date = (DateTime)order.Date, Price = (decimal)productOrderin.Price });
+                }
+                PrepareChart(ThisProductCostHistory, purchaseHistory);
             }
             Fabricators = await Api.GetListAsync<List<FabricatorApi>>("Fabricator");
             Units = await Api.GetListAsync<List<UnitApi>>("Unit");
@@ -345,42 +370,80 @@ namespace ShopClient.ViewModels.Add
         public void Chart(ProductApi product)
         {
             List<ProductCostHistoryApi> TimeStampHistory;
+            List<ChartProductOrderIn> PurchaseHistory = new List<ChartProductOrderIn>();
             if (SelectedTimeStamp == "За год")
             {
                 TimeStampHistory = ProductCostHistories.Where(c => c.IdProduct == product.Id && c.ChangeDate > (DateTime.Now - TimeSpan.FromDays(365))).ToList();
-                PrepareChart(TimeStampHistory);
+                var thisOrderIns = FullProductOrderIns.Where(p => p.IdProduct == product.Id).ToList();
+                foreach (var productOrderin in thisOrderIns)
+                {
+                    var order = FullOrders.First(s => s.Id == productOrderin.IdOrder);
+                    if (order.Date > (DateTime.Now - TimeSpan.FromDays(365)))
+                    {
+                        PurchaseHistory.Add(new ChartProductOrderIn { Date = (DateTime)order.Date, Price = (decimal)productOrderin.Price });
+                    }
+                }
+                PrepareChart(TimeStampHistory, PurchaseHistory);
             }
             else if (SelectedTimeStamp == "За месяц")
             {
                 TimeStampHistory = ProductCostHistories.Where(c => c.IdProduct == product.Id && c.ChangeDate > (DateTime.Now - TimeSpan.FromDays(30))).ToList();
-                PrepareChart(TimeStampHistory);
+                var thisOrderIns = FullProductOrderIns.Where(p => p.IdProduct == product.Id).ToList();
+                foreach (var productOrderin in thisOrderIns)
+                {
+                    var order = FullOrders.First(s => s.Id == productOrderin.IdOrder);
+                    if (order.Date > (DateTime.Now - TimeSpan.FromDays(30)))
+                    {
+                        PurchaseHistory.Add(new ChartProductOrderIn { Date = (DateTime)order.Date, Price = (decimal)productOrderin.Price });
+                    }
+                }
+                PrepareChart(TimeStampHistory, PurchaseHistory);
             }
             else if (SelectedTimeStamp == "За все время")
             {
                 TimeStampHistory = ProductCostHistories.Where(c => c.IdProduct == product.Id).ToList();
-                PrepareChart(TimeStampHistory);
+                var thisOrderIns = FullProductOrderIns.Where(p => p.IdProduct == product.Id).ToList();
+                foreach (var productOrderin in thisOrderIns)
+                {
+                    var order = FullOrders.First(s => s.Id == productOrderin.IdOrder);
+                    PurchaseHistory.Add(new ChartProductOrderIn { Date = (DateTime)order.Date, Price = (decimal)productOrderin.Price });
+                }
+                PrepareChart(TimeStampHistory, PurchaseHistory);
             }
         }
 
-        public void PrepareChart(List<ProductCostHistoryApi> productCostHistories)
+        public void PrepareChart(List<ProductCostHistoryApi> productCostHistories, List<ChartProductOrderIn> productOrderIns)
         {
             Retail.Clear();
             Wholesale.Clear();
+            Purchase.Clear();
             Dates.Clear();
+            DatesPurchase.Clear();
             var result = productCostHistories.OrderBy(x => x.ChangeDate);
+            var resultPurchase = productOrderIns.OrderBy(x => x.Date);
             foreach (ProductCostHistoryApi productCostHistory in result)
             {
-
                 Retail.Add((double)productCostHistory.RetailPriceValue);
                 Wholesale.Add((double)productCostHistory.WholesalePirceValue);
                 Dates.Add((DateTime)productCostHistory.ChangeDate);
+            }
+            foreach (ChartProductOrderIn chartProductOrderIn in productOrderIns)
+            {
+                Purchase.Add((double)chartProductOrderIn.Price);
+                DatesPurchase.Add((DateTime)chartProductOrderIn.Date);
             }
             string[] dateTimes = new string[Dates.Count];
             for (int i = 0; i < Dates.Count; i++)
             {
                 dateTimes[i] = Dates[i].Date.ToShortDateString().ToString();
             }
+            string[] dateTimesPurchase = new string[DatesPurchase.Count];
+            for (int i = 0; i < DatesPurchase.Count; i++)
+            {
+                dateTimesPurchase[i] = DatesPurchase[i].Date.ToShortDateString().ToString();
+            }
             Labels = dateTimes;
+            LabelsPurchase = dateTimesPurchase;
             BuildChart();
         }
 
@@ -401,7 +464,16 @@ namespace ShopClient.ViewModels.Add
                 },
 
               };
-            
+            SeriesCollectionPurchase = new SeriesCollection
+              {
+                new LineSeries
+                {
+                    Title = "Закуп. цена",
+                     Values = Purchase
+                },
+              };
+
+            YFormatterPurchase = value => value.ToString("C");
             YFormatter = value => value.ToString("C");
         }
     }

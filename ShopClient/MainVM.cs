@@ -37,8 +37,17 @@ namespace ShopClient
             }
         }
 
- 
-        
+        private object currentDashPage;
+        public object CurrentDashPage
+        {
+            get { return currentDashPage; }
+            set
+            {
+                currentDashPage = value;
+                SignalChanged("CurrentDashPage");
+            }
+        }
+
         private object _currentPage;
         public object CurrentPage
         {
@@ -63,6 +72,7 @@ namespace ShopClient
 
         public CustomCommand ClickCommandLists { get; set; }
         public CustomCommand ClickCommand { get; set; }
+        public CustomCommand ClickCommandDash { get; set; }
         public CustomCommand ClickCommandReports { get; set; }
 
         public MainVM()
@@ -71,6 +81,7 @@ namespace ShopClient
             CurrentListPage = new ProductView();
             CurrentPage = new OrderOutView();
             CurrentReportPage = new ReportView();
+            CurrentDashPage = new DashView();
 
             OpenUnitView = new CustomCommand(()=>
             {
@@ -136,6 +147,11 @@ namespace ShopClient
             {
                 CurrentReportPage = new ReportView();
                 SignalChanged("CurrentReportPage");
+            });
+            ClickCommandDash = new CustomCommand(() =>
+            {
+                CurrentDashPage = new DashView();
+                SignalChanged("CurrentDashPage");
             });
         }
         public void FirstStart()
