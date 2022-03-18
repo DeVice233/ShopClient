@@ -98,7 +98,7 @@
             <ListBox.ContextMenu>
                 <ContextMenu>
                     <MenuItem Header="Изменить цену" Command="{Binding ProductPriceChange}"/>
-                    <MenuItem Header="Редактировать" Command="{Binding EditProduct}"/>
+                    <MenuItem Header="Расширенная информация" Command="{Binding EditProduct}"/>
                     <MenuItem Header="Удалить" Command="{Binding DeleteProduct}"/>
                 </ContextMenu>
             </ListBox.ContextMenu>

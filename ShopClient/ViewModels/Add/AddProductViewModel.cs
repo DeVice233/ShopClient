@@ -88,6 +88,16 @@ namespace ShopClient.ViewModels.Add
                 SignalChanged();
             }
         }
+        private List<LegalClientApi> legalClients = new List<LegalClientApi>();
+        public List<LegalClientApi> LegalClients
+        {
+            get => legalClients;
+            set
+            {
+                Set(ref legalClients, value);
+                SignalChanged();
+            }
+        }
         private FabricatorApi selectedFabricator;
         public FabricatorApi SelectedFabricator
         {
@@ -118,8 +128,22 @@ namespace ShopClient.ViewModels.Add
                 SignalChanged();
             }
         }
-      
-      
+        private LegalClientApi selectedLegalClient;
+        public LegalClientApi SelectedLegalClient
+        {
+            get => selectedLegalClient;
+            set
+            {
+                if (value != selectedLegalClient)
+                {
+                    selectedLegalClient = value;
+                    SignalChanged();
+                    Chart(AddProduct);
+                }
+            }
+        }
+
+
         public CustomCommand Save { get; set; }
         public CustomCommand Cancel { get; set; }
         public CustomCommand SelectImage { get; set; }
@@ -353,11 +377,29 @@ namespace ShopClient.ViewModels.Add
                 SelectedUnit = Units.First(s => s.Id == product.IdUnit);
                 SelectedProductType = ProductTypes.First(s => s.Id == product.IdProductType);
             }
+            await fillSuppliers();
             SignalChanged("Fabricators");
             SignalChanged("Units");
             SignalChanged("ProductTypes");
+            SignalChanged("SelectedLegalClient");
         }
-
+        private async Task fillSuppliers()
+        {
+            LegalClients.Clear();
+            var legalClients = await Api.GetListAsync<List<LegalClientApi>>("LegalClient");
+            var thisOrderIns = FullProductOrderIns.Where(p => p.IdProduct == AddProduct.Id).ToList();
+            foreach (var productOrderin in thisOrderIns)
+            {
+                var order = FullOrders.First(s => s.Id == productOrderin.IdOrder);
+                var legalClient = legalClients.First(s=>s.IdClient == order.IdClient);
+                if (!LegalClients.Contains(legalClient))
+                {
+                     LegalClients.Add(legalClient);
+                }
+            }
+            LegalClients.Add(new LegalClientApi { Title = "Все поставщики" });
+            SelectedLegalClient = LegalClients.Last();
+        }
         private BitmapImage GetImageFromPath(string url)
         {
             BitmapImage img = new BitmapImage();
@@ -380,6 +422,14 @@ namespace ShopClient.ViewModels.Add
                     var order = FullOrders.First(s => s.Id == productOrderin.IdOrder);
                     if (order.Date > (DateTime.Now - TimeSpan.FromDays(365)))
                     {
+                        if (!(SelectedLegalClient.Title == "Все поставщики"))
+                        {
+                            if (SelectedLegalClient.IdClient == order.IdClient)
+                            {
+                                PurchaseHistory.Add(new ChartProductOrderIn { Date = (DateTime)order.Date, Price = (decimal)productOrderin.Price });
+                            }
+                        }
+                        else
                         PurchaseHistory.Add(new ChartProductOrderIn { Date = (DateTime)order.Date, Price = (decimal)productOrderin.Price });
                     }
                 }
@@ -394,7 +444,15 @@ namespace ShopClient.ViewModels.Add
                     var order = FullOrders.First(s => s.Id == productOrderin.IdOrder);
                     if (order.Date > (DateTime.Now - TimeSpan.FromDays(30)))
                     {
-                        PurchaseHistory.Add(new ChartProductOrderIn { Date = (DateTime)order.Date, Price = (decimal)productOrderin.Price });
+                        if (!(SelectedLegalClient.Title == "Все поставщики"))
+                        {
+                            if (SelectedLegalClient.IdClient == order.IdClient)
+                            {
+                                PurchaseHistory.Add(new ChartProductOrderIn { Date = (DateTime)order.Date, Price = (decimal)productOrderin.Price });
+                            }
+                        }
+                        else
+                            PurchaseHistory.Add(new ChartProductOrderIn { Date = (DateTime)order.Date, Price = (decimal)productOrderin.Price });
                     }
                 }
                 PrepareChart(TimeStampHistory, PurchaseHistory);
@@ -406,7 +464,15 @@ namespace ShopClient.ViewModels.Add
                 foreach (var productOrderin in thisOrderIns)
                 {
                     var order = FullOrders.First(s => s.Id == productOrderin.IdOrder);
-                    PurchaseHistory.Add(new ChartProductOrderIn { Date = (DateTime)order.Date, Price = (decimal)productOrderin.Price });
+                    if (!(SelectedLegalClient.Title == "Все поставщики"))
+                    {
+                        if (SelectedLegalClient.IdClient == order.IdClient)
+                        {
+                            PurchaseHistory.Add(new ChartProductOrderIn { Date = (DateTime)order.Date, Price = (decimal)productOrderin.Price });
+                        }
+                    }
+                    else
+                        PurchaseHistory.Add(new ChartProductOrderIn { Date = (DateTime)order.Date, Price = (decimal)productOrderin.Price });
                 }
                 PrepareChart(TimeStampHistory, PurchaseHistory);
             }
