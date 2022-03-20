@@ -142,7 +142,16 @@ namespace ShopClient.ViewModels
                 SignalChanged();
             }
         }
-
+        private DateTime selectedDate = DateTime.Now;
+        public DateTime SelectedDate
+        {
+            get => selectedDate;
+            set
+            {
+                selectedDate = value;
+                SignalChanged();
+            }
+        }
         private List<ProductOrderInApi> FullProductOrderIns = new List<ProductOrderInApi>();
         public ObservableCollection<ProductOrderOutApi> ProductOrderOutsToUpdate = new ObservableCollection<ProductOrderOutApi>();
         private List<ProductOrderInApi> ProductOrderInsWithRemains = new List<ProductOrderInApi>();
@@ -203,9 +212,11 @@ namespace ShopClient.ViewModels
                         ClientApi client = Clients.First(c => c.Phone == "Списание");
                         OrderOutApi orderOut = new OrderOutApi { ProductOrderOuts = ProductOrderOutsToUpdate.ToList()};
 
-                        AddNewOrder(new OrderApi { Date = DateTime.Now, IdActionType = actionType.Id, IdClient = client.Id }, orderOut);
+                        AddNewOrder(new OrderApi { Date = SelectedDate, IdActionType = actionType.Id, IdClient = client.Id }, orderOut);
                         PutProductOrderIns(ProductOrderInsToUpdate);
                         MessageBox.Show("Заказ принят", "Успех", MessageBoxButton.OK, MessageBoxImage.Information);
+                        SelectedDate = DateTime.Now;
+                        SignalChanged("SelectedDate");
                     }
                     catch (Exception e)
                     {

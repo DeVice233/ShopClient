@@ -30,7 +30,8 @@
                         <StackPanel Orientation="Vertical">
                             <StackPanel Orientation="Horizontal">
                                 <Label Content="Дата:" FontSize="16"/>
-                                <Label Content="{Binding OrderDate}" FontSize="16"/>
+                                <DatePicker  Width="180" 
+                         SelectedDate="{Binding OrderDate, StringFormat='{}{0:dd.MM.yyyy}'}" FontSize="16"/>
                             </StackPanel>
                             <StackPanel Orientation="Horizontal">
                                 <Label Content="Заказчик:" FontSize="16"/>

@@ -23,8 +23,8 @@ namespace ShopClient.ViewModels
             }
         }
 
-        private string orderDate;
-        public string OrderDate
+        private DateTime orderDate;
+        public DateTime OrderDate
         {
             get => orderDate;
             set
@@ -145,7 +145,8 @@ namespace ShopClient.ViewModels
                             orderOutApi.Status = "Отменен";
                             PutOrderOut(orderOutApi);
                         }
-
+                        order.Date = OrderDate;
+                        PutOrder(order);
                         foreach (Window window in Application.Current.Windows)
                         {
                             if (window.DataContext == this) CloseWin(window);
@@ -180,6 +181,10 @@ namespace ShopClient.ViewModels
         {
             var id = await Api.PutAsync<OrderOutApi>(orderOut, "OrderOut");
         }
+        private async Task PutOrder(OrderApi order)
+        {
+            var id = await Api.PutAsync<OrderApi>(order, "Order");
+        }
         public void CloseWin(object obj)
         {
             Window win = obj as Window;
@@ -194,8 +199,7 @@ namespace ShopClient.ViewModels
             Clients = await Api.GetListAsync<List<ClientApi>>("Client");
             PhysicalClients = await Api.GetListAsync<List<PhysicalClientApi>>("PhysicalClient");
             LegalClients = await Api.GetListAsync<List<LegalClientApi>>("LegalClient");
-            OrderDate = order.Date.ToString();
-            OrderDate = OrderDate.Substring(0, OrderDate.Length - 8);
+            OrderDate = (DateTime)order.Date;
 
             GenerateProductOrderIns(order);
         }

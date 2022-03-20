@@ -102,7 +102,11 @@
             </ListView.ContextMenu>
         </ListView>
         <StackPanel Grid.Row="3" Grid.Column="1" Orientation="Vertical" HorizontalAlignment="Left" Width="320">
-          
+            <StackPanel Grid.Row="3" Grid.Column="1" Orientation="Vertical" HorizontalAlignment="Left" Width="180" Margin="0 0 0 0">
+                <Label Content="Дата:"/>
+                <DatePicker  Width="180" 
+                         SelectedDate="{Binding SelectedDate, StringFormat='{}{0:dd.MM.yyyy}'}" FontSize="13"/>
+            </StackPanel>
         </StackPanel>
         <StackPanel Grid.Row="3" Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Right">
             <Button Content="Принять" Height="25" Width="120" Command="{Binding AddOrder}" FontSize="16"/>

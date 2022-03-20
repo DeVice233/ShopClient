@@ -21,8 +21,8 @@ namespace ShopClient.ViewModels
                 Set(ref productOrderOuts, value);
             }
         }
-        private string orderDate;
-        public string OrderDate
+        private DateTime orderDate;
+        public DateTime OrderDate
         {
             get => orderDate;
             set
@@ -33,6 +33,7 @@ namespace ShopClient.ViewModels
         }
 
         public CustomCommand Cancel { get; set; }
+        public CustomCommand Save { get; set; }
 
         public List<ProductApi> Products = new List<ProductApi>();
         public List<OrderOutApi> FullOrderOuts = new List<OrderOutApi>();
@@ -43,7 +44,29 @@ namespace ShopClient.ViewModels
         {
             GetList(order);
 
+            Save = new CustomCommand(() =>
+            {
+                MessageBoxResult result = MessageBox.Show("Сохранить изменения?", "Подтвердите действие", MessageBoxButton.YesNo, MessageBoxImage.Question);
+                if (result == MessageBoxResult.Yes)
+                {
+                    try
+                    {
 
+                        order.Date = OrderDate;
+                        PutOrder(order);
+
+                        foreach (Window window in Application.Current.Windows)
+                        {
+                            if (window.DataContext == this) CloseWin(window);
+                        }
+                    }
+                    catch (Exception e)
+                    {
+                        MessageBox.Show(e.Message);
+                    };
+                }
+                else return;
+            });
             Cancel = new CustomCommand(() =>
             {
                 foreach (Window window in Application.Current.Windows)
@@ -54,6 +77,10 @@ namespace ShopClient.ViewModels
                     }
                 }
             });
+        }
+        private async Task PutOrder(OrderApi order)
+        {
+            var id = await Api.PutAsync<OrderApi>(order, "Order");
         }
         public void CloseWin(object obj)
         {
@@ -72,8 +99,7 @@ namespace ShopClient.ViewModels
                 var prodOrderIn = FullProductOrderIns.First(s=>s.Id == productOrderOut.IdProductOrderIn);
                 productOrderOut.Product = Products.First(s=>s.Id == prodOrderIn.IdProduct);
             }
-            OrderDate = order.Date.ToString();
-            OrderDate = OrderDate.Substring(0, OrderDate.Length - 8);
+            OrderDate = (DateTime)order.Date;
 
             SignalChanged("OrderDate");
             SignalChanged("ProductOrderOuts");

@@ -172,6 +172,16 @@ namespace ShopClient.ViewModels
                 SignalChanged();
             }
         }
+        private DateTime selectedDate = DateTime.Now;
+        public DateTime SelectedDate
+        {
+            get => selectedDate;
+            set
+            {
+                selectedDate = value;
+                SignalChanged();
+            }
+        }
         public CustomCommand AddProduct { get; set; }
         public CustomCommand AddOrder { get; set; }
         public CustomCommand DeleteProductOrderIn { get; set; }
@@ -230,7 +240,7 @@ namespace ShopClient.ViewModels
                         ActionTypeApi actionType = ActionTypes.First(c => c.Name == "Поступление");
                         ClientApi client = SelectedLegalClient.Client;
 
-                        AddNewOrder(new OrderApi {Date = DateTime.Now, IdActionType = actionType.Id, IdClient =client.Id });
+                        AddNewOrder(new OrderApi {Date = SelectedDate, IdActionType = actionType.Id, IdClient =client.Id });
                         
                        
                      
@@ -238,6 +248,9 @@ namespace ShopClient.ViewModels
 
                         SelectedLegalClient = null;
                         ProductOrderIns.Clear();
+                        SelectedDate = DateTime.Now;
+                        SignalChanged("SelectedDate");
+
                     }
                     catch (Exception e)
                     {
@@ -320,6 +333,7 @@ namespace ShopClient.ViewModels
             ProductTypeFilter = await Api.GetListAsync<List<ProductTypeApi>>("ProductType");
             ProductTypeFilter.Add(new ProductTypeApi { Title = "Все типы" });
             SelectedProductTypeFilter = ProductTypeFilter.Last();
+      
             TotalCalculate();
             PrepareTreeView();
         }
