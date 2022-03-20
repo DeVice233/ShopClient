@@ -69,6 +69,8 @@ namespace ShopClient
         public CustomCommand OpenOrderView { get; set; }
         public CustomCommand OpenOrderOutView { get; set; }
         public CustomCommand OpenWriteOffView { get; set; }
+        public CustomCommand OpenReportView { get; set; }
+        public CustomCommand OpenDashView { get; set; }
 
         public CustomCommand ClickCommandLists { get; set; }
         public CustomCommand ClickCommand { get; set; }
@@ -123,9 +125,19 @@ namespace ShopClient
                 CurrentPage = new ProductOrderInView();
                 SignalChanged("CurrentPage");
             });
+            OpenReportView = new CustomCommand(() =>
+            {
+                CurrentPage = new ReportView();
+                SignalChanged("CurrentPage");
+            });
             OpenOrderOutView = new CustomCommand(() =>
             {
                 CurrentPage = new OrderOutView();
+                SignalChanged("CurrentPage");
+            });
+            OpenDashView = new CustomCommand(() =>
+            {
+                CurrentPage = new DashView();
                 SignalChanged("CurrentPage");
             });
             OpenWriteOffView = new CustomCommand(() =>

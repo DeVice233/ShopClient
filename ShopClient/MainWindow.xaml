@@ -40,25 +40,24 @@
 
 
                         <Grid  Background="#FF1A315B">
-                            <StackPanel Orientation="Horizontal" Grid.ColumnSpan="2" >
+                            <StackPanel Orientation="Horizontal" Grid.ColumnSpan="2"  >
                                 <StackPanel Orientation="Vertical">
                                     <StackPanel Orientation="Horizontal">
 
                                         <RadioButton Content="Продажа" x:Name="mainRadio"
                              FontSize="20" Foreground="white" IsChecked="True"
                              Style="{StaticResource MenuButtonThemeVertical}"
-                             Command="{Binding OpenOrderOutView}">
-
+                             Command="{Binding OpenOrderOutView}" GroupName="group1">
                                         </RadioButton>
                                         <RadioButton Content="Поступление" 
                              FontSize="20" Foreground="white"
                              Style="{StaticResource MenuButtonThemeVertical}"
-                             Command="{Binding OpenProductOrderInView}">
+                             Command="{Binding OpenProductOrderInView}" GroupName="group1">
                                 </RadioButton>
                                                                                 
                                 <RadioButton Content="Списание"
                              FontSize="20" Foreground="white"
-                             Style="{StaticResource MenuButtonThemeVertical}"
+                             Style="{StaticResource MenuButtonThemeVertical}" GroupName="group1"
                              Command="{Binding OpenWriteOffView}">
                                 </RadioButton>
                                         
@@ -66,7 +65,25 @@
                                     
                             <TextBlock Text="Управление" HorizontalAlignment="Center" FontSize="14" Foreground="White" FontFamily="Century Gothic" />
                           </StackPanel>
-                         </StackPanel>
+                                <StackPanel Orientation="Vertical" Margin="20 0 0 0">
+                                    <StackPanel Orientation="Horizontal">
+
+                                        <RadioButton Content="Отчеты"
+                             FontSize="20" Foreground="white" 
+                             Style="{StaticResource MenuButtonThemeVertical}" GroupName="group1"
+                             Command="{Binding OpenReportView}">
+
+                                        </RadioButton>
+                                        <RadioButton Content="Статистика" 
+                             FontSize="20" Foreground="white"
+                             Style="{StaticResource MenuButtonThemeVertical}" GroupName="group1"
+                             Command="{Binding OpenDashView}">
+                                        </RadioButton>
+                                    </StackPanel>
+
+                                    <TextBlock Text="Статистика" HorizontalAlignment="Center" FontSize="14" Foreground="White" FontFamily="Century Gothic" />
+                                </StackPanel>
+                            </StackPanel>
 
                         </Grid>
 
@@ -149,9 +166,45 @@
                     </behaviors:EventTrigger>
                 </behaviors:Interaction.Triggers>
                 <TabItem.Content>
-                    <Frame  NavigationUIVisibility="Hidden"
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="120"/>
+                            <RowDefinition/>
+                        </Grid.RowDefinitions>
+                        <Grid  Background="#FF1A315B" Grid.Row="0">
+                            <StackPanel Orientation="Horizontal" Grid.ColumnSpan="2" >
+                                <StackPanel Orientation="Vertical">
+                                    <StackPanel Orientation="Horizontal">
+
+                                        <RadioButton Content="Продажа" x:Name="reportRadio"
+                             FontSize="20" Foreground="white" IsChecked="True"
+                             Style="{StaticResource MenuButtonThemeVertical}"
+                             Command="{Binding OpenOrderOutView}">
+
+                                        </RadioButton>
+                                        <RadioButton Content="Поступление" 
+                             FontSize="20" Foreground="white"
+                             Style="{StaticResource MenuButtonThemeVertical}"
+                             Command="{Binding OpenProductOrderInView}">
+                                        </RadioButton>
+
+                                        <RadioButton Content="Списание"
+                             FontSize="20" Foreground="white"
+                             Style="{StaticResource MenuButtonThemeVertical}"
+                             Command="{Binding OpenWriteOffView}">
+                                        </RadioButton>
+
+                                    </StackPanel>
+
+                                    <TextBlock Text="Управление" HorizontalAlignment="Center" FontSize="14" Foreground="White" FontFamily="Century Gothic" />
+                                </StackPanel>
+                            </StackPanel>
+
+                        </Grid>
+                        <Frame  NavigationUIVisibility="Hidden" Grid.Row="1"
                         Margin="0" 
                         Content="{Binding CurrentReportPage}"/>
+                    </Grid>
                 </TabItem.Content>
             </TabItem>
             <TabItem>
