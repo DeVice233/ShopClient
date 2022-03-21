@@ -493,7 +493,7 @@ namespace ShopClient.ViewModels.Add
                 Wholesale.Add((double)productCostHistory.WholesalePirceValue);
                 Dates.Add((DateTime)productCostHistory.ChangeDate);
             }
-            foreach (ChartProductOrderIn chartProductOrderIn in productOrderIns)
+            foreach (ChartProductOrderIn chartProductOrderIn in resultPurchase)
             {
                 Purchase.Add((double)chartProductOrderIn.Price);
                 DatesPurchase.Add((DateTime)chartProductOrderIn.Date);

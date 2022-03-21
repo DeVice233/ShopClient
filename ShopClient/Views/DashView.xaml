@@ -4,11 +4,32 @@
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
       xmlns:local="clr-namespace:ShopClient.Views"
+      xmlns:help="clr-namespace:ShopClient.Helper"
       mc:Ignorable="d" 
-      d:DesignHeight="450" d:DesignWidth="800"
+      d:DesignHeight="450" d:DesignWidth="800" Background="White"
       Title="DashView">
 
     <Grid>
-        
+        <Grid.RowDefinitions>
+            <RowDefinition/>
+            <RowDefinition/>
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="180"/>
+            <ColumnDefinition/>
+        </Grid.ColumnDefinitions>
+        <StackPanel Orientation="Vertical" Grid.Row="0" Grid.Column="0">
+            <Label Content="Текущий месяц:" FontSize="16"/>
+            <DatePicker help:DatePickerCalendar.IsMonthYear="True" 
+            help:DatePickerDateFormat.DateFormat="y" FontSize="16"
+            Text="y"></DatePicker>
+            <Label Content="Месяц для сравнения:" Margin="0 20 0 0" FontSize="16"/>
+            <DatePicker help:DatePickerCalendar.IsMonthYear="True" 
+            help:DatePickerDateFormat.DateFormat="y" FontSize="16"
+            Text="y"></DatePicker>
+        </StackPanel>
+        <StackPanel Grid.Row="0" Grid.Column="1">
+            
+        </StackPanel>
     </Grid>
 </Page>

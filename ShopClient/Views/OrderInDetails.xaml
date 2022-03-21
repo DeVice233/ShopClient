@@ -4,6 +4,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:ShopClient.Views"
+        xmlns:help="clr-namespace:ShopClient.Helper"
         mc:Ignorable="d"
         Title="OrderInDetails" Height="450" Width="600" WindowStartupLocation="CenterScreen" ResizeMode="NoResize" WindowStyle="None">
     <Grid>
@@ -21,6 +22,7 @@
                             <Label Content="Дата:" FontSize="16"/>
                             <DatePicker  Width="180" 
                          SelectedDate="{Binding OrderDate, StringFormat='{}{0:dd.MM.yyyy}'}" FontSize="16"/>
+                           
                         </StackPanel>
                         <StackPanel Orientation="Horizontal">
                             <Label Content="Поставщик:" FontSize="16"/>
