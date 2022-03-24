@@ -1,4 +1,5 @@
-﻿using System;
+﻿using ShopClient.ViewModels;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -23,6 +24,7 @@ namespace ShopClient.Views
         public DashView()
         {
             InitializeComponent();
+            DataContext = new DashViewModel();
         }
     }
 }

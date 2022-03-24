@@ -5,13 +5,14 @@
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
       xmlns:local="clr-namespace:ShopClient.Views"
       xmlns:help="clr-namespace:ShopClient.Helper"
+      xmlns:lvc="clr-namespace:LiveCharts.Wpf;assembly=LiveCharts.Wpf"
       mc:Ignorable="d" 
-      d:DesignHeight="450" d:DesignWidth="800" Background="White"
+      d:DesignHeight="520" d:DesignWidth="1080" Background="White"
       Title="DashView">
 
-    <Grid>
+    <Grid Background="WhiteSmoke">
         <Grid.RowDefinitions>
-            <RowDefinition/>
+            <RowDefinition Height="auto"/>
             <RowDefinition/>
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
@@ -22,14 +23,79 @@
             <Label Content="Текущий месяц:" FontSize="16"/>
             <DatePicker help:DatePickerCalendar.IsMonthYear="True" 
             help:DatePickerDateFormat.DateFormat="y" FontSize="16"
-            Text="y"></DatePicker>
+            Text="y" SelectedDate="{Binding DateNow}"></DatePicker>
             <Label Content="Месяц для сравнения:" Margin="0 20 0 0" FontSize="16"/>
             <DatePicker help:DatePickerCalendar.IsMonthYear="True" 
-            help:DatePickerDateFormat.DateFormat="y" FontSize="16"
+            help:DatePickerDateFormat.DateFormat="y" FontSize="16" SelectedDate="{Binding DateCompare}"
             Text="y"></DatePicker>
         </StackPanel>
-        <StackPanel Grid.Row="0" Grid.Column="1">
-            
-        </StackPanel>
+        <Grid Grid.Row="0" Grid.Column="1">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition/>
+                <ColumnDefinition/>
+                <ColumnDefinition/>
+            </Grid.ColumnDefinitions>
+            <GroupBox Header="Прибыль:" Grid.Column="0" FontSize="16" Margin="5" Height="140" BorderThickness="2" Background="White" VerticalAlignment="Top">
+                <StackPanel Orientation="Horizontal">  
+                    <StackPanel Orientation="Vertical">
+                    <Label Content="Текущий период" FontSize="16"/>
+                    <Label Content="Период сравнения " FontSize="16"/>
+                    <Label Content="Разница" FontSize="16"/>
+                </StackPanel>
+                    <StackPanel Orientation="Vertical">
+                        <Label Content="{Binding ProfitNow}" FontSize="16" Height="31"/>
+                        <Label Content="{Binding ProfitCompare}" FontSize="16" Height="31"/>
+                        <Label Content="{Binding ProfitDifference}" Foreground="{Binding ProfitColor}" FontSize="16" Height="31"/>
+                    </StackPanel>
+                </StackPanel>
+             
+            </GroupBox>
+            <GroupBox Header="Средний чек:" Grid.Column="1" FontSize="16" Margin="5" Height="140" Background="White" VerticalAlignment="Top">
+                <StackPanel Orientation="Horizontal" >
+                    <StackPanel Orientation="Vertical">
+                        <Label Content="Текущий период" FontSize="16"/>
+                        <Label Content="Период сравнения " FontSize="16"/>
+                        <Label Content="Разница" FontSize="16"/>
+                    </StackPanel>
+                    <StackPanel Orientation="Vertical">
+                        <Label Content="{Binding AverageCheckNow}" FontSize="16" Height="31"/>
+                        <Label Content="{Binding AverageCheckCompare}" FontSize="16" Height="31"/>
+                        <Label Content="{Binding AverageCheckDifference}" FontSize="16" Foreground="{Binding AverageCheckColor}" Height="31"/>
+                    </StackPanel>
+                </StackPanel>
+
+            </GroupBox>
+            <GroupBox Header="Кол-во продаж:" Grid.Column="2" FontSize="16" Margin="5" Height="140" Background="White" VerticalAlignment="Top">
+                <StackPanel Orientation="Horizontal" >
+                    <StackPanel Orientation="Vertical">
+                        <Label Content="Текущий период" FontSize="16"/>
+                        <Label Content="Период сравнения " FontSize="16"/>
+                        <Label Content="Разница" FontSize="16"/>
+                    </StackPanel>
+                    <StackPanel Orientation="Vertical">
+                        <Label Content="{Binding OrdersCountNow}" FontSize="16" Height="31"/>
+                        <Label Content="{Binding OrdersCountCompare}" FontSize="16" Height="31"/>
+                        <Label Content="{Binding OrdersCountDifference}" FontSize="16" Foreground="{Binding OrdersCountColor}" Height="31"/>
+                    </StackPanel>
+                </StackPanel>
+
+            </GroupBox>
+        </Grid>
+        <Grid Grid.Row="1" Grid.Column="1">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition  Width="500"/>
+                <ColumnDefinition/>
+            </Grid.ColumnDefinitions>
+            <StackPanel>
+                <lvc:CartesianChart Series="{Binding SeriesCollection}" LegendLocation="Bottom" Height="350" Width="500">
+                    <lvc:CartesianChart.AxisX>
+                        <lvc:Axis Title="Товары" Labels="{Binding Labels}"></lvc:Axis>
+                    </lvc:CartesianChart.AxisX>
+                    <lvc:CartesianChart.AxisY>
+                        <lvc:Axis Title="Кол-во" LabelFormatter="{Binding Formatter}"></lvc:Axis>
+                    </lvc:CartesianChart.AxisY>
+                </lvc:CartesianChart>
+            </StackPanel>
+        </Grid>
     </Grid>
 </Page>
