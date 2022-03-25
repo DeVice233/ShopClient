@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 
@@ -103,8 +104,9 @@ namespace ShopClient.ViewModels
 
             AddLegalClient = new CustomCommand(() =>
             {
-                AddLegalClient addLegalClient = new AddLegalClient();
+                AddLegalClient addLegalClient = new();
                 addLegalClient.ShowDialog();
+                Thread.Sleep(200);
                 Update();
             });
             EditLegalClient = new CustomCommand(() =>
@@ -112,6 +114,7 @@ namespace ShopClient.ViewModels
                 if (SelectedLegalClient == null) return;
                 AddLegalClient addLegalClient = new AddLegalClient(SelectedLegalClient);
                 addLegalClient.ShowDialog();
+                Thread.Sleep(200);
                 Update();
 
             });

@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 
@@ -204,6 +205,7 @@ namespace ShopClient.ViewModels
             {
                 AddProduct addProduct = new AddProduct();
                 addProduct.ShowDialog();
+                Thread.Sleep(200);
                 Update();
                 InitPagination();
                 Pagination();
@@ -215,6 +217,7 @@ namespace ShopClient.ViewModels
                 SelectedProduct.Image = SelectedProduct.Image.Substring(pos + 1);
                 AddProduct addProduct = new AddProduct(SelectedProduct);
                 addProduct.ShowDialog();
+                Thread.Sleep(200);
                 Update();
                 InitPagination();
                 Pagination();
@@ -223,8 +226,11 @@ namespace ShopClient.ViewModels
             ProductPriceChange = new CustomCommand(() =>
             {
                 if (SelectedProduct == null) return;
+                int pos = SelectedProduct.Image.LastIndexOf('/');
+                SelectedProduct.Image = SelectedProduct.Image.Substring(pos + 1);
                 AddProductPriceChange addProductPriceChange = new AddProductPriceChange(SelectedProduct);
                 addProductPriceChange.ShowDialog();
+                Thread.Sleep(200);
                 Update();
                 InitPagination();
                 Pagination();
@@ -238,6 +244,19 @@ namespace ShopClient.ViewModels
                     if (SelectedProduct == null) return;
                     try
                     {
+                        var x = 0;
+                        foreach (var item in ProductOrderIns)
+                        {
+                            if (item.IdProduct == SelectedProduct.Id)
+                            {
+                                x = 1;
+                            }
+                        }
+                        if (x == 1)
+                        {
+                            MessageBox.Show("Невозможно удалить, с этим товаром есть записи в БД!", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
+                            return;
+                        }
                         Delete(SelectedProduct);
                         Update();
                         SignalChanged("Products");

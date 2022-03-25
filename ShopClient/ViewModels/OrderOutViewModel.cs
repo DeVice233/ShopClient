@@ -380,6 +380,7 @@ namespace ShopClient.ViewModels
                         PutProductOrderIns(ProductOrderInsToUpdate);
                         MessageBox.Show("Заказ принят", "Успех", MessageBoxButton.OK, MessageBoxImage.Information);
                         SelectedDate = DateTime.Now;
+                        IsEnableSaleType = true;
                         SignalChanged("SelectedDate");
                     }
                     catch (Exception e)

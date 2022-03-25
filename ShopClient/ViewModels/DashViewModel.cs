@@ -1,4 +1,5 @@
 ﻿using LiveCharts;
+using LiveCharts.Defaults;
 using LiveCharts.Wpf;
 using ModelsApi;
 using ShopClient.Core;
@@ -118,10 +119,16 @@ namespace ShopClient.ViewModels
         }
         public Func<double, string> Formatter { get; set; }
 
+        public List<SaleTypeApi> SaleTypes = new List<SaleTypeApi>();
         public List<OrderApi> FullOrders = new List<OrderApi>();
         public List<ProductApi> FullProducts = new List<ProductApi>();
         public List<OrderOutApi> FullOrderOuts = new List<OrderOutApi>();
         public List<ProductOrderInApi> FullProductOrderIns = new List<ProductOrderInApi>();
+        public Func<ChartPoint, string> PointLabel { get; set; }
+        public int RetailValue { get; set; } = 0;
+        public int WholesaleValue { get; set; } = 0;
+        public SeriesCollection PieSeries { get; set; }
+
         public DashViewModel()
         {
             GetList();
@@ -131,6 +138,7 @@ namespace ShopClient.ViewModels
 
         private async Task GetList()
         {
+            SaleTypes = await Api.GetListAsync<List<SaleTypeApi>>("SaleType");
             FullProducts = await Api.GetListAsync<List<ProductApi>>("Product");
             FullOrders = await Api.GetListAsync<List<OrderApi>>("Order");
             FullOrderOuts = await Api.GetListAsync<List<OrderOutApi>>("OrderOut");
@@ -240,6 +248,7 @@ namespace ShopClient.ViewModels
                 AverageCheckDifference = "0%";
                 AverageCheckColor = "#000000";
             }
+            GeneratePieChart(orderOutsNow);
             GenerateChart(orderOutsNow);
             Update();
         }
@@ -303,8 +312,9 @@ namespace ShopClient.ViewModels
             }
             SeriesCollection = new SeriesCollection
             {
-                new ColumnSeries
+                new RowSeries
                 {
+                    DataLabels = true,
                     Title = "Товары",
                     Values = Counts
                 }
@@ -314,6 +324,45 @@ namespace ShopClient.ViewModels
             SignalChanged("SeriesCollection");
             SignalChanged("Labels");
             SignalChanged("Formatter");
+        }
+        private void GeneratePieChart(List<OrderOutApi> orderOuts)
+        {
+            WholesaleValue = 0;
+            RetailValue = 0;
+
+            foreach (var item in orderOuts)
+            {
+                SaleTypeApi sale = SaleTypes.First(s => s.Id == item.IdSaleType);
+                if (sale.Title == "Оптовая")
+                    WholesaleValue++;
+                else
+                    RetailValue++;
+            }
+            PointLabel = chartPoint =>
+              string.Format("{0} ({1:P})", chartPoint.Y, chartPoint.Participation);
+            PieSeries = new SeriesCollection
+            {
+                new PieSeries
+                {
+                    Title = "Розничные",
+                    Values = new ChartValues<ObservableValue> {new ObservableValue(RetailValue) },
+                    DataLabels = true,
+                    LabelPoint = PointLabel,
+                    FontSize = 16
+                },
+                  new PieSeries
+                {
+                    Title = "Оптовые",
+                    Values = new ChartValues<ObservableValue> {new ObservableValue(WholesaleValue) },
+                    DataLabels = true,
+                    LabelPoint = PointLabel,
+                      FontSize = 16
+                },
+            };
+            SignalChanged("PieSeries");
+            SignalChanged("WholesaleValue");
+            SignalChanged("RetailValue");
+            SignalChanged("PointLabel");
         }
         private void Update()
         {

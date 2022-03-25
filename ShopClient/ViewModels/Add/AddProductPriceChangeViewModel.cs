@@ -72,12 +72,14 @@ namespace ShopClient.ViewModels.Add
                 SignalChanged();
             }
         }
+        public List<ProductCostHistoryApi> productCostHistories = new List<ProductCostHistoryApi>();
 
         public CustomCommand Save { get; set; }
         public CustomCommand Cancel { get; set; }
 
         public AddProductPriceChangeViewModel(ProductApi product)
         {
+            GetList();
             ProductTitle = $"{product.Fabricator.Title} " + product.Title + $" ({product.Unit.Title})";
             OldRetailPrice = product.RetailPrice;
             OldWholesalePrice = product.WholesalePrice;
@@ -94,9 +96,15 @@ namespace ShopClient.ViewModels.Add
                     try
                     {
                         product.RetailPrice = RetailTotal;
-                        product.WholesalePrice = WholesaleTotal;
-                        Edit(product);
+                        product.WholesalePrice = WholesaleTotal; 
+                        productCostHistories.OrderBy(x => x.ChangeDate).ToList();
+                        if (productCostHistories.Last().ChangeDate < ChangeDate)
+                        {
+                            Edit(product);
+                        }
                         Add(new ProductCostHistoryApi {IdProduct = product.Id, ChangeDate = ChangeDate, RetailPriceValue = RetailTotal, WholesalePirceValue = WholesaleTotal});
+                      
+                   
                         foreach (Window window in Application.Current.Windows)
                         {
                             if (window.DataContext == this) CloseWin(window);
@@ -135,6 +143,10 @@ namespace ShopClient.ViewModels.Add
         private async Task Add(ProductCostHistoryApi productCostHistory)
         {
             var id = await Api.PostAsync<ProductCostHistoryApi>(productCostHistory, "ProductCostHistory");
+        }
+        private async Task GetList()
+        {
+            productCostHistories = await Api.GetListAsync<List<ProductCostHistoryApi>>("ProductCostHistory");
         }
         private async Task Edit(ProductApi product)
         {

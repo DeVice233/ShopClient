@@ -105,7 +105,7 @@
         
         <StackPanel Grid.Row="3" Grid.Column="1" Orientation="Vertical" HorizontalAlignment="Left" Width="180">
             <Label Content="Поставщик:"/>
-            <ComboBox ItemsSource="{Binding LegalClients}" SelectedItem="{Binding SelectedLegalClient}" DisplayMemberPath="Title"/>
+            <ComboBox ItemsSource="{Binding LegalClients}" SelectedItem="{Binding SelectedLegalClient}" DisplayMemberPath="Title" IsEditable="True"/>
         </StackPanel>
         <StackPanel Grid.Row="3" Grid.Column="1" Orientation="Vertical" HorizontalAlignment="Left" Width="180" Margin="200 0 0 0">
             <Label Content="Дата:"/>

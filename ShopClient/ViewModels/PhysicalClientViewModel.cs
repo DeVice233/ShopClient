@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 
@@ -89,6 +90,7 @@ namespace ShopClient.ViewModels
             {
                 AddPhysicalClient addPhysicalClient = new AddPhysicalClient();
                 addPhysicalClient.ShowDialog();
+                Thread.Sleep(200);
                 Update();
             });
             EditPhysicalClient = new CustomCommand(() =>
@@ -96,8 +98,8 @@ namespace ShopClient.ViewModels
                 if (SelectedPhysicalClient == null) return;
                 AddPhysicalClient addPhysicalClient = new AddPhysicalClient(SelectedPhysicalClient);
                 addPhysicalClient.ShowDialog();
+                Thread.Sleep(200);
                 Update();
-
             });
             DeletePhysicalClient = new CustomCommand(() =>
             {

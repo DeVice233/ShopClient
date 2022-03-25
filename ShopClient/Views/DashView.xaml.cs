@@ -1,4 +1,6 @@
-﻿using ShopClient.ViewModels;
+﻿using LiveCharts;
+using LiveCharts.Wpf;
+using ShopClient.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -26,5 +28,7 @@ namespace ShopClient.Views
             InitializeComponent();
             DataContext = new DashViewModel();
         }
+
+       
     }
 }
