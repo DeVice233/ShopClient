@@ -38,6 +38,8 @@ namespace ShopClient.ViewModels
             }
         }
 
+        private List<ProductApi> products;
+
         public CustomCommand AddUnit { get; set; }
         public CustomCommand EditUnit { get; set; }
         public CustomCommand DeleteUnit { get; set; }
@@ -68,6 +70,15 @@ namespace ShopClient.ViewModels
                 if (result == MessageBoxResult.Yes)
                 { 
                     if (SelectedUnit == null) return;
+
+                    List<ProductApi> y = products.Where(s => s.IdUnit == SelectedUnit.Id).ToList();
+
+                    if (y.Count != 0)
+                    {
+                        MessageBox.Show("Невозможно удалить, с этим товаром есть записи в БД!", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
+                        return;
+                    }
+
                     try
                     {
                         Delete(SelectedUnit);
@@ -85,6 +96,7 @@ namespace ShopClient.ViewModels
 
         private async Task GetList()
         {
+            products = await Api.GetListAsync<List<ProductApi>>("Product");
             Units = await Api.GetListAsync<List<UnitApi>>("Unit");
             SignalChanged("Units");
 

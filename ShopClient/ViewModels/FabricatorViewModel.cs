@@ -39,6 +39,7 @@ namespace ShopClient.ViewModels
                 SignalChanged();
             }
         }
+        private List<ProductApi> products;
 
         public CustomCommand AddFabricator { get; set; }
         public CustomCommand EditFabricator { get; set; }
@@ -70,6 +71,14 @@ namespace ShopClient.ViewModels
                 if (result == MessageBoxResult.Yes)
                 {
                     if (SelectedFabricator == null) return;
+
+                    List<ProductApi> y = products.Where(s => s.IdFabricator == SelectedFabricator.Id).ToList();
+
+                    if (y.Count != 0)
+                    {
+                        MessageBox.Show("Невозможно удалить, с этим товаром есть записи в БД!", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
+                        return;
+                    }
                     try
                     {
                         Delete(SelectedFabricator);
@@ -87,6 +96,7 @@ namespace ShopClient.ViewModels
 
         private async Task GetList()
         {
+            products = await Api.GetListAsync<List<ProductApi>>("Product");
             Fabricators = await Api.GetListAsync<List<FabricatorApi>>("Fabricator");
             SignalChanged("Fabricators");
         }

@@ -48,8 +48,8 @@
                                         <Image  x:Name="img" Width="150" Height="70"/>
                                         <TextBox Text="{Binding Title}" Style="{StaticResource PropertyTextBox}"   />
                                         <TextBox Text="{Binding MinCount}" Style="{StaticResource PropertyTextBox}"   />
-                                        <TextBox Text="{Binding WholesalePrice}" Style="{StaticResource PropertyTextBox}" IsEnabled="False"/>
-                                        <TextBox Text="{Binding RetailPrice}" Style="{StaticResource PropertyTextBox}" IsEnabled="False"/>
+                                        <TextBox Text="{Binding WholesalePrice}" Style="{StaticResource PropertyTextBox}" IsEnabled="True"/>
+                                        <TextBox Text="{Binding RetailPrice}" Style="{StaticResource PropertyTextBox}" IsEnabled="True"/>
 
                                     </StackPanel>
                                 </StackPanel>
@@ -114,7 +114,7 @@
                                 <Grid  Height="290">
                                     <lvc:CartesianChart Series="{Binding SeriesCollection}" LegendLocation="Bottom" >
                                         <lvc:CartesianChart.AxisY>
-                                            <lvc:Axis Title="Цена" LabelFormatter="{Binding YFormatter}"></lvc:Axis>
+                                            <lvc:Axis Title="Цена" LabelFormatter="{Binding YFormatter}" ></lvc:Axis>
                                         </lvc:CartesianChart.AxisY>
                                         <lvc:CartesianChart.AxisX>
                                             <lvc:Axis Title="Дата" Labels="{Binding Labels}"></lvc:Axis>

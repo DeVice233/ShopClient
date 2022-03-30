@@ -95,6 +95,11 @@ namespace ShopClient.ViewModels.Add
                 {
                     try
                     {
+                        if (ChangeDate > DateTime.Now)
+                        {
+                            MessageBox.Show("Дата изменения не может быть позднней сегодняшней даты", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
+                            return;
+                        }
                         product.RetailPrice = RetailTotal;
                         product.WholesalePrice = WholesaleTotal; 
                         productCostHistories.OrderBy(x => x.ChangeDate).ToList();

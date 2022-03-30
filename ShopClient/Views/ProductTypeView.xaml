@@ -22,8 +22,8 @@
             </ListView.View>
             <ListView.ContextMenu>
                 <ContextMenu>
-                    <MenuItem Header="Удалить" Command="{Binding DeleteProductType}"/>
                     <MenuItem Header="Редактировать" Command="{Binding EditProductType}"/>
+                    <MenuItem Header="Удалить" Command="{Binding DeleteProductType}"/>
                 </ContextMenu>
             </ListView.ContextMenu>
         </ListView>

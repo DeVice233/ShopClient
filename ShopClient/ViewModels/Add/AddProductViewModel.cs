@@ -149,6 +149,8 @@ namespace ShopClient.ViewModels.Add
         public CustomCommand SelectImage { get; set; }
         public CustomCommand UpdateChart { get; set; }
 
+        private decimal? oldWholesale;
+        private decimal? oldRetail;
         public List<ProductApi> Products;
         private List<ProductOrderInApi> FullProductOrderIns = new List<ProductOrderInApi>();
         private List<OrderApi> FullOrders = new List<OrderApi>();
@@ -193,6 +195,8 @@ namespace ShopClient.ViewModels.Add
                     MinCount = product.MinCount,
                     WholesalePrice = product.WholesalePrice
                 };
+                oldWholesale = product.WholesalePrice;
+                oldRetail = product.RetailPrice;
 
                 GetList(product);
 
@@ -224,14 +228,18 @@ namespace ShopClient.ViewModels.Add
                         AddProduct.IdUnit = SelectedUnit.Id;
                         if (AddProduct.Id == 0)
                         { 
-                            AddProduct.WholesalePrice = 0;
-                            AddProduct.RetailPrice = 0;
+                          //  AddProduct.WholesalePrice = 0;
+                          //  AddProduct.RetailPrice = 0;
                             Add(AddProduct);
                         }
 
                         else
                         {
                             Edit(AddProduct);
+                            if (AddProduct.WholesalePrice != oldWholesale || AddProduct.RetailPrice != oldRetail)
+                            {
+                                AddProductPriceChange(new ProductCostHistoryApi { ChangeDate = DateTime.Now, IdProduct = AddProduct.Id, RetailPriceValue = AddProduct.RetailPrice, WholesalePirceValue = AddProduct.WholesalePrice});
+                            }
                         }
 
                         foreach (Window window in Application.Current.Windows)
@@ -335,16 +343,26 @@ namespace ShopClient.ViewModels.Add
             win.Close();
         }
 
-
+        private async Task AddProductPriceChange(ProductCostHistoryApi productCostHistory)
+        {
+            var id = await Api.PostAsync<ProductCostHistoryApi>(productCostHistory, "ProductCostHistory");
+        }
         private async Task Add(ProductApi product)
         {
             var id = await Api.PostAsync<ProductApi>(product, "Product");
+            await GetProducts();
+            var lastProduct = Products.Last();
+            await AddProductPriceChange(new ProductCostHistoryApi { ChangeDate = DateTime.Now, IdProduct = lastProduct.Id, RetailPriceValue = AddProduct.RetailPrice, WholesalePirceValue = AddProduct.WholesalePrice });
         }
         private async Task Edit(ProductApi product)
         {
             var id = await Api.PutAsync<ProductApi>(product, "Product");
         }
-        private async Task GetList(ProductApi product)
+        private async Task GetProducts()
+        {
+            Products = await Api.GetListAsync<List<ProductApi>>("Product");
+        }
+            private async Task GetList(ProductApi product)
         {
             FullOrders = await Api.GetListAsync<List<OrderApi>>("Order");
             FullProductOrderIns = await Api.GetListAsync<List<ProductOrderInApi>>("ProductOrderIn");

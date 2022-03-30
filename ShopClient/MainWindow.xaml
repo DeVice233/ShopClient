@@ -148,78 +148,12 @@
                             </StackPanel>
                         </Grid>
                         <Grid Grid.Row="1" Grid.Column="1" Background="WhiteSmoke">
-                               <Frame NavigationUIVisibility="Hidden"
+                            <Frame NavigationUIVisibility="Hidden"
                         Grid.Column="1" Margin="10" 
                         Content="{Binding CurrentListPage}"/>
                         </Grid>
-                     
+
                     </Grid>
-                </TabItem.Content>
-            </TabItem>
-            <TabItem>
-                <TabItem.Header>
-                    <TextBlock Text="Отчеты" x:Name="tabItemReport"/>
-                </TabItem.Header>
-                <behaviors:Interaction.Triggers>
-                    <behaviors:EventTrigger EventName="MouseDown" SourceObject="{Binding ElementName=tabItemReport}">
-                        <behaviors:InvokeCommandAction Command="{Binding ClickCommandReports}" />
-                    </behaviors:EventTrigger>
-                </behaviors:Interaction.Triggers>
-                <TabItem.Content>
-                    <Grid>
-                        <Grid.RowDefinitions>
-                            <RowDefinition Height="120"/>
-                            <RowDefinition/>
-                        </Grid.RowDefinitions>
-                        <Grid  Background="#FF1A315B" Grid.Row="0">
-                            <StackPanel Orientation="Horizontal" Grid.ColumnSpan="2" >
-                                <StackPanel Orientation="Vertical">
-                                    <StackPanel Orientation="Horizontal">
-
-                                        <RadioButton Content="Продажа" x:Name="reportRadio"
-                             FontSize="20" Foreground="white" IsChecked="True"
-                             Style="{StaticResource MenuButtonThemeVertical}"
-                             Command="{Binding OpenOrderOutView}">
-
-                                        </RadioButton>
-                                        <RadioButton Content="Поступление" 
-                             FontSize="20" Foreground="white"
-                             Style="{StaticResource MenuButtonThemeVertical}"
-                             Command="{Binding OpenProductOrderInView}">
-                                        </RadioButton>
-
-                                        <RadioButton Content="Списание"
-                             FontSize="20" Foreground="white"
-                             Style="{StaticResource MenuButtonThemeVertical}"
-                             Command="{Binding OpenWriteOffView}">
-                                        </RadioButton>
-
-                                    </StackPanel>
-
-                                    <TextBlock Text="Управление" HorizontalAlignment="Center" FontSize="14" Foreground="White" FontFamily="Century Gothic" />
-                                </StackPanel>
-                            </StackPanel>
-
-                        </Grid>
-                        <Frame  NavigationUIVisibility="Hidden" Grid.Row="1"
-                        Margin="0" 
-                        Content="{Binding CurrentReportPage}"/>
-                    </Grid>
-                </TabItem.Content>
-            </TabItem>
-            <TabItem>
-                <TabItem.Header>
-                    <TextBlock Text="Статистика" x:Name="tabItemDash"/>
-                </TabItem.Header>
-                <behaviors:Interaction.Triggers>
-                    <behaviors:EventTrigger EventName="MouseDown" SourceObject="{Binding ElementName=tabItemDash}">
-                        <behaviors:InvokeCommandAction Command="{Binding ClickCommandDash}" />
-                    </behaviors:EventTrigger>
-                </behaviors:Interaction.Triggers>
-                <TabItem.Content>
-                    <Frame  NavigationUIVisibility="Hidden"
-                        Margin="0" 
-                        Content="{Binding CurrentDashPage}"/>
                 </TabItem.Content>
             </TabItem>
         </TabControl>

@@ -90,7 +90,7 @@
                 <Label Content="Топ-5 продаваемых товаров:" Foreground="Black" FontSize="16" />
                 <lvc:CartesianChart Series="{Binding SeriesCollection}" LegendLocation="Bottom" Margin="0 30 0 0">
                     <lvc:CartesianChart.AxisX>
-                        <lvc:Axis Title="Кол-во" LabelFormatter="{Binding Formatter}" Foreground="Black" FontSize="16"></lvc:Axis>
+                        <lvc:Axis Title="Кол-во" LabelFormatter="{Binding Formatter}" Foreground="Black" FontSize="16" DisableAnimations="True"></lvc:Axis>
                     </lvc:CartesianChart.AxisX>
                     <lvc:CartesianChart.AxisY>
                         <lvc:Axis Title="Товары" Foreground="Black" FontSize="16" Labels="{Binding Labels}"></lvc:Axis>

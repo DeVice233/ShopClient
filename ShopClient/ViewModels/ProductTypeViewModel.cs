@@ -35,6 +35,8 @@ namespace ShopClient.ViewModels
             }
         }
 
+        private List<ProductApi> products;
+
         public CustomCommand AddProductType { get; set; }
         public CustomCommand EditProductType { get; set; }
         public CustomCommand DeleteProductType { get; set; }
@@ -67,6 +69,14 @@ namespace ShopClient.ViewModels
                 if (result == MessageBoxResult.Yes)
                 {
                     if (SelectedProductType == null) return;
+
+                    List<ProductApi> y = products.Where(s => s.IdProductType == SelectedProductType.Id).ToList();
+
+                    if (y.Count != 0)
+                    {
+                        MessageBox.Show("Невозможно удалить, с этим товаром есть записи в БД!", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
+                        return;
+                    }
                     try
                     {
                         Delete(SelectedProductType);
@@ -89,6 +99,7 @@ namespace ShopClient.ViewModels
         }
         private async Task GetList()
         {
+            products = await Api.GetListAsync<List<ProductApi>>("Product");
             ProductTypes = await Api.GetListAsync<List<ProductTypeApi>>("ProductType");
             SignalChanged("ProductTypes");
         }

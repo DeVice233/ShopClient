@@ -257,6 +257,7 @@ namespace ShopClient.ViewModels
                             MessageBox.Show("Невозможно удалить, с этим товаром есть записи в БД!", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
                             return;
                         }
+
                         Delete(SelectedProduct);
                         Update();
                         SignalChanged("Products");
@@ -335,8 +336,14 @@ namespace ShopClient.ViewModels
 
         private async Task Delete(ProductApi product)
         {
+            List<ProductCostHistoryApi> productPriceChanges = await Api.GetListAsync<List<ProductCostHistoryApi>>("ProductCostHistory");
+            List<ProductCostHistoryApi> thisPriceChanges = productPriceChanges.Where(s => s.IdProduct == product.Id).ToList();
+            foreach (var item in thisPriceChanges)
+            {
+                var res1 = await Api.DeleteAsync<ProductCostHistoryApi>(item, "ProductCostHistory");
+            }
             var res = await Api.DeleteAsync<ProductApi>(product, "Product");
-            GetList();
+            await GetList();
         }
         private async Task GetList()
         {
