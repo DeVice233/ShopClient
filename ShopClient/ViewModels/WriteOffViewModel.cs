@@ -179,7 +179,7 @@ namespace ShopClient.ViewModels
                 if (SelectedProductOrderIn == null) return;
                 if (ProductOrderInsToUpdate.Contains(SelectedProductOrderIn))
                 {
-                    MessageBox.Show("Такая поставка уже присутствует в списке!", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
+                    MessageBox.Show("Такой товар уже присутствует в списке!", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
                     return;
                 }
                 AddWriteOff addWriteOff = new AddWriteOff(SelectedProductOrderIn, ProductOrderInsToUpdate, ProductOrderOutsToUpdate);

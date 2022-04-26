@@ -119,6 +119,7 @@ namespace ShopClient.ViewModels
         }
         public Func<double, string> Formatter { get; set; }
 
+        public List<ActionTypeApi> ActionTypes = new List<ActionTypeApi>();
         public List<SaleTypeApi> SaleTypes = new List<SaleTypeApi>();
         public List<OrderApi> FullOrders = new List<OrderApi>();
         public List<ProductApi> FullProducts = new List<ProductApi>();
@@ -138,6 +139,7 @@ namespace ShopClient.ViewModels
 
         private async Task GetList()
         {
+            ActionTypes = await Api.GetListAsync<List<ActionTypeApi>>("ActionType");
             SaleTypes = await Api.GetListAsync<List<SaleTypeApi>>("SaleType");
             FullProducts = await Api.GetListAsync<List<ProductApi>>("Product");
             FullOrders = await Api.GetListAsync<List<OrderApi>>("Order");
@@ -153,24 +155,32 @@ namespace ShopClient.ViewModels
 
             foreach (var item in FullOrders)
             {
-                var date = (DateTime)item.Date;
-                if (date.Year == DateNow.Year && date.Month == DateNow.Month)
+                var actionType = ActionTypes.First(s => s.Name == "Списание");
+                if (item.IdActionType == actionType.Id)
                 {
-                    foreach (var orderOutApi in FullOrderOuts)
+                 
+                }
+                else if (true)
+                {
+                    var date = (DateTime)item.Date;
+                    if (date.Year == DateNow.Year && date.Month == DateNow.Month)
                     {
-                        if (orderOutApi.IdOrder == item.Id && orderOutApi.Status != "Отменен")
+                        foreach (var orderOutApi in FullOrderOuts)
                         {
-                            OrdersOutNow.Add(orderOutApi);
+                            if (orderOutApi.IdOrder == item.Id && orderOutApi.Status != "Отменен")
+                            {
+                                OrdersOutNow.Add(orderOutApi);
+                            }
                         }
                     }
-                }
-                if (date.Year == DateCompare.Year && date.Month == DateCompare.Month)
-                {
-                    foreach (var orderOutApi in FullOrderOuts)
+                    if (date.Year == DateCompare.Year && date.Month == DateCompare.Month)
                     {
-                        if (orderOutApi.IdOrder == item.Id && orderOutApi.Status != "Отменен")
+                        foreach (var orderOutApi in FullOrderOuts)
                         {
+                            if (orderOutApi.IdOrder == item.Id && orderOutApi.Status != "Отменен")
+                            {
                                 OrdersOutCompare.Add(orderOutApi);
+                            }
                         }
                     }
                 }

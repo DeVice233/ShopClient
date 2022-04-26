@@ -292,7 +292,7 @@ namespace ShopClient.ViewModels
                     var toggle = 0;
                     var sum = ProductOrderOut.Count * (ProductOrderOut.Price - ProductOrderOut.Discount);
                     //заменить article на id
-                    if(SelectedProduct.Article == ProductOrderOut.Product.Article)
+                    if(SelectedProduct.Id == ProductOrderOut.Product.Id)
                     {
                         SelectedProduct.Count -= ProductOrderOut.Count;
                     }

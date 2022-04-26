@@ -129,7 +129,7 @@ namespace ShopClient.ViewModels.Add
                     }
                     if (Count > SelectedProduct.Count)
                     {
-                        MessageBox.Show($"Количество не соотвествует остаткам на складе ({productOrderOuts.First().Product.Count})!");
+                        MessageBox.Show($"Количество не соотвествует остаткам на складе ({SelectedProduct.Count})!");
                         return;
                     }
                     try
@@ -188,15 +188,14 @@ namespace ShopClient.ViewModels.Add
                 countRemains -= ThisProductOrderIns[i].Remains;
                 if (countRemains < 0)
                 {
-                      productOrderOuts.Add(new ProductOrderOutApi { IdProductOrderIn = ThisProductOrderIns[i].Id, Product = ThisProduct, Price = thisPrice, Count = countRemainsBefore, Discount = Discount });
-                      ThisProductOrderIns[i].Remains = Math.Abs((int)countRemains);
+                    productOrderOuts.Add(new ProductOrderOutApi { IdProductOrderIn = ThisProductOrderIns[i].Id, Product = ThisProduct, Price = thisPrice, Count = countRemainsBefore, Discount = Discount });
+                    ThisProductOrderIns[i].Remains = Math.Abs((int)countRemains);
                 }
                 else
                 {
-                    productOrderOuts.Add(new ProductOrderOutApi { IdProductOrderIn = ThisProductOrderIns[i].Id, Product = ThisProduct, Price = thisPrice, Count = Count - countRemains, Discount = Discount});
-                      ThisProductOrderIns[i].Remains = 0;
+                    productOrderOuts.Add(new ProductOrderOutApi { IdProductOrderIn = ThisProductOrderIns[i].Id, Product = ThisProduct, Price = thisPrice, Count = Count - countRemains, Discount = Discount });
+                    ThisProductOrderIns[i].Remains = 0;
                 }
-
                 productOrderInsToUpdate.Add(ThisProductOrderIns[i]);
             }
 

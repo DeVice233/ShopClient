@@ -223,6 +223,22 @@ namespace ShopClient.ViewModels.Add
                             MessageBox.Show("Длина штрихкода - 8 символов", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
                             return;
                         }
+                        foreach (var product in Products)
+                        {
+                            if (AddProduct.Article == product.Article)
+                            {
+                                if (AddProduct.Id == 0)
+                                {
+                                    MessageBox.Show("Артикул должен быть уникальным", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
+                                    return;
+                                }
+                                else if (AddProduct.Id != product.Id)
+                                {
+                                    MessageBox.Show("Артикул должен быть уникальным", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
+                                    return;
+                                }
+                            }
+                        }
                         AddProduct.IdProductType = SelectedProductType.Id;
                         AddProduct.IdFabricator = SelectedFabricator.Id;
                         AddProduct.IdUnit = SelectedUnit.Id;

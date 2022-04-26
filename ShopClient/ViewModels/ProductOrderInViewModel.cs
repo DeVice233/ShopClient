@@ -256,6 +256,7 @@ namespace ShopClient.ViewModels
                     {
                         MessageBox.Show(e.Message);
                     };
+                    Update();
                 }
                 else return;
 
