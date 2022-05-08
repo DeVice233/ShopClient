@@ -26,5 +26,11 @@ namespace ShopClient.Views
             InitializeComponent();
             DataContext = new PhysicalClientViewModel();
         }
+
+        private void ClickColumn(object sender, MouseButtonEventArgs e)
+        {
+            string p = ((Control)sender).Tag as string;
+            ((PhysicalClientViewModel)DataContext).Sort(p);
+        }
     }
 }

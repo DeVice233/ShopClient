@@ -31,7 +31,7 @@
             </StackPanel>
         </Grid>
 
-        <ListBox Grid.Row="1" ItemsSource="{Binding Products}" FontSize="16" SelectedItem="{Binding SelectedProduct}" HorizontalContentAlignment="Stretch">
+        <ListBox Grid.Row="1" ItemsSource="{Binding Products}" FontSize="16" SelectedItem="{Binding SelectedProduct}" HorizontalContentAlignment="Stretch" FontFamily="Century Gothic">
             <ListBox.ItemTemplate>
                 <DataTemplate >
                     <Grid Background="{Binding ColorForXaml}" >
@@ -43,19 +43,19 @@
                         <Image Source="{Binding Image}" Width="100" Height="100" Grid.Column="0" HorizontalAlignment="Left"/>
                         <StackPanel Grid.Column="1" Orientation="Vertical" HorizontalAlignment="Left">
                             <StackPanel Orientation="Horizontal">
-                                <Label Content="{Binding ProductType.Title}"/>
+                                <Label Content="{Binding ProductType.Title}" />
                                 <Label Content="|"/>
-                                <Label Content="{Binding Title}"/>
+                                <Label Content="{Binding Title}" FontSize="15" FontWeight="UltraBold" />
                                 <Label Content="|"/>
-                                <Label Content="{Binding Fabricator.Title}"/>
+                                <Label Content="{Binding Fabricator.Title}" />
                             </StackPanel>
 
 
                             <StackPanel Orientation="Horizontal" >
-                                <Label Content="Артикул :"/>
-                                <Label Content="{Binding Article}"/>
-                                <Label Content="Штрихкод :"/>
-                                <Label Content="{Binding Barcode}"/>
+                                <Label Content="Артикул :"  />
+                                <Label Content="{Binding Article}" />
+                                <Label Content="Штрихкод :" />
+                                <Label Content="{Binding Barcode}" />
                             </StackPanel>
                             <StackPanel Orientation="Horizontal" >
                                 <Label Content="Розн.цена :"/>

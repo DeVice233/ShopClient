@@ -40,7 +40,16 @@
                     <GridViewColumn Header="Email" DisplayMemberBinding="{Binding Email}"/>
                     <GridViewColumn Header="Телефон" DisplayMemberBinding="{Binding Client.Phone}"/>
                     <GridViewColumn Header="Адрес" DisplayMemberBinding="{Binding Client.Address}"/>
-                    <GridViewColumn Header="Кол-во заказов" DisplayMemberBinding="{Binding Client.OrdersCount}"/>
+                    <GridViewColumn DisplayMemberBinding="{Binding Client.OrdersCount}">
+                        <GridViewColumn.HeaderTemplate>
+                            <DataTemplate>
+                                <StackPanel Orientation="Horizontal">
+                                    <Label Content="Кол-во заказов"  FontSize="14" Tag="Count" MouseDown="ClickColumn"/>
+                                    <Image Source="/Images/filter.png" Width="15"/>
+                                </StackPanel>
+                            </DataTemplate>
+                        </GridViewColumn.HeaderTemplate>
+                    </GridViewColumn>
                     <GridViewColumn Header="Поставщик">
                         <GridViewColumn.CellTemplate>
                             <DataTemplate>

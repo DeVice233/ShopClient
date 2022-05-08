@@ -13,6 +13,23 @@ namespace ShopClient.ViewModels
 {
     public class PhysicalClientViewModel : BaseViewModel
     {
+        public int ToggleSort = 0;
+        internal void Sort(string p)
+        {
+            if (p == "Count")
+            {
+                var forSort = searchResult.Where(s => s.Client.OrdersCount != 0).ToList();
+                var notSort = searchResult.Where(s => s.Client.OrdersCount == 0);
+                if (ToggleSort == 0) forSort.Sort((x, y) => y.Client.OrdersCount.CompareTo(x.Client.OrdersCount));
+                else forSort.Sort((x, y) => x.Client.OrdersCount.CompareTo(y.Client.OrdersCount));
+                searchResult = forSort;
+                searchResult.AddRange(notSort);
+                UpdateList();
+            }
+            if (ToggleSort == 1) ToggleSort = 0;
+            else ToggleSort = 1;
+        }
+
         private string searchText = "";
         public string SearchText
         {

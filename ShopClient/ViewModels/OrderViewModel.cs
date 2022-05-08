@@ -210,21 +210,21 @@ namespace ShopClient.ViewModels
                 {
                     OrderInDetails orderInDetails = new OrderInDetails(SelectedOrder);
                     orderInDetails.ShowDialog();
-                    Thread.Sleep(200);
                 }
             if (SelectedOrder.ActionType.Name == "Продажа")
             {
                     OrderOutDetails orderOutDetails = new OrderOutDetails(SelectedOrder);
                     orderOutDetails.ShowDialog();
-                    Thread.Sleep(200);
                 }
                 if (SelectedOrder.ActionType.Name == "Списание")
             {
                 WriteOffDetails writeOffDetails = new WriteOffDetails(SelectedOrder);
                 writeOffDetails.ShowDialog();
-                    Thread.Sleep(200);
                 }
+                Thread.Sleep(200);
+                Update();
             });
+           
         }
 
         private void InitPagination()

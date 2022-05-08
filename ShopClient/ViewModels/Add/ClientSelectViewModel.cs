@@ -106,7 +106,8 @@ namespace ShopClient.ViewModels.Add
                 {
                     if (SelectedClientView == null)
                     {
-                        MessageBox.Show("Клиент не выбран", "Ошибка", MessageBoxButton.YesNo, MessageBoxImage.Error);
+                        MessageBox.Show("Клиент не выбран", "Ошибка",MessageBoxButton.OK, MessageBoxImage.Error);
+                        return;
                     }
                     try
                     {

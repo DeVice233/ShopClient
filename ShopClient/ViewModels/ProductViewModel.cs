@@ -203,6 +203,11 @@ namespace ShopClient.ViewModels
             
             AddProduct = new CustomCommand(() =>
             {
+                if (Fabricators.Count == 0 || Units.Count == 0 || ProductTypes.Count == 0)
+                {
+                    MessageBox.Show("Необходимо иметь в БД хотя бы одну запись о производителе, ед. измерения и типе товара", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
+                    return;
+                }
                 AddProduct addProduct = new AddProduct();
                 addProduct.ShowDialog();
                 Thread.Sleep(200);

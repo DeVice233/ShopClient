@@ -4,11 +4,15 @@
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
       xmlns:local="clr-namespace:ShopClient.Views"
+      xmlns:helper="clr-namespace:ShopClient.Helper"
       mc:Ignorable="d" 
       d:DesignHeight="450" d:DesignWidth="800" Background="white"
       Title="OrderView">
-
+        <Page.Resources>
+            <helper:ClientNameConverter x:Shared="false" x:Key="clientNameConverter"/>
+        </Page.Resources>
     <Grid>
+       
         <Grid.RowDefinitions>
             <RowDefinition Height="60"/>
             <RowDefinition />
@@ -31,7 +35,7 @@
             </StackPanel>
         </Grid>
 
-        <ListView Grid.Row="1" ItemsSource="{Binding Orders}" FontSize="16" SelectedItem="{Binding SelectedOrder}">
+        <ListView Grid.Row="1" ItemsSource="{Binding Orders}" FontSize="16" SelectedItem="{Binding SelectedOrder}" Name="ListView1">
             <ListView.View>
                 <GridView>
                     <GridViewColumn Header="№" DisplayMemberBinding="{Binding Id}"/>
@@ -46,7 +50,13 @@
                         </GridViewColumn.HeaderTemplate>
                     </GridViewColumn>
                     <GridViewColumn Header="Тип операции" DisplayMemberBinding="{Binding ActionType.Name}"/>
-                    <GridViewColumn Header="Клиент" DisplayMemberBinding="{Binding Client.Phone}"/>
+                    <GridViewColumn Header="Телефон клиента" DisplayMemberBinding="{Binding Client.Phone}">
+                        <!--<GridViewColumn.CellTemplate>
+                            <DataTemplate>
+                                <TextBlock Text="{Binding Path=Client.Phone, Converter={StaticResource clientNameConverter}}"/>
+                            </DataTemplate>
+                        </GridViewColumn.CellTemplate>-->
+                    </GridViewColumn>
                 </GridView>
             </ListView.View>
             <ListView.ContextMenu>
