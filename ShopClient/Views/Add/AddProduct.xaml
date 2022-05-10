@@ -45,7 +45,7 @@
                                     <StackPanel Orientation="Vertical">
                                         <TextBox Text="{Binding Article}" Style="{StaticResource PropertyTextBox}" Width="150"/>
                                         <TextBox Text="{Binding Barcode}" Style="{StaticResource PropertyTextBox}" />
-                                        <Image  x:Name="img" Width="150" Height="70"/>
+                                        <Image  x:Name="img" Width="150" Height="70" />
                                         <TextBox Text="{Binding Title}" Style="{StaticResource PropertyTextBox}"   />
                                         <TextBox Text="{Binding MinCount}" Style="{StaticResource PropertyTextBox}"   />
                                         <TextBox Text="{Binding WholesalePrice}" Style="{StaticResource PropertyTextBox}" IsEnabled="True"/>

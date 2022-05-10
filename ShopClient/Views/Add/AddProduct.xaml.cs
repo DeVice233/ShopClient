@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
@@ -31,6 +32,7 @@ namespace ShopClient.Views.Add
         }
         public AddProduct(ProductApi  product)
         {
+         
             InitializeComponent();
             DataContext = new AddProductViewModel(product);
             GenerateBarcode(product.Barcode.ToString(), product.Article.ToString());
@@ -52,16 +54,38 @@ namespace ShopClient.Views.Add
                     File.Delete(Environment.CurrentDirectory + $"/{member}_Barcode.png");
             }
             bg.GenerateImage().Save(member + "_Barcode.png");
+            Thread.Sleep(50);
             img.Source = GetImageFromPath(Environment.CurrentDirectory  + $"/{member}_Barcode.png");
+            
         }
-        private BitmapImage GetImageFromPath(string url)
+
+        
+       
+        //private void Update(string member)
+        //{
+        //    var bi = GetImageFromPath(Environment.CurrentDirectory + $"/{member}_Barcode.png");
+        //    using (var fs = new FileStream(Environment.CurrentDirectory + $"/{member}_Barcode.png", FileMode.Open, FileAccess.Read))
+        //     {
+        //        bi.BeginInit();
+        //        bi.CacheOption = BitmapCacheOption.OnLoad;
+        //        bi.StreamSource = fs;
+        //        bi.EndInit();
+        //    }
+        //}
+
+private BitmapImage GetImageFromPath(string url)
         {
             BitmapImage img = new BitmapImage();
-            img.BeginInit();
-            img.CacheOption = BitmapCacheOption.OnLoad;
-            img.UriSource = new Uri(url, UriKind.Absolute);
-            img.EndInit();
-            return img;
+            using (var fs = new FileStream(url, FileMode.Open, FileAccess.Read))
+            {
+                img.BeginInit();
+                img.CacheOption = BitmapCacheOption.OnLoad;
+                img.CreateOptions = BitmapCreateOptions.IgnoreImageCache;
+                img.UriSource = new Uri(url, UriKind.Absolute);
+                img.StreamSource = fs;
+                img.EndInit();
+                return img;
+            }
         }
     }
 }
