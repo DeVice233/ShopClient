@@ -38,6 +38,11 @@ namespace ShopClient.ViewModels.Add
                 {
                     try
                     {
+                        if (AddFabricator.Title == null)
+                        {
+                            MessageBox.Show("Заполнены не все поля!", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
+                            return;
+                        }
                         if (AddFabricator.Id == 0)
                             Add(AddFabricator);
                         else

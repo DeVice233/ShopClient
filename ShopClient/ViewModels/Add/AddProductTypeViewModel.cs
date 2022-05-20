@@ -39,6 +39,11 @@ namespace ShopClient.ViewModels.Add
                 {
                     try
                     {
+                        if (AddProductType.Title == null)
+                        {
+                            MessageBox.Show("Заполнены не все поля!", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
+                            return;
+                        }
                         if (AddProductType.Id == 0)
                             Add(AddProductType);
                         else

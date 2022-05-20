@@ -43,6 +43,11 @@ namespace ShopClient.ViewModels.Add
                 {
                     try
                     {
+                        if (AddPhysicalClient.FirstName == null || AddPhysicalClient.LastName == null || AddPhysicalClient.Patronymic == null || AddPhysicalClient.Client.Phone == null || AddPhysicalClient.Client.Address == null)
+                        {
+                            MessageBox.Show("Заполнены не все поля!", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
+                            return;
+                        }
                         if (AddPhysicalClient.Id == 0)
                         {
                             Add(AddPhysicalClient);

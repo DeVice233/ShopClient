@@ -101,7 +101,8 @@ namespace ShopClient.ViewModels.Add
                             return;
                         }
                         product.RetailPrice = RetailTotal;
-                        product.WholesalePrice = WholesaleTotal; 
+                        product.WholesalePrice = WholesaleTotal;
+                        
                         productCostHistories.OrderBy(x => x.ChangeDate).ToList();
                         if (productCostHistories.Last().ChangeDate < ChangeDate)
                         {

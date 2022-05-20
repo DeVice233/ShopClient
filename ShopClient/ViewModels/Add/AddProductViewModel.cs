@@ -174,7 +174,7 @@ namespace ShopClient.ViewModels.Add
 
             if (product == null)
             {
-                AddProduct = new ProductApi { Image="picture.JPG", Barcode = 0 };
+                AddProduct = new ProductApi { Image="picture.JPG", Barcode = 0, Article = 0, RetailPrice = 0, WholesalePrice = 0};
                 GetList(product);
             }
             else
@@ -221,6 +221,11 @@ namespace ShopClient.ViewModels.Add
                         if (AddProduct.Barcode.ToString().Length != 8 )
                         {
                             MessageBox.Show("Длина штрихкода - 8 символов", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
+                            return;
+                        }
+                        else if (AddProduct.Article == null || AddProduct.MinCount == null || AddProduct.Title == null )
+                        {
+                            MessageBox.Show("Заполнены не все поля!", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
                             return;
                         }
                         foreach (var product in Products)

@@ -57,6 +57,11 @@ namespace ShopClient.ViewModels.Add
                 {
                     try
                     {
+                        if(AddLegalClient.Inn == null || AddLegalClient.Title == null || AddLegalClient.Email == null || AddLegalClient.Client.Address == null || AddLegalClient.Client.Phone == null)
+                        {
+                            MessageBox.Show("Заполнены не все поля!", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
+                            return;
+                        }
                         if (IsSupplier == false) AddLegalClient.IsSupplier = 0;
                         else AddLegalClient.IsSupplier = 1;
 

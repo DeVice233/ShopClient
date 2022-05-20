@@ -39,6 +39,11 @@ namespace ShopClient.ViewModels.Add
                 {
                     try
                     {
+                        if (AddUnit.Title == null)
+                        {
+                            MessageBox.Show("Заполнены не все поля!", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
+                            return;
+                        }
                         if (AddUnit.Id == 0)
                             Add(AddUnit);
                         else

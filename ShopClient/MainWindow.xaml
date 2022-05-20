@@ -6,7 +6,7 @@
         xmlns:behaviors="http://schemas.microsoft.com/xaml/behaviors"
         xmlns:local="clr-namespace:ShopClient"
         mc:Ignorable="d"
-        Title="Shop" MinHeight="720" MinWidth="1280"  WindowState="Normal" WindowStartupLocation="CenterScreen" WindowStyle="ThreeDBorderWindow" ResizeMode="CanResize">
+        Title="ShopMaster" MinHeight="720" MinWidth="1280"  WindowState="Normal" WindowStartupLocation="CenterScreen" WindowStyle="ThreeDBorderWindow" ResizeMode="CanResize">
     <Grid>
         <TabControl >
             <TabItem >
