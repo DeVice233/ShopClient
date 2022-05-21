@@ -11,27 +11,27 @@
                 Panel.ZIndex="2">
             <Grid Background="WhiteSmoke">
                 <Grid.RowDefinitions>
-                    <RowDefinition Height="60"/>
-                    <RowDefinition/>
+                    <RowDefinition Height="auto"/>
+                    <RowDefinition Height="*"/>
                     <RowDefinition Height="auto"/>
                 </Grid.RowDefinitions>
-                <Grid Grid.Row="0" Background="WhiteSmoke">
-                    <StackPanel  HorizontalAlignment="Left" Margin="5" Orientation="Horizontal" >
+                <Grid Grid.Row="0" Background="WhiteSmoke" >
+                    <StackPanel  HorizontalAlignment="Left" Margin="5" Orientation="Horizontal">
                         <StackPanel Margin=" 0 0 5 0">
-                            <Label Content="Тип клиента:"  FontFamily="Century Gothic"/>
-                            <ComboBox Width="140" ItemsSource="{Binding ClientTypes}" SelectedItem="{Binding SelectedClientType}"/>
+                            <Label Content="Тип клиента:" FontSize="15" FontFamily="Century Gothic"/>
+                            <ComboBox Width="140" FontSize="15" ItemsSource="{Binding ClientTypes}" SelectedItem="{Binding SelectedClientType}"/>
                         </StackPanel>
                         <StackPanel Margin="0 0 10 0">
-                            <Label Content="Поиск:"  FontFamily="Century Gothic"/>
-                            <TextBox Width="160" Height="22" Text="{Binding SearchText, UpdateSourceTrigger=PropertyChanged}"  FontFamily="Century Gothic"/>
+                            <Label Content="Поиск:" FontSize="15" FontFamily="Century Gothic"/>
+                            <TextBox Width="160" FontSize="15" Height="22" Text="{Binding SearchText, UpdateSourceTrigger=PropertyChanged}"  FontFamily="Century Gothic"/>
                         </StackPanel>
                         <StackPanel>
-                            <Label  Content="Критерий поиска:"  FontFamily="Century Gothic"/>
-                            <ComboBox Width="160"  ItemsSource="{Binding SearchType}" SelectedItem="{Binding SelectedSearchType}"/>
+                            <Label  Content="Критерий поиска:" FontSize="15" FontFamily="Century Gothic"/>
+                            <ComboBox Width="160" FontSize="15" ItemsSource="{Binding SearchType}" SelectedItem="{Binding SelectedSearchType}"/>
                         </StackPanel>
                     </StackPanel>
                 </Grid>
-                <ListView ItemsSource="{Binding ClientViews}" SelectedItem="{Binding SelectedClientView}" Grid.Row="1" Margin="5" >
+                <ListView ItemsSource="{Binding ClientViews}" SelectedItem="{Binding SelectedClientView}" FontSize="15" Grid.Row="1" Margin="5" >
                     <ListView.View>
                         <GridView>
                             <GridViewColumn Header="Наименование" DisplayMemberBinding="{Binding Title}"/>

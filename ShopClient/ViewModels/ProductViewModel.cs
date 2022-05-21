@@ -146,10 +146,11 @@ namespace ShopClient.ViewModels
         public CustomCommand AddProduct{ get; set; }
         public CustomCommand EditProduct { get; set; }
         public CustomCommand DeleteProduct { get; set; }
+        public CustomCommand ShowOrderIns { get; set; }
         public CustomCommand BackPage { get; set; }
         public CustomCommand ForwardPage { get; set; }
         public CustomCommand ProductPriceChange { get; set; }
-
+        
         private List<ProductApi> FullProducts = new List<ProductApi>();
         private List<ProductOrderInApi> ProductOrderIns = new List<ProductOrderInApi>();
         public int rows = 0;
@@ -210,6 +211,16 @@ namespace ShopClient.ViewModels
                 }
                 AddProduct addProduct = new AddProduct();
                 addProduct.ShowDialog();
+                Thread.Sleep(200);
+                Update();
+                InitPagination();
+                Pagination();
+            });
+            ShowOrderIns = new CustomCommand(() =>
+            {
+                if (SelectedProduct == null) return;
+                OrderInsByProduct orderIns = new OrderInsByProduct(SelectedProduct);
+                orderIns.ShowDialog();
                 Thread.Sleep(200);
                 Update();
                 InitPagination();

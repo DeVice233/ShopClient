@@ -28,22 +28,22 @@
                 <ColumnDefinition Width="*"  />
             </Grid.ColumnDefinitions>
             <StackPanel Grid.Column="1" Margin="10 0 10 0">
-                <Label Content="Фильтрация по типу:"  FontFamily="Century Gothic"/>
-                <ComboBox Width="140" DisplayMemberPath="Title" ItemsSource="{Binding ProductTypeFilter}" SelectedItem="{Binding SelectedProductTypeFilter}"/>
+                <Label Content="Фильтрация по типу:" FontSize="16" FontFamily="Century Gothic"/>
+                <ComboBox Width="180" DisplayMemberPath="Title" FontSize="15" ItemsSource="{Binding ProductTypeFilter}" SelectedItem="{Binding SelectedProductTypeFilter}"/>
             </StackPanel>
             <StackPanel Margin="10 0 10 0" Grid.Column="2">
-                <Label Content="Поиск:"  FontFamily="Century Gothic"/>
-                <TextBox Width="160" Height="22" Text="{Binding SearchText, UpdateSourceTrigger=PropertyChanged}"  FontFamily="Century Gothic"/>
+                <Label Content="Поиск:" FontSize="16" FontFamily="Century Gothic"/>
+                <TextBox Width="160" Height="25" FontSize="16" Text="{Binding SearchText, UpdateSourceTrigger=PropertyChanged}"  FontFamily="Century Gothic"/>
             </StackPanel>
             <StackPanel Grid.Column="3">
-                <Label  Content="Критерий поиска:"  FontFamily="Century Gothic"/>
-                <ComboBox Width="160"  ItemsSource="{Binding SearchType}" SelectedItem="{Binding SelectedSearchType}"/>
+                <Label  Content="Критерий поиска:" FontSize="16" FontFamily="Century Gothic"/>
+                <ComboBox Width="180" FontSize="16" ItemsSource="{Binding SearchType}" SelectedItem="{Binding SelectedSearchType}"/>
             </StackPanel>
             <StackPanel Grid.Column="4" VerticalAlignment="Center" HorizontalAlignment="Right">
                 <Label  Content="СПИСАНИЕ"  FontFamily="Century Gothic" FontSize="20" FontWeight="ExtraBold" />
             </StackPanel>
         </Grid>
-        <TreeView FontSize="16" Grid.Row="0" Grid.Column="0" Grid.RowSpan="3"  Margin="0 5 5 0" Background="Beige" BorderThickness="1" TreeViewItem.Selected="TreeViewItem_OnItemSelected" x:Name="trvName" Tag="{Binding ClickedTreeElement, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
+        <TreeView FontSize="17" Grid.Row="0" Grid.Column="0" Grid.RowSpan="3"  Margin="0 5 5 0" Background="Beige" BorderThickness="1" TreeViewItem.Selected="TreeViewItem_OnItemSelected" x:Name="trvName" Tag="{Binding ClickedTreeElement, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
             <TreeViewItem Header="Все" ItemsSource="{Binding ProductTypeTreeViews}">
                 <TreeViewItem.ItemTemplate>
                     <HierarchicalDataTemplate ItemsSource="{Binding Path=Fabricators}">
@@ -103,9 +103,9 @@
         </ListView>
         <StackPanel Grid.Row="3" Grid.Column="1" Orientation="Vertical" HorizontalAlignment="Left" Width="320">
             <StackPanel Grid.Row="3" Grid.Column="1" Orientation="Vertical" HorizontalAlignment="Left" Width="180" Margin="0 0 0 0">
-                <Label Content="Дата:"/>
+                <Label Content="Дата:" FontSize="15"/>
                 <DatePicker  Width="180" 
-                         SelectedDate="{Binding SelectedDate, StringFormat='{}{0:dd.MM.yyyy}'}" FontSize="13"/>
+                         SelectedDate="{Binding SelectedDate, StringFormat='{}{0:dd.MM.yyyy}'}" FontSize="15"/>
             </StackPanel>
         </StackPanel>
         <StackPanel Grid.Row="3" Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Right">

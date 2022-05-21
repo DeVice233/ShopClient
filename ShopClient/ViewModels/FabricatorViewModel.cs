@@ -48,14 +48,14 @@ namespace ShopClient.ViewModels
         public FabricatorViewModel()
         {
             Fabricators = new List<FabricatorApi>();
-            GetList();
+            Task.Run(GetList);
 
             AddFabricator = new CustomCommand(() =>
             {
                 AddFabricator addFabricator = new AddFabricator();
                 addFabricator.ShowDialog();
                 Thread.Sleep(200);
-                GetList();
+                Task.Run(GetList);
             });
             EditFabricator = new CustomCommand(() =>
             {
@@ -63,7 +63,7 @@ namespace ShopClient.ViewModels
                 AddFabricator addunit = new AddFabricator(SelectedFabricator);
                 addunit.ShowDialog();
                 Thread.Sleep(200);
-                GetList();
+                Task.Run(GetList);
             });
             DeleteFabricator = new CustomCommand(() =>
             {
@@ -82,7 +82,7 @@ namespace ShopClient.ViewModels
                     try
                     {
                         Delete(SelectedFabricator);
-                        GetList();
+                        Task.Run(GetList);
                     }
                     catch (Exception e)
                     {

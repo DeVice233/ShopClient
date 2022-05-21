@@ -35,7 +35,16 @@ namespace ShopClient.ViewModels
                 SignalChanged();
             }
         }
-
+        private string total;
+        public string Total
+        {
+            get => total;
+            set
+            {
+                total = value;
+                SignalChanged();
+            }
+        }
         private string supplier;
         public string Supplier 
         { 
@@ -121,6 +130,14 @@ namespace ShopClient.ViewModels
             {
                 ProductOrderIns.Add(item);
             }
+
+            decimal total = 0;
+            foreach (ProductOrderInApi productOrderInApi in ProductOrderIns)
+            {
+                total += (decimal)(productOrderInApi.Count * productOrderInApi.Price);
+            }
+            Total = total.ToString();
+            SignalChanged("Total");
             //ProductOrderIns.AddRange(FullProductOrderIns.Where(s=>s.IdOrder == order.Id).ToList());
             //foreach (var item in ProductOrderIns)
             //{

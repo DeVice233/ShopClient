@@ -12,14 +12,14 @@ namespace ShopClient.ViewModels
 {
     public class OrderOutDetailsViewModels : BaseViewModel
     {
-        private List<ProductOrderOutApi> productOrderOuts;
+        private List<ProductOrderOutApi> productOrderOuts = new List<ProductOrderOutApi>();
         public List<ProductOrderOutApi> ProductOrderOuts
         {
             get => productOrderOuts;
             set
             {
-                SignalChanged();
                 Set(ref productOrderOuts, value);
+                SignalChanged();
             }
         }
 
@@ -108,6 +108,16 @@ namespace ShopClient.ViewModels
 
             }
         }
+        private string total;
+        public string Total
+        {
+            get => total;
+            set
+            {
+                total = value;
+                SignalChanged();
+            }
+        }
 
         public List<OrderOutApi> FullOrderOuts = new List<OrderOutApi>();
         public List<ProductOrderInApi> FullProductOrderIns = new List<ProductOrderInApi>();
@@ -118,7 +128,7 @@ namespace ShopClient.ViewModels
         public List<SaleTypeApi> SaleTypes = new List<SaleTypeApi>();
         private string oldStatus;
         public OrderOutApi orderOutApi = new OrderOutApi();
-
+       
 
         public CustomCommand Cancel { get; set; }
         public CustomCommand Save { get; set; }
@@ -206,6 +216,21 @@ namespace ShopClient.ViewModels
         public void GenerateProductOrderIns(OrderApi order)
         {
             var orderOut = FullOrderOuts.First(s => s.IdOrder == order.Id);
+            List<ProductOrderOutApi> list = new List<ProductOrderOutApi>();
+            ProductOrderOuts = new List<ProductOrderOutApi>();
+            foreach (var item in orderOut.ProductOrderOuts)
+            {
+                list.Add(item);
+            }
+            //ProductOrderOuts.AddRange(orderOut.ProductOrderOuts);
+            foreach (var item in list)
+            {
+                item.Product = FullProductOrderIns.First(s => s.Id == item.IdProductOrderIn).Product;
+                //item.Product = Products.First(s => s.Id == productOrderIn.Id);
+            }
+            ProductOrderOuts = list;
+            SignalChanged("ProductOrderOuts");
+
             OrderStatus = orderOut.Status;
             var saleType = SaleTypes.First(s => s.Id == orderOut.IdSaleType);
             SaleTypeName = saleType.Title;
@@ -215,13 +240,6 @@ namespace ShopClient.ViewModels
             if (SelectedOrderStatus == "Отменен")
             {
                 StatusEnable = false;
-            }
-            ProductOrderOuts = new List<ProductOrderOutApi>();
-            ProductOrderOuts.AddRange(orderOut.ProductOrderOuts);
-            foreach (var item in ProductOrderOuts)
-            {
-                item.Product = FullProductOrderIns.First(s => s.Id == item.IdProductOrderIn).Product;
-                //item.Product = Products.First(s => s.Id == productOrderIn.Id);
             }
             var legalcli = LegalClients.Find(s => s.IdClient == order.IdClient);
             if (legalcli != null)
@@ -234,6 +252,15 @@ namespace ShopClient.ViewModels
                 if (phyClient != null)
                     Client = $"{phyClient.LastName} " + $"{phyClient.FirstName} " + $"{phyClient.Patronymic}";
             }
+
+            decimal total = 0;
+            foreach (ProductOrderOutApi productOrderOut in ProductOrderOuts)
+            {
+                total += (decimal)(productOrderOut.Count * (productOrderOut.Price - productOrderOut.Discount));
+            }
+            Total = total.ToString();
+            SignalChanged("Total");
+
             SignalChanged("SelectedOrderStatus");
             SignalChanged("SaleTypeName");
             SignalChanged("OrderStatus");

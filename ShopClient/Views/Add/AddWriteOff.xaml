@@ -21,7 +21,7 @@
                         <Label Content="{Binding ProductTitle}" Height="35" FontFamily="Century Gothic" FontWeight="Bold" FontSize="16"/>
                     </StackPanel>
                     <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="5">
-                        <GroupBox Header="Кол-во" Width="Auto"  FontFamily="Century Gothic">
+                        <GroupBox Header="Кол-во" Width="Auto" FontSize="14" FontFamily="Century Gothic">
                             <StackPanel Orientation="Horizontal">
                                 <TextBox Text="{Binding Count, UpdateSourceTrigger=PropertyChanged}" Height="30" Width="80" FontSize="15" FontFamily="Century Gothic"/>
                                 <Button Content="+" Command="{Binding AddOne}" Margin="5 0 0 0" Width="20"/>

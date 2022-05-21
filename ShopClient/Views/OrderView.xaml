@@ -14,23 +14,23 @@
     <Grid>
        
         <Grid.RowDefinitions>
-            <RowDefinition Height="60"/>
+            <RowDefinition Height="auto"/>
             <RowDefinition />
             <RowDefinition Height="40"/>
         </Grid.RowDefinitions>
         <Grid Grid.Row="0" Background="WhiteSmoke">
             <StackPanel Grid.Row="0" HorizontalAlignment="Left" Margin="5" Orientation="Horizontal" >
                 <StackPanel>
-                    <Label Content="Фильтрация по типу:"  FontFamily="Century Gothic"/>
-                    <ComboBox Width="140" DisplayMemberPath="Name" ItemsSource="{Binding ActionTypeFilter}" SelectedItem="{Binding SelectedActionTypeFilter}"/>
+                    <Label Content="Фильтрация по типу:" FontSize="16" FontFamily="Century Gothic"/>
+                    <ComboBox Width="180" DisplayMemberPath="Name" FontSize="16" ItemsSource="{Binding ActionTypeFilter}" SelectedItem="{Binding SelectedActionTypeFilter}"/>
                 </StackPanel>
                 <StackPanel Margin="10 0 10 0">
-                    <Label Content="Поиск:"  FontFamily="Century Gothic"/>
-                    <TextBox Width="160" Height="22" Text="{Binding SearchText, UpdateSourceTrigger=PropertyChanged}"  FontFamily="Century Gothic"/>
+                    <Label Content="Поиск:" FontSize="16" FontFamily="Century Gothic"/>
+                    <TextBox Width="160" Height="25" FontSize="16" Text="{Binding SearchText, UpdateSourceTrigger=PropertyChanged}"  FontFamily="Century Gothic"/>
                 </StackPanel>
                 <StackPanel>
-                    <Label Grid.Column="1" Content="Критерий поиска:"  FontFamily="Century Gothic"/>
-                    <ComboBox Width="160"  ItemsSource="{Binding SearchType}" SelectedItem="{Binding SelectedSearchType}"/>
+                    <Label Grid.Column="1" FontSize="16" Content="Критерий поиска:"  FontFamily="Century Gothic"/>
+                    <ComboBox Width="180" FontSize="16" ItemsSource="{Binding SearchType}" SelectedItem="{Binding SelectedSearchType}"/>
                 </StackPanel>
             </StackPanel>
         </Grid>
@@ -67,15 +67,15 @@
         </ListView>
         <Grid Background="#FF1A315B" Grid.Row="2">
             <StackPanel Orientation="Horizontal">
-              
 
-                <Label Content="{Binding SearchCountRows}" VerticalAlignment="Center" Foreground="White"  FontFamily="Century Gothic" />
+
+                <Label Content="{Binding SearchCountRows}" VerticalAlignment="Center" Foreground="White" FontSize="15" FontFamily="Century Gothic" />
                 <Button Content="&lt;" Width="20" Command="{Binding BackPage}" Height="30"/>
-                <Label Content="{Binding Pages}" VerticalAlignment="Center" Foreground="White"  FontFamily="Century Gothic" />
-                <Button Content=">" Width="20" Command="{Binding ForwardPage}" Height="30" />
+                <Label Content="{Binding Pages}" VerticalAlignment="Center" Foreground="White" FontSize="15" FontFamily="Century Gothic" />
+                <Button Content=">" Width="20" Command="{Binding ForwardPage}" Height="30"  />
 
-                <Label Content="Кол-во записей на странице:" Foreground="White" VerticalAlignment="Center" FontFamily="Century Gothic" />
-                <ComboBox Width="140" ItemsSource="{Binding ViewCountRows}" SelectedItem="{Binding SelectedViewCountRows}" Height="25" />
+                <Label Content="Кол-во записей на странице:" FontSize="15" Foreground="White" VerticalAlignment="Center" FontFamily="Century Gothic" />
+                <ComboBox Width="150" FontSize="15" ItemsSource="{Binding ViewCountRows}" SelectedItem="{Binding SelectedViewCountRows}" Height="25" />
 
             </StackPanel>
 

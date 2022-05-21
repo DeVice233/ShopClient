@@ -208,6 +208,14 @@ namespace ShopClient.ViewModels
             AddProduct = new CustomCommand(() =>
             {
                 if (SelectedProduct == null) return;
+                foreach (var item in ProductOrderIns)
+                {
+                    if (SelectedProduct.Id == item.IdProduct)
+                    {
+                        MessageBox.Show("Такой продукт уже есть в заказе!", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
+                        return;
+                    }
+                }
                 ProductOrderInApi productOrderIn = new ProductOrderInApi{ IdProduct = SelectedProduct.Id};
                 AddProductOrderIn addProductOrderIn = new AddProductOrderIn(productOrderIn);
                 addProductOrderIn.ShowDialog();
@@ -335,7 +343,6 @@ namespace ShopClient.ViewModels
             ProductTypeFilter.Add(new ProductTypeApi { Title = "Все типы" });
             SelectedProductTypeFilter = ProductTypeFilter.Last();
       
-            TotalCalculate();
             PrepareTreeView();
         }
         private void PrepareTreeView()
@@ -420,7 +427,7 @@ namespace ShopClient.ViewModels
             {
                 total += (decimal)(productOrderInApi.Count * productOrderInApi.Price);
             }
-            Total = total.ToString();
+            Total = total.ToString()+",0000";
             SignalChanged("Total");
         }
     }

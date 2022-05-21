@@ -90,7 +90,7 @@ namespace ShopClient.ViewModels.Add
 
         public ClientSelectViewModel(OrderOutViewModel orderOutViewModel)
         {
-            GetList();
+            Task.Run(GetList); 
             SearchType = new List<string>();
             SearchType.AddRange(new string[] { "Наименование", "Телефон", "Адрес" });
             selectedSearchType = SearchType.First();

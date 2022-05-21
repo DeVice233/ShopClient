@@ -16,11 +16,11 @@
                 </Grid.RowDefinitions>
                 <StackPanel Orientation="Vertical">
                      <StackPanel>
-                      <Label Content="Наименование:" FontFamily="Century Gothic"/>
+                        <Label Content="Наименование:" FontFamily="Century Gothic" FontSize="15"/>
                 <Label Content="{Binding ProductTitle}" Height="35" FontFamily="Century Gothic" FontWeight="Bold" FontSize="16"/>
                 </StackPanel>
                 <StackPanel Orientation="Horizontal">
-                        <GroupBox Header="Розничная цена:" Width="540"  FontFamily="Century Gothic">
+                        <GroupBox Header="Розничная цена:" Width="540" FontSize="14" FontFamily="Century Gothic">
                             <StackPanel Orientation="Horizontal">
                                 <Label Content="Старая цена:"  FontFamily="Century Gothic" FontSize="15"/>
                                 <Label Content="{Binding OldRetailPrice}" Height="30" Width="80" FontSize="15" FontFamily="Century Gothic"/>
@@ -32,7 +32,7 @@
                         </GroupBox>
                 </StackPanel>
                     <StackPanel Orientation="Horizontal">
-                        <GroupBox Header="Оптовая цена:" Width="540"  FontFamily="Century Gothic">
+                        <GroupBox Header="Оптовая цена:" Width="540" FontSize="14" FontFamily="Century Gothic">
                             <StackPanel Orientation="Horizontal">
                                 <Label Content="Старая цена:" FontSize="15" FontFamily="Century Gothic"/>
                                 <Label Content="{Binding OldWholesalePrice}" FontSize="15" Height="30" Width="80" FontFamily="Century Gothic"/>
@@ -43,7 +43,7 @@
                             </StackPanel>
                         </GroupBox>
                     </StackPanel>
-                    <DatePicker  Width="150"  Grid.Column="1" Grid.Row="3" 
+                    <DatePicker  Width="180"  Grid.Column="1" Grid.Row="3" FontSize="15"
                          SelectedDate="{Binding ChangeDate, StringFormat='{}{0:dd.MM.yyyy}'}" 
                          Margin="0 20 0 0"/>
                 </StackPanel>

@@ -10,19 +10,19 @@
 
     <Grid>
         <Grid.RowDefinitions>
-            <RowDefinition Height="60"/>
+            <RowDefinition Height="auto"/>
             <RowDefinition />
             <RowDefinition Height="40"/>
         </Grid.RowDefinitions>
         <Grid Grid.Row="0" Background="WhiteSmoke">
             <StackPanel Grid.Row="0" HorizontalAlignment="Left" Margin="5" Orientation="Horizontal" >
                 <StackPanel Margin="0 0 10 0">
-                    <Label Content="Поиск:"  FontFamily="Century Gothic"/>
-                    <TextBox Width="160" Height="22" Text="{Binding SearchText, UpdateSourceTrigger=PropertyChanged}"  FontFamily="Century Gothic"/>
+                    <Label Content="Поиск:" FontSize="16" FontFamily="Century Gothic"/>
+                    <TextBox Width="160" Height="25" FontSize="16" Text="{Binding SearchText, UpdateSourceTrigger=PropertyChanged}"  FontFamily="Century Gothic"/>
                 </StackPanel>
                 <StackPanel>
-                    <Label Grid.Column="1" Content="Критерий поиска:"  FontFamily="Century Gothic"/>
-                    <ComboBox Width="160"  ItemsSource="{Binding SearchType}" SelectedItem="{Binding SelectedSearchType}"/>
+                    <Label Grid.Column="1" FontSize="16" Content="Критерий поиска:"  FontFamily="Century Gothic"/>
+                    <ComboBox Width="180" FontSize="16" ItemsSource="{Binding SearchType}" SelectedItem="{Binding SelectedSearchType}"/>
                 </StackPanel>
             </StackPanel>
         </Grid>
