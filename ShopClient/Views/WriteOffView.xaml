@@ -63,7 +63,7 @@
                 </TreeViewItem.ItemTemplate>
             </TreeViewItem>
         </TreeView>
-        <ListView Grid.Row="1" Grid.Column="1" FontSize="15" ItemsSource="{Binding ProductOrderIns}"  SelectedItem="{Binding SelectedProductOrderIn}" Background="AliceBlue">
+        <ListView Grid.Row="1" Grid.Column="1" FontSize="15" ItemsSource="{Binding ProductOrderIns}"  SelectedItem="{Binding SelectedProductOrderIn}" Background="AliceBlue" >
             <ListView.View>
                 <GridView>
                     <GridViewColumn Header="№ партии" DisplayMemberBinding="{Binding Id}"/>

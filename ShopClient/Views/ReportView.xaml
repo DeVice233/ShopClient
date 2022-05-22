@@ -8,9 +8,9 @@
       mc:Ignorable="d" 
       d:DesignHeight="450" d:DesignWidth="800"
       Title="ReportView">
-    <Grid Background="#FFBBBBBB">
-        <TabControl>
-            <TabItem Header="Отчет по продажам" >
+    <Grid >
+        <TabControl Background="#FFBBBBBB">
+            <TabItem Header="Отчет по продажам" FontSize="14">
                 <TabItem.Content>
                     <Grid Background="#FFBBBBBB">
                         <Grid HorizontalAlignment="Center" VerticalAlignment="Center" Background="White" Width="380" Height="400" >
@@ -63,7 +63,7 @@
                     </Grid>
                 </TabItem.Content>
             </TabItem>
-            <TabItem Header="Отчет по поставкам">
+            <TabItem Header="Отчет по поставкам" FontSize="14">
                 <TabItem.Content>
                     <controls:OrderInReport/>
                 </TabItem.Content>

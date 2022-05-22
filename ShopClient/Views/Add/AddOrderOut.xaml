@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:ShopClient.Views.Add"
         mc:Ignorable="d"
-        Title="AddOrderOut"  Height="280" Width="500" WindowStartupLocation="CenterScreen" ResizeMode="NoResize" WindowStyle="None">
+        Title="AddOrderOut"  Height="300" Width="540" WindowStartupLocation="CenterScreen" ResizeMode="NoResize" WindowStyle="None">
     <Grid>
         <Border BorderThickness="5" BorderBrush="#FF1A315B" 
                 Panel.ZIndex="2">
@@ -17,29 +17,30 @@
                 <StackPanel Orientation="Vertical">
                     <StackPanel>
                         <Label Content="Внести в документ:" FontFamily="Century Gothic" FontSize="16" />
-                        <Label Content="Наименование:" FontFamily="Century Gothic" FontSize="14"/>
+                        <Rectangle HorizontalAlignment="Stretch" Fill="Gray" Height="0.5" Width="480"/>
+                        <Label Content="Наименование:" FontFamily="Century Gothic" FontSize="15"/>
                         <Label Content="{Binding ProductTitle}" Height="35" FontFamily="Century Gothic" FontWeight="Bold" FontSize="16"/>
                     </StackPanel>
-                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="10">
-                        <GroupBox Header="Кол-во" Width="Auto"  FontFamily="Century Gothic">
+                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="10 30 10 10">
+                        <GroupBox Header="Кол-во" Width="Auto"  FontFamily="Century Gothic" FontSize="15">
                             <StackPanel Orientation="Horizontal">
                                 <TextBox Text="{Binding Count, UpdateSourceTrigger=PropertyChanged}" Height="30" Width="80" FontSize="16" FontFamily="Century Gothic"/>
                                 <Button Content="+" Command="{Binding AddOne}" Margin="5 0 0 0" Width="20"/>
                             </StackPanel>
                         </GroupBox>
-                        <GroupBox Header="{Binding PickedSaleType}" Width="Auto"  FontFamily="Century Gothic">
+                        <GroupBox Header="{Binding PickedSaleType}" Width="Auto"  FontFamily="Century Gothic" FontSize="15" >
                             <StackPanel Orientation="Horizontal">
                                 <TextBox Text="{Binding Price, UpdateSourceTrigger=PropertyChanged}" Height="30" Width="120" FontSize="16" FontFamily="Century Gothic" IsReadOnly="True"/>
                             </StackPanel>
                         </GroupBox>
-                        <GroupBox Header="Скидка" Width="Auto"  FontFamily="Century Gothic">
+                        <GroupBox Header="Скидка" Width="Auto"  FontFamily="Century Gothic" FontSize="15">
                             <StackPanel Orientation="Horizontal">
                                 <TextBox Text="{Binding Discount, UpdateSourceTrigger=PropertyChanged}" Height="30" Width="80" FontSize="16" FontFamily="Century Gothic"/>
                             </StackPanel>
                         </GroupBox>
-                        <GroupBox Header="Всего" Width="Auto"  FontFamily="Century Gothic">
+                        <GroupBox Header="Всего" Width="Auto"  FontFamily="Century Gothic" FontSize="15">
                             <StackPanel Orientation="Horizontal">
-                                <TextBox Text="{Binding Total, UpdateSourceTrigger=PropertyChanged}" Height="30" Width="80" FontSize="16" FontFamily="Century Gothic" IsEnabled="False"/>
+                                <TextBox Text="{Binding Total, UpdateSourceTrigger=PropertyChanged}" Height="30" Width="100" FontSize="16" FontFamily="Century Gothic" IsEnabled="False"/>
                             </StackPanel>
                         </GroupBox>
                     </StackPanel>

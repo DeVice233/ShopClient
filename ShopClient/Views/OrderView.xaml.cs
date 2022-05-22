@@ -31,6 +31,16 @@ namespace ShopClient.Views
             InitializeComponent(); 
             GetList();
             DataContext = new OrderViewModel();
+
+            //for (int i = 0; i < ListView1.Items.Count; i++)
+            //{
+            //    var item = ListView1.ItemContainerGenerator.ContainerFromIndex(i) as ListViewItem;
+            //    if (i % 2 == 0)
+            //        item.Background = Brushes.Tomato;
+            //    else
+            //        item.Background = Brushes.AntiqueWhite;
+            //}
+
             ListView1.ItemContainerGenerator.StatusChanged += ContainerStatusChanged;
         }
 

@@ -291,13 +291,16 @@ namespace ShopClient.ViewModels
         {
             Clients = await Api.GetListAsync<List<ClientApi>>("Client");
             ActionTypes = await Api.GetListAsync<List<ActionTypeApi>>("ActionType");
-            Orders = await Api.GetListAsync<List<OrderApi>>("Order");
+            Orders = await Api.GetListAsync<List<OrderApi>>("Order");    
+            var x = Orders;
+            Orders = x.OrderByDescending(s => s.Date).ToList();
             FullOrders = Orders;
             foreach (OrderApi order in Orders)
             {
                 order.Client = Clients.First(s => s.Id == order.IdClient);
                 order.ActionType = ActionTypes.First(s => s.Id == order.IdActionType);
             }
+
             ActionTypeFilter = await Api.GetListAsync<List<ActionTypeApi>>("ActionType");
             ActionTypeFilter.Add(new ActionTypeApi { Name = "Все типы" });
             SelectedActionTypeFilter = ActionTypeFilter.Last();

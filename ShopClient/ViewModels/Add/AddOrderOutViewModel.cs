@@ -305,7 +305,7 @@ namespace ShopClient.ViewModels.Add
                 thisPrice = SelectedProduct.RetailPrice;
             }
             PickedSaleType = $"Цена: ({saleType.Title})";
-            ProductTitle = $"{SelectedProduct.Fabricator.Title} " + SelectedProduct.Title + $" ({SelectedProduct.Unit.Title})";
+            ProductTitle =  SelectedProduct.Title + $"  {SelectedProduct.Fabricator.Title} " + $" ({SelectedProduct.Unit.Title})";
         }
         private void TotalCalculate()
         {

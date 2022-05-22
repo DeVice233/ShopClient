@@ -11,7 +11,7 @@
         <TabControl >
             <TabItem >
                 <TabItem.Header>
-                    <TextBlock Text="Документы" x:Name="tabItem" MouseDown="tabItem_MouseDown_1"/>
+                    <TextBlock Text="Документы" x:Name="tabItem" MouseDown="tabItem_MouseDown_1" FontSize="14"/>
                 </TabItem.Header>
                 <behaviors:Interaction.Triggers>
                     <behaviors:EventTrigger EventName="MouseDown" SourceObject="{Binding ElementName=tabItem}">
@@ -95,7 +95,7 @@
             </TabItem>
             <TabItem>
                 <TabItem.Header>
-                    <TextBlock Text="Списки" x:Name="tabItemLists" MouseDown="tabItemLists_MouseDown"/>
+                    <TextBlock Text="Списки" x:Name="tabItemLists" MouseDown="tabItemLists_MouseDown" FontSize="14"/>
                 </TabItem.Header>
                 <behaviors:Interaction.Triggers>
                     <behaviors:EventTrigger EventName="MouseDown" SourceObject="{Binding ElementName=tabItemLists}">

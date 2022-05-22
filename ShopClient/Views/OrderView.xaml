@@ -36,6 +36,14 @@
         </Grid>
 
         <ListView Grid.Row="1" ItemsSource="{Binding Orders}" FontSize="16" SelectedItem="{Binding SelectedOrder}" Name="ListView1">
+            <ListView.Resources>
+                <Style TargetType="ListViewItem">
+                    <!--<Setter Property="Background" Value="#FFE0DEDE"/>-->
+                    <Setter Property="BorderBrush" Value="#FF818080"/>
+                    <Setter Property="BorderThickness" Value="0.1"/>
+
+                </Style>
+            </ListView.Resources>
             <ListView.View>
                 <GridView>
                     <GridViewColumn Header="№" DisplayMemberBinding="{Binding Id}"/>

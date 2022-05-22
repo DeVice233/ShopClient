@@ -24,7 +24,12 @@
                 <Setter Property="FontFamily" Value="Century Gothic"/>
                 <Setter Property="BorderBrush" Value="#FF1A315B"/>
             </Style>
-            
+            <Style TargetType="ListViewItem">
+                <!--<Setter Property="Background" Value="#FFE0DEDE"/>-->
+                <Setter Property="BorderBrush" Value="#FF818080"/>
+                <Setter Property="BorderThickness" Value="0.1"/>
+            </Style>
+
             <ResourceDictionary.MergedDictionaries>
                 
                 <ResourceDictionary Source="Themes/MenuButtonThemeHorizontal.xaml"/>
@@ -32,6 +37,9 @@
                 <ResourceDictionary Source="Themes/MainButtonTheme.xaml"/>
 
             </ResourceDictionary.MergedDictionaries>
+            
+            
+            
         </ResourceDictionary>
 
        

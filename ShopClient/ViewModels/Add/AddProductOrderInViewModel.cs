@@ -169,7 +169,7 @@ namespace ShopClient.ViewModels.Add
                 buyPrice = productOrderInRes.Price;
             }
 
-            ProductTitle = $"{productOrderIn.Product.Fabricator.Title} " + productOrderIn.Product.Title + $" ({productOrderIn.Product.Unit.Title})";
+            ProductTitle =  productOrderIn.Product.Title + $"  {productOrderIn.Product.Fabricator.Title} " + $" ({productOrderIn.Product.Unit.Title})";
             LastPrices = $"Последние цены: закупочная: {buyPrice}, розничная: {productOrderIn.Product.RetailPrice}, оптовая: {productOrderIn.Product.WholesalePrice}";
         }
          private void TotalCalculate()
