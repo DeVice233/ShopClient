@@ -73,7 +73,7 @@
                             </StackPanel>
                             <StackPanel Orientation="Horizontal">
                                 <Label Content="Остаток:"/>
-                                <Label  Content="{Binding Count}"/>
+                                <Label  Content="{Binding Count}" FontWeight="UltraBold"/>
                                 <Label  Content="{Binding Unit.Title}"/>
                             </StackPanel>
                         </StackPanel>
@@ -106,7 +106,7 @@
         </ListBox>
         <Grid Background="#FF1A315B" Grid.Row="2">
             <StackPanel Orientation="Horizontal">
-                <Button Width="auto" Background="Transparent" 
+                <Button Width="auto" Background="Transparent" ToolTip="Добавить"
                         BorderThickness="0" Margin="5,0,0,0"
                         Command="{Binding AddProduct}">
                     <Button.Content>

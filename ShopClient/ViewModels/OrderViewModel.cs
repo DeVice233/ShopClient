@@ -175,7 +175,7 @@ namespace ShopClient.ViewModels
             selectedViewCountRows = ViewCountRows.First();
 
             SearchType = new List<string>();
-            SearchType.AddRange(new string[] { "Клиент", "Дата" });
+            SearchType.AddRange(new string[] { "Клиент", "Дата", "№ Заказа" });
             selectedSearchType = SearchType.First();
 
             BackPage = new CustomCommand(() =>
@@ -267,6 +267,9 @@ namespace ShopClient.ViewModels
                 else if(SelectedSearchType == "Дата")
                     searchResult = FullOrders
                      .Where(c => c.Date.ToString().ToLower().Contains(search)).ToList();
+                else if (SelectedSearchType == "№ Заказа")
+                    searchResult = FullOrders
+                     .Where(c => c.Id.ToString().ToLower().Contains(search)).ToList();
             }
             else
             {
@@ -276,6 +279,9 @@ namespace ShopClient.ViewModels
                 else if (SelectedSearchType == "Дата")
                     searchResult = FullOrders
                      .Where(c => c.Date.ToString().ToLower().Contains(search) && c.ActionType.Name.Contains(SelectedActionTypeFilter.Name)).ToList();
+                else if (SelectedSearchType == "№ Заказа")
+                    searchResult = FullOrders
+                     .Where(c => c.Id.ToString().ToLower().Contains(search) && c.ActionType.Name.Contains(SelectedActionTypeFilter.Name)).ToList();
             }
             InitPagination();
             Pagination();

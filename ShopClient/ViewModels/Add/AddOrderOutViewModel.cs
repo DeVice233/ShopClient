@@ -180,6 +180,8 @@ namespace ShopClient.ViewModels.Add
 
         private void PrepareList(List<ProductOrderOutApi> productOrderOuts, ObservableCollection<ProductOrderInApi> productOrderInsToUpdate)
         {
+            var OrderIns = ThisProductOrderIns.OrderBy(s => s.Order.Date).ToList();
+            ThisProductOrderIns = OrderIns;
             ThisProductOrderIns.ToArray();
             int? countRemains = Count;
             for (int i = 0; countRemains > 0; i++)
@@ -277,11 +279,15 @@ namespace ShopClient.ViewModels.Add
             ThisProduct = SelectedProduct;
             ProductCount = SelectedProduct.Count;
             //List<ProductOrderInApi> thisProductOrderin = productOrderIns.Where(c => c.IdProduct == productOrderIn.IdProduct).ToList();
-            ThisProductOrderIns.OrderBy(s => s.IdOrder);
+            foreach (var item in ThisProductOrderIns)
+            {
+                item.Order = FullOrders.Find(s => s.Id == item.IdOrder);
+            }
+            ThisProductOrderIns.OrderBy(s => s.Order.Date);
            
             //var result = ThisProductOrders.OrderBy(x => x.Date);
 
-
+            
             //if (thisProductOrderin.Count != 0)
             //{
             //    var result = thisProductOrderin.OrderBy(x => x.IdOrder);

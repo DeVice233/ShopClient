@@ -36,6 +36,8 @@ namespace ShopClient.ViewModels
                 SignalChanged();
             }
         }
+
+
         private bool isRetail = true;
         public bool IsRetail
         {
@@ -67,6 +69,8 @@ namespace ShopClient.ViewModels
                 SignalChanged();
             }
         }
+
+
 
         public List<OrderApi> FullOrders = new List<OrderApi>();
         public List<SaleTypeApi> SaleTypes = new List<SaleTypeApi>();
@@ -223,10 +227,10 @@ namespace ShopClient.ViewModels
                 sheet.Range[$"I{index}"].Value = ((productOrderOut.Price - productOrderOut.Discount) * productOrderOut.Count).ToString();
                 sheet.Range[$"I{index}"].NumberFormat = "0.00 ₽";
                 TotalPriceWithDiscount += (decimal)((productOrderOut.Price - productOrderOut.Discount) * productOrderOut.Count);
-                var a = (decimal)((productOrderIn.Price - (productOrderOut.Price - productOrderOut.Discount)) * productOrderOut.Count);
-                sheet.Range[$"J{index}"].Value = Math.Abs(a).ToString();
+                var a = (decimal)((productOrderOut.Price - productOrderOut.Discount - productOrderIn.Price) * productOrderOut.Count);
+                sheet.Range[$"J{index}"].Value = a.ToString();
                 sheet.Range[$"J{index}"].NumberFormat = "0.00 ₽";
-                TotalProfit += Math.Abs(a);
+                TotalProfit += a;
                 index++;
             }
 

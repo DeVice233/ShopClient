@@ -157,7 +157,7 @@ namespace ShopClient
             });
             ClickCommandReports = new CustomCommand(() =>
             {
-                CurrentReportPage = new ReportView();
+                CurrentReportPage = new ReportOrderIn();
                 SignalChanged("CurrentReportPage");
             });
             ClickCommandDash = new CustomCommand(() =>

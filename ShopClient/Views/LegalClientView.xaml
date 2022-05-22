@@ -69,7 +69,7 @@
 
         <Grid Background="#FF1A315B" Grid.Row="2" >
             <StackPanel Orientation="Horizontal">
-                <Button Width="auto" Background="Transparent" 
+                <Button Width="auto" Background="Transparent"  ToolTip="Добавить"
                         BorderThickness="0" Margin="5,0,0,0"
                         Command="{Binding AddLegalClient}">
                     <Button.Content>

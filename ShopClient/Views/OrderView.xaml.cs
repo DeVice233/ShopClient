@@ -47,8 +47,11 @@ namespace ShopClient.Views
                         if (orderOut.Status == "Отменен")
                         {
                             var lvitem = ListView1.ItemContainerGenerator.ContainerFromItem(o) as ListViewItem;
-                            lvitem.Background = Brushes.LightGray;
-                            lvitem.Opacity = 0.7;
+                            if (lvitem != null)
+                            {
+                               lvitem.Background = Brushes.LightGray;
+                               lvitem.Opacity = 0.7;
+                            }
                         }
                     }
                     i++;
