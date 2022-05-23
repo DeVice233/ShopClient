@@ -83,7 +83,7 @@
                 </ContextMenu>
             </ListView.ContextMenu>
         </ListView>
-        <ListView FontSize="15" Grid.Row="2" Grid.Column="1" Margin="0 10 0 0" ItemsSource="{Binding ProductOrderIns}"  SelectedItem="{Binding SelectedProductOrderIn}" Background="#FFF9E4E4">
+        <ListView FontSize="15" Grid.Row="2" Grid.Column="1" Margin="0 10 0 0" ItemsSource="{Binding ProductOrderIns}"  SelectedItem="{Binding SelectedProductOrderIn}" Background="#FFFBEDED">
             <ListView.View>
                 <GridView>
                     <GridViewColumn Header="Артикул" DisplayMemberBinding="{Binding Product.Article}"/>

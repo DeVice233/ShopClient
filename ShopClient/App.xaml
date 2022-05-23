@@ -24,10 +24,26 @@
                 <Setter Property="FontFamily" Value="Century Gothic"/>
                 <Setter Property="BorderBrush" Value="#FF1A315B"/>
             </Style>
+            <Style TargetType="ListView">
+                <Setter Property="AlternationCount" Value="2"/>
+            </Style>
             <Style TargetType="ListViewItem">
                 <!--<Setter Property="Background" Value="#FFE0DEDE"/>-->
+                <Setter Property="Padding" Value="2"/>
                 <Setter Property="BorderBrush" Value="#FF818080"/>
                 <Setter Property="BorderThickness" Value="0.1"/>
+                <Setter Property="Background" Value="WhiteSmoke"/>
+                <Style.Triggers>
+                    <Trigger Property="ItemsControl.AlternationIndex" Value="1">
+                        <Setter Property="Background" Value="#FFD8D8DB"/>
+                    </Trigger>
+                    <Trigger Property="IsSelected" Value="True">
+                        <Setter Property="Background" Value="#FF1A315B"/>
+                        <Setter Property="Foreground" Value="White"/>
+                        <Setter Property="BorderThickness" Value="1"/>
+                        <Setter Property="BorderBrush" Value="Black"/>
+                    </Trigger>
+                </Style.Triggers>
             </Style>
 
             <ResourceDictionary.MergedDictionaries>

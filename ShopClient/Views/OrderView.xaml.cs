@@ -61,6 +61,7 @@ namespace ShopClient.Views
                             {
                                lvitem.Background = Brushes.LightGray;
                                lvitem.Opacity = 0.7;
+                               lvitem.Foreground = Brushes.Black;
                             }
                         }
                     }
