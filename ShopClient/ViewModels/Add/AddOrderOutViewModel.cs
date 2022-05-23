@@ -188,7 +188,7 @@ namespace ShopClient.ViewModels.Add
             {
                 var countRemainsBefore = countRemains;
                 countRemains -= ThisProductOrderIns[i].Remains;
-                if (countRemains < 0)
+                if (countRemains <= 0)
                 {
                     productOrderOuts.Add(new ProductOrderOutApi { IdProductOrderIn = ThisProductOrderIns[i].Id, Product = ThisProduct, Price = thisPrice, Count = countRemainsBefore, Discount = Discount });
                     ThisProductOrderIns[i].Remains = Math.Abs((int)countRemains);

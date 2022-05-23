@@ -111,7 +111,7 @@
                                 <RowDefinition Height="auto"/>
                             </Grid.RowDefinitions>
                             <StackPanel Orientation="Vertical">
-                                <Label Content="График изменения цен продажи:" FontFamily="Century Gothic" FontSize="14" />
+                                <Label Content="График изменения цен продажи:" FontFamily="Century Gothic" FontSize="15" />
                                 <Grid  Height="290">
                                     <lvc:CartesianChart Series="{Binding SeriesCollection}" LegendLocation="Bottom" >
                                         <lvc:CartesianChart.AxisY>
@@ -123,12 +123,12 @@
                                     </lvc:CartesianChart>
 
                                 </Grid>
-                                <Label Content="Промежуток времени:" FontFamily="Century Gothic" FontSize="16" HorizontalAlignment="Center"/>
-                                <ComboBox ItemsSource="{Binding TimeStamps}" SelectedItem="{Binding SelectedTimeStamp}" Width="120" HorizontalAlignment="Center" Margin="10 0 0 0" />
+                                <Label Content="Промежуток времени:" FontFamily="Century Gothic" FontSize="15" HorizontalAlignment="Center"/>
+                                <ComboBox ItemsSource="{Binding TimeStamps}" SelectedItem="{Binding SelectedTimeStamp}" FontSize="14" Width="140" HorizontalAlignment="Center" Margin="10 0 0 0" />
                                 <!--<Button Content="Обновить график" Command="{Binding UpdateChart}" Style="{StaticResource MainButton}" Grid.Row="2" Height="20" Margin="5" Width="120" FontFamily="Century Gothic" />-->
                             </StackPanel>
                             <StackPanel Orientation="Vertical" Grid.Column="1">
-                                <Label Content="График изменения цен закупки:" FontFamily="Century Gothic" FontSize="14" />
+                                <Label Content="График изменения цен закупки:" FontFamily="Century Gothic" FontSize="15" />
                                 <Grid  Height="290">
                                     <lvc:CartesianChart Series="{Binding SeriesCollectionPurchase}" LegendLocation="Bottom" >
                                         <lvc:CartesianChart.AxisY>
@@ -140,8 +140,8 @@
                                     </lvc:CartesianChart>
 
                                 </Grid>
-                                <Label Content="Поставщик:" FontFamily="Century Gothic" FontSize="16" HorizontalAlignment="Center"/>
-                                <ComboBox ItemsSource="{Binding LegalClients}" SelectedItem="{Binding SelectedLegalClient}" DisplayMemberPath="Title" HorizontalAlignment="Center"  Width="200"/>
+                                <Label Content="Поставщик:" FontFamily="Century Gothic" FontSize="15" HorizontalAlignment="Center"/>
+                                <ComboBox ItemsSource="{Binding LegalClients}" SelectedItem="{Binding SelectedLegalClient}" FontSize="14" DisplayMemberPath="Title" HorizontalAlignment="Center"  Width="200"/>
                                 <!--<Label Content="Промежуток времени:" FontFamily="Century Gothic" FontSize="16"/>
                                 <ComboBox ItemsSource="{Binding TimeStamps}" SelectedItem="{Binding SelectedTimeStamp}" Width="120" HorizontalAlignment="Left" Margin="10 0 0 0" />-->
                                 <!--<Button Content="Обновить график" Command="{Binding UpdateChart}" Style="{StaticResource MainButton}" Grid.Row="2" Height="20" Margin="5" Width="120" FontFamily="Century Gothic" />-->
