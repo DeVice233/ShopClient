@@ -57,7 +57,7 @@ namespace ShopClient.ViewModels
             });
             EditProductType = new CustomCommand(() =>
             {
-                if (SelectedProductType == null) return;
+            if (SelectedProductType == null || SelectedProductType.Id == 0) return;
                 AddProductType addProductType = new AddProductType(SelectedProductType);
                 addProductType.ShowDialog();
                 Thread.Sleep(200);
@@ -68,7 +68,7 @@ namespace ShopClient.ViewModels
                 MessageBoxResult result = MessageBox.Show("Удалить запись?", "Подтвердите действие", MessageBoxButton.YesNo, MessageBoxImage.Question);
                 if (result == MessageBoxResult.Yes)
                 {
-                    if (SelectedProductType == null) return;
+                    if (SelectedProductType == null || SelectedProductType.Id == 0) return;
 
                     List<ProductApi> y = products.Where(s => s.IdProductType == SelectedProductType.Id).ToList();
 

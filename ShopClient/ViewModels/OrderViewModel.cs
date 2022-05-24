@@ -205,7 +205,7 @@ namespace ShopClient.ViewModels
             });
             OpenOrderDetails = new CustomCommand(() =>
             {
-                if (SelectedOrder == null) return;
+                if (SelectedOrder == null || SelectedOrder.Id == 0) return;
                 if(SelectedOrder.ActionType.Name == "Поступление")
                 {
                     OrderInDetails orderInDetails = new OrderInDetails(SelectedOrder);

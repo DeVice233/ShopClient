@@ -207,7 +207,7 @@ namespace ShopClient.ViewModels
 
             AddProduct = new CustomCommand(() =>
             {
-                if (SelectedProduct == null) return;
+                if (SelectedProduct == null || SelectedProduct.Id == 0) return;
                 foreach (var item in ProductOrderIns)
                 {
                     if (SelectedProduct.Id == item.IdProduct)
@@ -272,7 +272,7 @@ namespace ShopClient.ViewModels
             });
             DeleteProductOrderIn = new CustomCommand(() =>
             {
-                if (SelectedProductOrderIn == null) return;
+                if (SelectedProductOrderIn == null || SelectedProductOrderIn.Id == 0) return;
                 ProductOrderIns.Remove(SelectedProductOrderIn);
                 Update();
             });

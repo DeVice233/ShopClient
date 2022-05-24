@@ -58,7 +58,7 @@ namespace ShopClient.ViewModels
             });
             EditUnit = new CustomCommand(() =>
             {
-                if (SelectedUnit == null) return;
+                if (SelectedUnit == null || SelectedUnit.Id == 0) return;
                 AddUnit addunit = new AddUnit(SelectedUnit);
                 addunit.ShowDialog();
                 Thread.Sleep(200);
@@ -69,7 +69,7 @@ namespace ShopClient.ViewModels
                 MessageBoxResult result = MessageBox.Show("Удалить запись?", "Подтвердите действие", MessageBoxButton.YesNo, MessageBoxImage.Question);
                 if (result == MessageBoxResult.Yes)
                 { 
-                    if (SelectedUnit == null) return;
+                    if (SelectedUnit == null || SelectedUnit.Id == 0) return;
 
                     List<ProductApi> y = products.Where(s => s.IdUnit == SelectedUnit.Id).ToList();
 

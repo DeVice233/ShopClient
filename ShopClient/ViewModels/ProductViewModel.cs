@@ -218,7 +218,7 @@ namespace ShopClient.ViewModels
             });
             ShowOrderIns = new CustomCommand(() =>
             {
-                if (SelectedProduct == null) return;
+                if (SelectedProduct == null || SelectedProduct.Id == 0) return;
                 OrderInsByProduct orderIns = new OrderInsByProduct(SelectedProduct);
                 orderIns.ShowDialog();
                 Thread.Sleep(200);
@@ -228,7 +228,7 @@ namespace ShopClient.ViewModels
             });
             EditProduct = new CustomCommand(() =>
             {
-                if (SelectedProduct == null) return;
+                if (SelectedProduct == null || SelectedProduct.Id == 0) return;
                 int pos = SelectedProduct.Image.LastIndexOf('/');
                 SelectedProduct.Image = SelectedProduct.Image.Substring(pos + 1);
                 AddProduct addProduct = new AddProduct(SelectedProduct);
@@ -241,7 +241,7 @@ namespace ShopClient.ViewModels
 
             ProductPriceChange = new CustomCommand(() =>
             {
-                if (SelectedProduct == null) return;
+                if (SelectedProduct == null || SelectedProduct.Id == 0) return;
                 int pos = SelectedProduct.Image.LastIndexOf('/');
                 SelectedProduct.Image = SelectedProduct.Image.Substring(pos + 1);
                 AddProductPriceChange addProductPriceChange = new AddProductPriceChange(SelectedProduct);
@@ -257,7 +257,7 @@ namespace ShopClient.ViewModels
                 MessageBoxResult result = MessageBox.Show("Удалить запись?", "Подтвердите действие", MessageBoxButton.YesNo, MessageBoxImage.Question);
                 if (result == MessageBoxResult.Yes)
                 {
-                    if (SelectedProduct == null) return;
+                    if (SelectedProduct == null || SelectedProduct.Id == 0) return;
                     try
                     {
                         var x = 0;

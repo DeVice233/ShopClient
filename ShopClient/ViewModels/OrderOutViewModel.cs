@@ -268,7 +268,7 @@ namespace ShopClient.ViewModels
                     MessageBox.Show("Выберите тип продажи!", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
                     return;
                 }
-                if (SelectedProduct == null) return;
+                if (SelectedProduct == null || SelectedProduct.Id == 0) return;
                 if (SelectedProduct.Count <= 0)
                 {
                     MessageBox.Show("Продукт отсутствует на складе!", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
@@ -323,7 +323,7 @@ namespace ShopClient.ViewModels
 
             DeleteProductOrderOut = new CustomCommand(() =>
             {
-                if (SelectedOrderOutVisual == null) return;
+                if (SelectedOrderOutVisual == null || SelectedOrderOutVisual.OrderInId == 0) return;
                 var product = SelectedOrderOutVisual.Product;
                 ObservableCollection<ProductOrderOutApi> productOrderOutApis = new ObservableCollection<ProductOrderOutApi>(ProductOrderOutsToUpdate);
                 foreach (ProductOrderOutApi productOrderOutApi in productOrderOutApis)

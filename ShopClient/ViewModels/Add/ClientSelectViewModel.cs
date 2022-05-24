@@ -104,7 +104,7 @@ namespace ShopClient.ViewModels.Add
                 MessageBoxResult result = MessageBox.Show("Сохранить изменения?", "Подтвердите действие", MessageBoxButton.YesNo, MessageBoxImage.Question);
                 if (result == MessageBoxResult.Yes)
                 {
-                    if (SelectedClientView == null)
+                    if (SelectedClientView == null || SelectedClientView.Id == 0)
                     {
                         MessageBox.Show("Клиент не выбран", "Ошибка",MessageBoxButton.OK, MessageBoxImage.Error);
                         return;

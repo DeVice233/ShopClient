@@ -176,7 +176,7 @@ namespace ShopClient.ViewModels
 
             AddProductOrderIn = new CustomCommand(() =>
             {
-                if (SelectedProductOrderIn == null) return;
+                if (SelectedProductOrderIn == null || SelectedProductOrderIn.Id == 0) return;
                 if (ProductOrderInsToUpdate.Contains(SelectedProductOrderIn))
                 {
                     MessageBox.Show("Такой товар уже присутствует в списке!", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
@@ -189,7 +189,7 @@ namespace ShopClient.ViewModels
             });
             DeleteProductOrderOut = new CustomCommand(() =>
             {
-                if (SelectedOrderOutVisual == null) return;
+                if (SelectedOrderOutVisual == null || SelectedOrderOutVisual.OrderInId == 0) return;
                 var productOrderIn = FullProductOrderIns.First(s => s.Id == SelectedOrderOutVisual.OrderInId);
                 ProductOrderInsToUpdate.Remove(productOrderIn);
                 var productOrderOut = ProductOrderOutsToUpdate.First(s=>s.IdProductOrderIn == SelectedOrderOutVisual.OrderInId);

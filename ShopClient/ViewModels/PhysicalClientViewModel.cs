@@ -112,7 +112,7 @@ namespace ShopClient.ViewModels
             });
             EditPhysicalClient = new CustomCommand(() =>
             {
-                if (SelectedPhysicalClient == null) return;
+                if (SelectedPhysicalClient == null || SelectedPhysicalClient.Id == 0) return;
                 AddPhysicalClient addPhysicalClient = new AddPhysicalClient(SelectedPhysicalClient);
                 addPhysicalClient.ShowDialog();
                 Thread.Sleep(200);
@@ -123,7 +123,7 @@ namespace ShopClient.ViewModels
                 MessageBoxResult result = MessageBox.Show("Удалить запись?", "Подтвердите действие", MessageBoxButton.YesNo, MessageBoxImage.Question);
                 if (result == MessageBoxResult.Yes)
                 {
-                    if (SelectedPhysicalClient == null) return;
+                    if (SelectedPhysicalClient == null || SelectedPhysicalClient.Id == 0) return;
                     try
                     {
                         Delete(SelectedPhysicalClient);

@@ -59,7 +59,7 @@ namespace ShopClient.ViewModels
             });
             EditFabricator = new CustomCommand(() =>
             {
-                if (SelectedFabricator == null) return;
+                if (SelectedFabricator == null || SelectedFabricator.Id == 0) return;
                 AddFabricator addunit = new AddFabricator(SelectedFabricator);
                 addunit.ShowDialog();
                 Thread.Sleep(200);
@@ -70,7 +70,7 @@ namespace ShopClient.ViewModels
                 MessageBoxResult result = MessageBox.Show("Удалить запись?", "Подтвердите действие", MessageBoxButton.YesNo, MessageBoxImage.Question);
                 if (result == MessageBoxResult.Yes)
                 {
-                    if (SelectedFabricator == null) return;
+                    if (SelectedFabricator == null || SelectedFabricator.Id == 0) return;
 
                     List<ProductApi> y = products.Where(s => s.IdFabricator == SelectedFabricator.Id).ToList();
 

@@ -128,7 +128,7 @@ namespace ShopClient.ViewModels
             });
             EditLegalClient = new CustomCommand(() =>
             {
-                if (SelectedLegalClient == null) return;
+            if (SelectedLegalClient == null || SelectedLegalClient.Id == 0) return;
                 AddLegalClient addLegalClient = new AddLegalClient(SelectedLegalClient);
                 addLegalClient.ShowDialog();
                 Thread.Sleep(200);
@@ -140,7 +140,7 @@ namespace ShopClient.ViewModels
                 MessageBoxResult result = MessageBox.Show("Удалить запись?", "Подтвердите действие", MessageBoxButton.YesNo, MessageBoxImage.Question);
                 if (result == MessageBoxResult.Yes)
                 {
-                    if (SelectedLegalClient == null) return;
+                    if (SelectedLegalClient == null || SelectedLegalClient.Id == 0) return;
                     try
                     {
                         Delete(SelectedLegalClient);
