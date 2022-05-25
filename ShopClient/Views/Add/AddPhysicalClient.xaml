@@ -24,8 +24,8 @@
                         <Label Content="Адрес:"  Style="{StaticResource PropertyLabel}"/>
                     </StackPanel>
 
-                    <StackPanel Orientation="Vertical">
-                        <TextBox Text="{Binding FirstName}" Style="{StaticResource PropertyTextBox}" Width="200"/>
+                    <StackPanel Orientation="Vertical" Width="200">
+                        <TextBox Text="{Binding FirstName}" Style="{StaticResource PropertyTextBox}" />
                         <TextBox Text="{Binding LastName}" Style="{StaticResource PropertyTextBox}" />
                         <TextBox Text="{Binding Patronymic}" Style="{StaticResource PropertyTextBox}"   />
                         <TextBox Text="{Binding Client.Phone}" Style="{StaticResource PropertyTextBox}" />

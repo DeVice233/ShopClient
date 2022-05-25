@@ -25,11 +25,11 @@
                             <Label Content="Адрес:" Style="{StaticResource PropertyLabel}"/>
                         </StackPanel>
 
-                        <StackPanel Orientation="Vertical">
-                            <TextBox Text="{Binding Title}" Style="{StaticResource PropertyTextBox}" Width="230" />
+                        <StackPanel Orientation="Vertical" Width="230">
+                            <TextBox Text="{Binding Title}" Style="{StaticResource PropertyTextBox}" />
                             <TextBox Text="{Binding Inn}" Style="{StaticResource PropertyTextBox}"  />
                             <TextBox Text="{Binding Email}" Style="{StaticResource PropertyTextBox}"   />
-                            <TextBox Text="{Binding Client.Phone}" Style="{StaticResource PropertyTextBox}" />
+                            <TextBox Text="{Binding Client.Phone}" Style="{StaticResource PropertyTextBox}"  />
                             <TextBox Text="{Binding Client.Address}" Style="{StaticResource PropertyTextBox}" />
 
                         </StackPanel>

@@ -3,6 +3,7 @@ using ShopClient.Core;
 using ShopClient.Views.Add;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading;
@@ -371,7 +372,10 @@ namespace ShopClient.ViewModels
             FullProducts = Products;
             foreach (ProductApi product in Products)
             {
-                product.Image = Environment.CurrentDirectory + "/Products/" + product.Image;
+                if (File.Exists(Environment.CurrentDirectory + "/Products/" + product.Image))
+                    product.Image = Environment.CurrentDirectory + "/Products/" + product.Image;
+                else
+                    product.Image = Environment.CurrentDirectory + "/Products/" + "picture.JPG";
                 product.Count = ProductOrderIns.Where(s => s.IdProduct == product.Id).Select(s => s.Remains).Sum();
                 product.Fabricator = Fabricators.First(s => s.Id == product.IdFabricator);
                 product.Unit = Units.First(s => s.Id == product.IdUnit);

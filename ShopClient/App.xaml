@@ -10,6 +10,7 @@
             <Style TargetType="TextBox" x:Key="PropertyTextBox">
                  <Setter Property="Margin" Value="0 0 0 2"/>
                  <Setter Property="Height" Value="30"/>
+                <!--<Setter Property="Width" Value="150"/>-->
                 <Setter Property="VerticalContentAlignment" Value="Center"/>
                  <Setter Property="FontFamily" Value="Century Gothic"/>
                 <Setter Property="FontSize" Value="16"/>
